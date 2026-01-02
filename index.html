@@ -1,0 +1,505 @@
+import React, { useState } from 'react';
+import { Upload, BookOpen, Brain, TrendingUp, AlertCircle } from 'lucide-react';
+
+export default function StudyDiagnosticTool() {
+  const [currentView, setCurrentView] = useState('home');
+  const [pdfFile, setPdfFile] = useState(null);
+  const [pdfText, setPdfText] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [quiz, setQuiz] = useState(null);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [results, setResults] = useState(null);
+
+  const studyTechniques = [
+    {
+      name: "Active Recall",
+      description: "Testing yourself on material without looking at notes",
+      strengths: ["Excellent for long-term retention", "Identifies knowledge gaps quickly", "Strengthens memory retrieval"],
+      weaknesses: ["Can be frustrating initially", "Requires discipline", "May feel slower at first"]
+    },
+    {
+      name: "Spaced Repetition",
+      description: "Reviewing material at increasing intervals over time",
+      strengths: ["Scientifically proven for retention", "Efficient use of study time", "Combats forgetting curve"],
+      weaknesses: ["Requires consistent scheduling", "Needs planning ahead", "Less effective for cramming"]
+    },
+    {
+      name: "Feynman Technique",
+      description: "Explaining concepts in simple terms as if teaching someone",
+      strengths: ["Reveals understanding gaps", "Deepens comprehension", "Great for complex topics"],
+      weaknesses: ["Time-consuming", "Can be difficult alone", "Not ideal for memorization tasks"]
+    },
+    {
+      name: "Mind Mapping",
+      description: "Creating visual diagrams of concepts and their relationships",
+      strengths: ["Excellent for visual learners", "Shows big picture connections", "Creative and engaging"],
+      weaknesses: ["Less effective for linear content", "Can become too complex", "Time investment for creation"]
+    },
+    {
+      name: "Pomodoro Technique",
+      description: "Studying in focused 25-minute intervals with short breaks",
+      strengths: ["Maintains focus and energy", "Prevents burnout", "Easy to implement"],
+      weaknesses: ["May interrupt flow state", "Rigid time structure", "Not suitable for all task types"]
+    }
+  ];
+
+  const studyApproaches = [
+    {
+      name: "Deep Learning",
+      description: "Focus on understanding underlying principles and concepts",
+      bestFor: "Complex subjects, long-term mastery",
+      approach: "Quality over quantity, connecting ideas"
+    },
+    {
+      name: "Surface Learning",
+      description: "Memorizing facts and procedures without deep understanding",
+      bestFor: "Quick recall, basic knowledge requirements",
+      approach: "Repetition, flashcards, rote memorization"
+    },
+    {
+      name: "Strategic Learning",
+      description: "Optimizing study methods to achieve specific goals efficiently",
+      bestFor: "Exam preparation, time-limited situations",
+      approach: "Past papers, targeted practice, pattern recognition"
+    }
+  ];
+
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file || file.type !== 'application/pdf') {
+      alert('Please upload a PDF file');
+      return;
+    }
+
+    setPdfFile(file);
+    setIsProcessing(true);
+
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const uint8Array = new Uint8Array(arrayBuffer);
+      const text = await window.fs.readFile(file.name, { encoding: 'utf8' }).catch(() => {
+        return new TextDecoder().decode(uint8Array);
+      });
+      
+      setPdfText(text.slice(0, 3000));
+      setIsProcessing(false);
+    } catch (error) {
+      console.error('Error reading PDF:', error);
+      setPdfText("Sample content for demonstration purposes.");
+      setIsProcessing(false);
+    }
+  };
+
+  const generateQuiz = async () => {
+    setIsProcessing(true);
+
+    const prompt = `Based on this educational content, create a diagnostic quiz with 5 multiple-choice questions that test conceptual understanding (not just memorization). Make questions that reveal the student's learning style and comprehension level.
+
+Content: ${pdfText || "Mathematics and problem-solving strategies"}
+
+Return ONLY valid JSON in this exact format, no other text:
+{
+  "questions": [
+    {
+      "question": "Question text here?",
+      "options": ["Option A", "Option B", "Option C", "Option D"],
+      "correct": 0,
+      "concept": "main concept being tested"
+    }
+  ]
+}`;
+
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          messages: [
+            { role: "user", content: prompt }
+          ],
+        })
+      });
+
+      const data = await response.json();
+      const text = data.content[0].text;
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      const quizData = JSON.parse(jsonMatch ? jsonMatch[0] : text);
+      
+      setQuiz(quizData);
+      setCurrentQuestion(0);
+      setAnswers([]);
+      setCurrentView('quiz');
+    } catch (error) {
+      console.error('Error generating quiz:', error);
+      alert('Error generating quiz. Please try again.');
+    }
+    
+    setIsProcessing(false);
+  };
+
+  const handleAnswer = (selectedIndex) => {
+    const newAnswers = [...answers, {
+      questionIndex: currentQuestion,
+      selected: selectedIndex,
+      correct: quiz.questions[currentQuestion].correct,
+      concept: quiz.questions[currentQuestion].concept
+    }];
+    setAnswers(newAnswers);
+
+    if (currentQuestion < quiz.questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      analyzeResults(newAnswers);
+    }
+  };
+
+  const analyzeResults = async (userAnswers) => {
+    setIsProcessing(true);
+
+    const correctCount = userAnswers.filter(a => a.selected === a.correct).length;
+    const accuracy = (correctCount / userAnswers.length) * 100;
+
+    const analysisPrompt = `Analyze this student's quiz performance and recommend a personalized study technique.
+
+Quiz Results:
+- Accuracy: ${accuracy.toFixed(1)}%
+- Correct: ${correctCount}/${userAnswers.length}
+- Concepts tested: ${userAnswers.map(a => a.concept).join(', ')}
+- Answer pattern: ${userAnswers.map((a, i) => a.selected === a.correct ? '✓' : '✗').join('')}
+
+Available techniques: Active Recall, Spaced Repetition, Feynman Technique, Mind Mapping, Pomodoro Technique
+
+Return ONLY valid JSON:
+{
+  "recommendedTechnique": "technique name",
+  "reason": "why this technique suits the student",
+  "confidenceLevel": "high/medium/low",
+  "strengths": ["strength 1", "strength 2"],
+  "weaknesses": ["concept/topic to focus on"],
+  "studyPlan": "brief personalized advice"
+}`;
+
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          messages: [
+            { role: "user", content: analysisPrompt }
+          ],
+        })
+      });
+
+      const data = await response.json();
+      const text = data.content[0].text;
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      const analysis = JSON.parse(jsonMatch ? jsonMatch[0] : text);
+      
+      setResults({
+        score: accuracy,
+        correctCount,
+        totalQuestions: userAnswers.length,
+        ...analysis
+      });
+      setCurrentView('results');
+    } catch (error) {
+      console.error('Error analyzing results:', error);
+      setResults({
+        score: accuracy,
+        correctCount,
+        totalQuestions: userAnswers.length,
+        recommendedTechnique: "Active Recall",
+        reason: "Based on your performance pattern",
+        confidenceLevel: accuracy > 70 ? "high" : accuracy > 50 ? "medium" : "low",
+        strengths: ["Pattern recognition"],
+        weaknesses: ["Needs more practice"],
+        studyPlan: "Focus on understanding core concepts"
+      });
+      setCurrentView('results');
+    }
+    
+    setIsProcessing(false);
+  };
+
+  const HomeView = () => (
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-4xl mx-auto px-6 py-12">
+        <header className="text-center mb-16">
+          <h1 className="text-4xl font-light mb-4 text-gray-900">Study Technique Diagnostic</h1>
+          <p className="text-gray-600 text-lg">Discover your optimal learning approach</p>
+        </header>
+
+        <section className="mb-16 bg-white p-8 rounded-lg shadow-sm">
+          <div className="flex items-center gap-3 mb-6">
+            <BookOpen className="text-blue-600" size={28} />
+            <h2 className="text-2xl font-light text-gray-900">Study Techniques</h2>
+          </div>
+          
+          <div className="space-y-6">
+            {studyTechniques.map((technique, idx) => (
+              <div key={idx} className="border-l-4 border-blue-500 pl-6 py-2">
+                <h3 className="text-xl font-medium text-gray-900 mb-2">{technique.name}</h3>
+                <p className="text-gray-600 mb-3">{technique.description}</p>
+                
+                <div className="grid md:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="font-medium text-green-700 mb-2">Strengths:</p>
+                    <ul className="space-y-1">
+                      {technique.strengths.map((s, i) => (
+                        <li key={i} className="text-gray-600">• {s}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <p className="font-medium text-orange-700 mb-2">Weaknesses:</p>
+                    <ul className="space-y-1">
+                      {technique.weaknesses.map((w, i) => (
+                        <li key={i} className="text-gray-600">• {w}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-16 bg-white p-8 rounded-lg shadow-sm">
+          <div className="flex items-center gap-3 mb-6">
+            <Brain className="text-purple-600" size={28} />
+            <h2 className="text-2xl font-light text-gray-900">Learning Approaches</h2>
+          </div>
+          
+          <div className="space-y-6">
+            {studyApproaches.map((approach, idx) => (
+              <div key={idx} className="border-l-4 border-purple-500 pl-6 py-2">
+                <h3 className="text-xl font-medium text-gray-900 mb-2">{approach.name}</h3>
+                <p className="text-gray-600 mb-3">{approach.description}</p>
+                <div className="text-sm space-y-1">
+                  <p><span className="font-medium text-gray-700">Best for:</span> <span className="text-gray-600">{approach.bestFor}</span></p>
+                  <p><span className="font-medium text-gray-700">Approach:</span> <span className="text-gray-600">{approach.approach}</span></p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="bg-gradient-to-r from-blue-600 to-purple-600 p-12 rounded-lg shadow-lg text-center text-white">
+          <h2 className="text-3xl font-light mb-4">Ready to find your perfect study technique?</h2>
+          <p className="text-lg mb-8 opacity-90">Upload a PDF and take a personalized diagnostic quiz</p>
+          <button
+            onClick={() => setCurrentView('upload')}
+            className="bg-white text-blue-600 px-8 py-4 rounded-lg font-medium text-lg hover:bg-gray-100 transition-colors"
+          >
+            Start Diagnostic
+          </button>
+        </section>
+      </div>
+    </div>
+  );
+
+  const UploadView = () => (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
+      <div className="max-w-2xl w-full">
+        <button
+          onClick={() => setCurrentView('home')}
+          className="text-gray-600 hover:text-gray-900 mb-8"
+        >
+          ← Back to Home
+        </button>
+
+        <div className="bg-white p-12 rounded-lg shadow-sm text-center">
+          <Upload className="mx-auto mb-6 text-blue-600" size={48} />
+          <h2 className="text-3xl font-light mb-4 text-gray-900">Upload Your Study Material</h2>
+          <p className="text-gray-600 mb-8">Upload a PDF of your study material to generate a personalized diagnostic quiz</p>
+
+          <label className="block">
+            <input
+              type="file"
+              accept=".pdf"
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 cursor-pointer hover:border-blue-500 transition-colors">
+              {pdfFile ? (
+                <div>
+                  <p className="text-green-600 font-medium mb-2">✓ {pdfFile.name}</p>
+                  <p className="text-sm text-gray-500">Click to change file</p>
+                </div>
+              ) : (
+                <div>
+                  <p className="text-gray-600 mb-2">Click to upload PDF</p>
+                  <p className="text-sm text-gray-400">or drag and drop</p>
+                </div>
+              )}
+            </div>
+          </label>
+
+          {pdfFile && !isProcessing && (
+            <button
+              onClick={generateQuiz}
+              className="mt-8 bg-blue-600 text-white px-8 py-4 rounded-lg font-medium text-lg hover:bg-blue-700 transition-colors"
+            >
+              Generate Diagnostic Quiz
+            </button>
+          )}
+
+          {isProcessing && (
+            <div className="mt-8 text-gray-600">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <p>Processing your material...</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
+  const QuizView = () => (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
+      <div className="max-w-3xl w-full">
+        <div className="bg-white p-12 rounded-lg shadow-sm">
+          <div className="mb-8">
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-sm text-gray-500">Question {currentQuestion + 1} of {quiz.questions.length}</span>
+              <div className="flex gap-2">
+                {quiz.questions.map((_, idx) => (
+                  <div
+                    key={idx}
+                    className={`h-2 w-8 rounded-full ${
+                      idx < currentQuestion ? 'bg-green-500' :
+                      idx === currentQuestion ? 'bg-blue-500' :
+                      'bg-gray-200'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <h3 className="text-2xl font-light text-gray-900 mb-8">
+            {quiz.questions[currentQuestion].question}
+          </h3>
+
+          <div className="space-y-4">
+            {quiz.questions[currentQuestion].options.map((option, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleAnswer(idx)}
+                className="w-full text-left p-6 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+              >
+                <span className="font-medium text-gray-700 mr-4">{String.fromCharCode(65 + idx)}.</span>
+                <span className="text-gray-900">{option}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const ResultsView = () => (
+    <div className="min-h-screen bg-gray-50 px-6 py-12">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-12">
+          <div className="inline-block p-4 bg-blue-100 rounded-full mb-4">
+            <TrendingUp className="text-blue-600" size={48} />
+          </div>
+          <h2 className="text-4xl font-light mb-4 text-gray-900">Your Diagnostic Results</h2>
+          <p className="text-gray-600 text-lg">Here's your personalized study recommendation</p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <div className="bg-white p-6 rounded-lg shadow-sm text-center">
+            <p className="text-gray-600 mb-2">Score</p>
+            <p className="text-4xl font-light text-blue-600">{results.score.toFixed(0)}%</p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-sm text-center">
+            <p className="text-gray-600 mb-2">Correct Answers</p>
+            <p className="text-4xl font-light text-green-600">{results.correctCount}/{results.totalQuestions}</p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-sm text-center">
+            <p className="text-gray-600 mb-2">Confidence Level</p>
+            <p className="text-4xl font-light text-purple-600 capitalize">{results.confidenceLevel}</p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-8 rounded-lg shadow-lg text-white mb-8">
+          <h3 className="text-2xl font-light mb-4">Recommended Technique</h3>
+          <p className="text-3xl font-medium mb-4">{results.recommendedTechnique}</p>
+          <p className="text-lg opacity-90">{results.reason}</p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8 mb-8">
+          <div className="bg-white p-8 rounded-lg shadow-sm">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              <h3 className="text-xl font-medium text-gray-900">Your Strengths</h3>
+            </div>
+            <ul className="space-y-3">
+              {results.strengths.map((strength, idx) => (
+                <li key={idx} className="text-gray-600 flex items-start gap-2">
+                  <span className="text-green-500 mt-1">✓</span>
+                  <span>{strength}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="bg-white p-8 rounded-lg shadow-sm">
+            <div className="flex items-center gap-3 mb-4">
+              <AlertCircle className="text-orange-500" size={20} />
+              <h3 className="text-xl font-medium text-gray-900">Focus Areas</h3>
+            </div>
+            <ul className="space-y-3">
+              {results.weaknesses.map((weakness, idx) => (
+                <li key={idx} className="text-gray-600 flex items-start gap-2">
+                  <span className="text-orange-500 mt-1">→</span>
+                  <span>{weakness}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="bg-white p-8 rounded-lg shadow-sm mb-8">
+          <h3 className="text-xl font-medium text-gray-900 mb-4">Your Personalized Study Plan</h3>
+          <p className="text-gray-600 leading-relaxed">{results.studyPlan}</p>
+        </div>
+
+        <div className="text-center">
+          <button
+            onClick={() => {
+              setCurrentView('home');
+              setPdfFile(null);
+              setQuiz(null);
+              setAnswers([]);
+              setResults(null);
+            }}
+            className="bg-blue-600 text-white px-8 py-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+          >
+            Start New Diagnostic
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div>
+      {currentView === 'home' && <HomeView />}
+      {currentView === 'upload' && <UploadView />}
+      {currentView === 'quiz' && quiz && <QuizView />}
+      {currentView === 'results' && results && <ResultsView />}
+    </div>
+  );
+}
