@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyMind AI | Text-Based Learning Diagnostic</title>
+    <title>StudyMind AI | Real-Time Text Analysis</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -95,71 +95,6 @@
             font-size: 1.25rem;
             color: var(--gray);
             margin-bottom: 40px;
-        }
-
-        /* Articles */
-        .articles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 80px;
-        }
-
-        .article-card {
-            background: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            overflow: hidden;
-            transition: var(--transition);
-            height: 100%;
-        }
-
-        .article-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .article-header {
-            padding: 25px;
-            background: linear-gradient(135deg, var(--primary-light), var(--primary));
-            color: white;
-        }
-
-        .article-header h2 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        .article-content {
-            padding: 25px;
-        }
-
-        .method-grid {
-            display: grid;
-            gap: 15px;
-        }
-
-        .method-item {
-            padding: 15px;
-            border-radius: 8px;
-            background: var(--gray-light);
-            transition: var(--transition);
-        }
-
-        .method-item:hover {
-            transform: translateX(5px);
-            background: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .strength {
-            color: var(--success);
-            font-weight: 600;
-        }
-
-        .weakness {
-            color: var(--danger);
-            font-weight: 600;
         }
 
         /* Diagnostic Section */
@@ -741,10 +676,6 @@
                 font-size: 2.5rem;
             }
             
-            .articles-grid {
-                grid-template-columns: 1fr;
-            }
-            
             .diagnostic-container {
                 padding: 30px 20px;
             }
@@ -787,7 +718,6 @@
                 <span>StudyMind AI</span>
             </div>
             <nav>
-                <a href="#articles" style="margin-right: 25px; text-decoration: none; color: var(--dark); font-weight: 500;">Articles</a>
                 <a href="#diagnostic" style="text-decoration: none; color: var(--dark); font-weight: 500;">Diagnostic</a>
             </nav>
         </div>
@@ -796,70 +726,11 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>AI-Powered Study Diagnostic</h1>
-            <p>Paste your textbook content below. Our AI will analyze it and generate a personalized quiz to assess your understanding and create a custom study plan.</p>
+            <h1>AI-Powered Text Analysis & Quiz Generator</h1>
+            <p>Paste your study content below. Our AI will analyze it and generate a personalized quiz to assess your understanding and create a custom study plan.</p>
             <button class="btn btn-primary btn-large" id="startBtn">
                 <i class="fas fa-play-circle"></i> Start Diagnostic
             </button>
-        </div>
-    </section>
-
-    <!-- Articles Section -->
-    <section id="articles" class="container">
-        <h2 class="section-title">Study Techniques & Methods</h2>
-        <div class="articles-grid">
-            <!-- Article 1 -->
-            <article class="article-card">
-                <div class="article-header">
-                    <h2><i class="fas fa-lightbulb"></i> Effective Study Techniques</h2>
-                    <p>Evidence-based learning strategies</p>
-                </div>
-                <div class="article-content">
-                    <div class="method-grid">
-                        <div class="method-item">
-                            <strong>Active Recall</strong>
-                            Testing yourself without looking at material to strengthen memory pathways.
-                        </div>
-                        <div class="method-item">
-                            <strong>Spaced Repetition</strong>
-                            Reviewing information at scientifically optimized intervals for long-term retention.
-                        </div>
-                        <div class="method-item">
-                            <strong>Feynman Technique</strong>
-                            Teaching concepts in simple language to identify and fill knowledge gaps.
-                        </div>
-                        <div class="method-item">
-                            <strong>Interleaving</strong>
-                            Mixing different topics or types of problems during study sessions.
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Article 2 -->
-            <article class="article-card">
-                <div class="article-header">
-                    <h2><i class="fas fa-chart-bar"></i> Technique Analysis</h2>
-                    <p>Strengths and weaknesses of each approach</p>
-                </div>
-                <div class="article-content">
-                    <div class="method-item">
-                        <strong>Active Recall</strong>
-                        <span class="strength">Strengths:</span> Highly effective for long-term retention, identifies knowledge gaps<br>
-                        <span class="weakness">Weaknesses:</span> Mentally demanding, requires discipline and planning
-                    </div>
-                    <div class="method-item">
-                        <strong>Feynman Technique</strong>
-                        <span class="strength">Strengths:</span> Deepens conceptual understanding, reveals misunderstandings<br>
-                        <span class="weakness">Weaknesses:</span> Time-intensive for complex topics, requires foundational knowledge
-                    </div>
-                    <div class="method-item">
-                        <strong>Spaced Repetition</strong>
-                        <span class="strength">Strengths:</span> Optimizes memory retention, efficient over time<br>
-                        <span class="weakness">Weaknesses:</span> Requires consistent schedule, less effective for pure conceptual learning
-                    </div>
-                </div>
-            </article>
         </div>
     </section>
 
@@ -878,10 +749,8 @@
                 <div class="text-input-container">
                     <textarea class="text-input" id="textInput" 
                         placeholder="Paste your textbook content, lecture notes, or study material here...
-                        
-Example: Psychology is the scientific study of mind and behavior. It includes the study of conscious and unconscious phenomena, as well as feelings and thoughts. Psychology is an academic discipline of immense scope, crossing the boundaries between the natural and social sciences.
 
-Key areas include biological psychology, cognitive psychology, developmental psychology, and social psychology. Researchers in psychology employ empirical methods to infer causal and correlational relationships between psychosocial variables."></textarea>
+Example: Photosynthesis is the process used by plants, algae, and some bacteria to convert light energy into chemical energy. This process occurs in chloroplasts and involves two main stages: the light-dependent reactions and the Calvin cycle. In the light-dependent reactions, chlorophyll absorbs light energy, which splits water molecules into oxygen, protons, and electrons. The energy from these reactions is stored in ATP and NADPH. In the Calvin cycle, carbon dioxide is fixed and converted into glucose using the ATP and NADPH produced in the light reactions."></textarea>
                 </div>
                 
                 <div class="text-input-footer">
@@ -907,8 +776,8 @@ Key areas include biological psychology, cognitive psychology, developmental psy
                 <h3>AI is Analyzing Your Content</h3>
                 <p>Extracting key concepts, identifying main topics, and generating personalized questions...</p>
                 <div style="margin-top: 25px; color: var(--gray); display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                    <div><i class="fas fa-check-circle"></i> Text processed</div>
-                    <div><i class="fas fa-cog fa-spin"></i> Identifying topics</div>
+                    <div><i class="fas fa-cog fa-spin"></i> Analyzing text structure</div>
+                    <div><i class="fas fa-cog fa-spin"></i> Extracting key concepts</div>
                     <div><i class="fas fa-cog fa-spin"></i> Generating questions</div>
                 </div>
             </div>
@@ -916,10 +785,7 @@ Key areas include biological psychology, cognitive psychology, developmental psy
             <!-- AI Analysis Summary -->
             <div class="ai-analysis" id="aiAnalysis">
                 <h3><i class="fas fa-robot"></i> AI Analysis Complete</h3>
-                <p><i class="fas fa-check-circle"></i> Content analyzed successfully</p>
-                <p><i class="fas fa-tags"></i> 5 main topics identified</p>
-                <p><i class="fas fa-question-circle"></i> 10 personalized questions generated</p>
-                <p><i class="fas fa-chart-line"></i> Difficulty: Medium (adaptive)</p>
+                <p id="analysisDetails">Content analyzed successfully</p>
             </div>
 
             <!-- Quiz Section -->
@@ -997,6 +863,7 @@ Key areas include biological psychology, cognitive psychology, developmental psy
         const analyzeTextBtn = document.getElementById('analyzeTextBtn');
         const processingArea = document.getElementById('processingArea');
         const aiAnalysis = document.getElementById('aiAnalysis');
+        const analysisDetails = document.getElementById('analysisDetails');
         const quizSection = document.getElementById('quizSection');
         const quizQuestions = document.getElementById('quizQuestions');
         const progressText = document.getElementById('progressText');
@@ -1006,184 +873,46 @@ Key areas include biological psychology, cognitive psychology, developmental psy
         const submitQuizBtn = document.getElementById('submitQuizBtn');
         const resultsSection = document.getElementById('resultsSection');
 
-        // Sample text for demonstration
-        const sampleText = `Psychology is the scientific study of mind and behavior. It includes the study of conscious and unconscious phenomena, as well as feelings and thoughts. Psychology is an academic discipline of immense scope, crossing the boundaries between the natural and social sciences.
+        // Sample texts for demonstration
+        const sampleTexts = {
+            biology: `Photosynthesis is the process used by plants, algae, and some bacteria to convert light energy into chemical energy. This process occurs in chloroplasts and involves two main stages: the light-dependent reactions and the Calvin cycle.
 
-Key areas in psychology include biological psychology, cognitive psychology, developmental psychology, and social psychology. Researchers in psychology employ empirical methods to infer causal and correlational relationships between psychosocial variables.
+In the light-dependent reactions, chlorophyll absorbs light energy, which splits water molecules into oxygen, protons, and electrons. The energy from these reactions is stored in ATP and NADPH. This stage occurs in the thylakoid membranes of chloroplasts.
 
-Biological psychology examines how biological processes influence behavior and mental processes. This includes studying the brain, neurotransmitters, hormones, and genetics. Cognitive psychology focuses on mental processes such as perception, attention, language, memory, and problem-solving.
+The Calvin cycle, also known as the light-independent reactions, takes place in the stroma of chloroplasts. Here, carbon dioxide is fixed and converted into glucose using the ATP and NADPH produced in the light reactions. The enzyme RuBisCO catalyzes the first major step of carbon fixation.
 
-Developmental psychology studies how people change and grow across their lifespan, from infancy to old age. This includes physical, cognitive, social, and emotional development. Social psychology examines how individuals' thoughts, feelings, and behaviors are influenced by the actual, imagined, or implied presence of others.
+Photosynthesis is crucial for life on Earth as it produces oxygen and forms the base of most food chains. The overall chemical equation for photosynthesis is: 6CO₂ + 6H₂O + light energy → C₆H₁₂O₆ + 6O₂.
 
-Learning theories in psychology explain how behavior changes as a result of experience. Classical conditioning, discovered by Ivan Pavlov, involves learning through association. Operant conditioning, developed by B.F. Skinner, involves learning through consequences (reinforcement and punishment).
+Factors affecting photosynthesis include light intensity, carbon dioxide concentration, temperature, and water availability. Plants have adapted various mechanisms to optimize photosynthesis under different environmental conditions, such as C4 and CAM pathways in plants living in hot, dry environments.`,
 
-Memory is another crucial area, involving processes of encoding, storage, and retrieval. The multi-store model proposes three memory stores: sensory memory, short-term memory, and long-term memory. Working memory, a component of short-term memory, is essential for complex cognitive tasks.
+            history: `The Industrial Revolution was a period of major industrialization and innovation that began in Great Britain in the late 18th century and spread to other parts of the world. This transformative era marked a shift from agrarian, handcraft economies to machine-based manufacturing.
 
-Personality psychology studies enduring patterns of thinking, feeling, and behaving that distinguish individuals. Major theories include psychodynamic, humanistic, trait, and social-cognitive approaches. Assessment methods include self-report inventories, projective tests, and behavioral observations.
+Key inventions included the steam engine (improved by James Watt), the spinning jenny, and the power loom. These innovations revolutionized textile production and manufacturing processes. The development of railroads and steamships transformed transportation and trade.
 
-Psychological disorders are characterized by clinically significant disturbances in cognition, emotion regulation, or behavior. The DSM-5 (Diagnostic and Statistical Manual of Mental Disorders) provides a classification system. Treatment approaches include psychotherapy, medication, and combined treatments.`;
+The Industrial Revolution led to significant social changes, including urbanization as people moved from rural areas to cities for factory work. Working conditions in early factories were often harsh, with long hours, low wages, and unsafe environments. This eventually led to the rise of labor movements and reforms.
 
-        // AI-generated quiz based on text analysis
-        const aiGeneratedQuiz = {
-            documentTitle: "Psychology Fundamentals",
-            topics: [
-                { name: "Introduction to Psychology", confidence: 0 },
-                { name: "Biological Psychology", confidence: 0 },
-                { name: "Cognitive Processes", confidence: 0 },
-                { name: "Learning Theories", confidence: 0 },
-                { name: "Memory Systems", confidence: 0 },
-                { name: "Personality Psychology", confidence: 0 }
-            ],
-            questions: [
-                {
-                    id: 1,
-                    topic: "Introduction to Psychology",
-                    type: "conceptual",
-                    text: "Based on the text, which statement best captures the scope of psychology as a discipline?",
-                    options: [
-                        "It studies both conscious and unconscious phenomena, crossing boundaries between natural and social sciences",
-                        "It focuses exclusively on observable behavior and ignores internal mental processes",
-                        "It is primarily concerned with treating mental disorders and psychological problems",
-                        "It is a natural science that doesn't incorporate social science methodologies"
-                    ],
-                    correct: 0,
-                    explanation: "The text explicitly states psychology includes study of conscious/unconscious phenomena and crosses boundaries between natural and social sciences."
-                },
-                {
-                    id: 2,
-                    topic: "Biological Psychology",
-                    type: "factual",
-                    text: "According to the text, what does biological psychology examine?",
-                    options: [
-                        "How biological processes influence behavior and mental processes",
-                        "Exclusively the structure of the brain without considering neurotransmitters",
-                        "Only genetic factors in psychological disorders",
-                        "Social influences on biological development"
-                    ],
-                    correct: 0,
-                    explanation: "The text states biological psychology examines how biological processes influence behavior and mental processes, including brain, neurotransmitters, hormones, and genetics."
-                },
-                {
-                    id: 3,
-                    topic: "Cognitive Processes",
-                    type: "application",
-                    text: "If a researcher is studying how people solve complex puzzles, which area of psychology mentioned in the text would this research most likely fall under?",
-                    options: [
-                        "Cognitive psychology",
-                        "Developmental psychology",
-                        "Social psychology",
-                        "Biological psychology"
-                    ],
-                    correct: 0,
-                    explanation: "Cognitive psychology focuses on mental processes like problem-solving, as mentioned in the text."
-                },
-                {
-                    id: 4,
-                    topic: "Learning Theories",
-                    type: "critical",
-                    text: "Why would classical conditioning be considered different from operant conditioning based on the text's description?",
-                    options: [
-                        "Classical conditioning involves learning through association, while operant conditioning involves learning through consequences",
-                        "Classical conditioning is more effective than operant conditioning for all types of learning",
-                        "Operant conditioning was discovered before classical conditioning",
-                        "Classical conditioning only works with animals, while operant conditioning works with humans"
-                    ],
-                    correct: 0,
-                    explanation: "The text clearly distinguishes classical conditioning (learning through association) from operant conditioning (learning through consequences)."
-                },
-                {
-                    id: 5,
-                    topic: "Memory Systems",
-                    type: "conceptual",
-                    text: "What is the key distinction between short-term memory and working memory according to the text?",
-                    options: [
-                        "Working memory is a component of short-term memory essential for complex cognitive tasks",
-                        "Short-term memory is only for visual information, while working memory is for auditory information",
-                        "Working memory has unlimited capacity while short-term memory is limited",
-                        "They are completely separate memory systems with no relationship"
-                    ],
-                    correct: 0,
-                    explanation: "The text states working memory is a component of short-term memory essential for complex cognitive tasks."
-                },
-                {
-                    id: 6,
-                    topic: "Personality Psychology",
-                    type: "application",
-                    text: "If a psychologist uses a questionnaire where people rate themselves on various traits, which assessment method from the text are they using?",
-                    options: [
-                        "Self-report inventories",
-                        "Projective tests",
-                        "Behavioral observations",
-                        "Clinical interviews"
-                    ],
-                    correct: 0,
-                    explanation: "The text mentions self-report inventories as one method of personality assessment."
-                },
-                {
-                    id: 7,
-                    topic: "Introduction to Psychology",
-                    type: "factual",
-                    text: "Which of the following is NOT listed as a key area of psychology in the text?",
-                    options: [
-                        "Industrial-organizational psychology",
-                        "Biological psychology",
-                        "Cognitive psychology",
-                        "Developmental psychology"
-                    ],
-                    correct: 0,
-                    explanation: "The text lists biological, cognitive, developmental, and social psychology as key areas, but not industrial-organizational psychology."
-                },
-                {
-                    id: 8,
-                    topic: "Learning Theories",
-                    type: "conceptual",
-                    text: "Based on the text's description, what is the primary mechanism of learning in operant conditioning?",
-                    options: [
-                        "Consequences (reinforcement and punishment)",
-                        "Association between stimuli",
-                        "Observational learning",
-                        "Cognitive restructuring"
-                    ],
-                    correct: 0,
-                    explanation: "The text explicitly states operant conditioning involves learning through consequences (reinforcement and punishment)."
-                },
-                {
-                    id: 9,
-                    topic: "Memory Systems",
-                    type: "critical",
-                    text: "Why is the multi-store model of memory considered hierarchical according to the text?",
-                    options: [
-                        "It proposes three distinct memory stores that process information sequentially",
-                        "It suggests some memories are more important than others",
-                        "It was developed by psychologists with different academic ranks",
-                        "It only applies to memories formed during important life events"
-                    ],
-                    correct: 0,
-                    explanation: "The multi-store model proposes three memory stores (sensory, short-term, long-term) that process information in a sequence, making it hierarchical."
-                },
-                {
-                    id: 10,
-                    topic: "Personality Psychology",
-                    type: "application",
-                    text: "A psychologist believes personality is shaped by the interaction between personal factors and the environment. Which theoretical approach from the text aligns with this view?",
-                    options: [
-                        "Social-cognitive approach",
-                        "Psychodynamic approach",
-                        "Humanistic approach",
-                        "Trait approach"
-                    ],
-                    correct: 0,
-                    explanation: "The social-cognitive approach focuses on the interaction between personal factors and the environment in shaping personality."
-                }
-            ]
+Economic theories such as capitalism and socialism emerged in response to industrial changes. The period also saw environmental impacts, including pollution and resource depletion. Despite challenges, the Industrial Revolution dramatically increased production efficiency and laid the foundation for modern industrial society.
+
+Major consequences included the growth of the middle class, changes in family structure, and increased global trade. The revolution spread to continental Europe, North America, and eventually to other parts of the world, fundamentally altering global economic and social structures.`,
+
+            psychology: `Classical conditioning is a learning process discovered by Ivan Pavlov, a Russian physiologist. In his famous experiment with dogs, Pavlov noticed that dogs would salivate not only when food was presented but also when they saw the lab assistant who normally fed them.
+
+Pavlov conducted systematic experiments where he paired a neutral stimulus (a bell) with an unconditioned stimulus (food). After repeated pairings, the neutral stimulus alone could elicit the salivation response. The bell became a conditioned stimulus, and salivation to the bell became a conditioned response.
+
+Key concepts in classical conditioning include: unconditioned stimulus (US) which naturally triggers a response; unconditioned response (UR) which is the natural response to the US; conditioned stimulus (CS) which is originally neutral but comes to trigger a response after association; and conditioned response (CR) which is the learned response to the CS.
+
+Other important phenomena include extinction (weakening of CR when CS is presented without US), spontaneous recovery (reappearance of extinguished CR after rest period), generalization (responding to similar stimuli), and discrimination (learning to differentiate between stimuli).
+
+Classical conditioning has practical applications in areas like phobia treatment through systematic desensitization, advertising through associative learning, and understanding emotional responses. It forms a fundamental basis for understanding how associations are formed in learning.`
         };
 
         // Quiz state
         let currentQuestion = 0;
-        let userAnswers = new Array(aiGeneratedQuiz.questions.length).fill(null);
+        let userAnswers = [];
         let quizStartTime = null;
         let timerInterval = null;
         let wordCountValue = 0;
+        let aiGeneratedQuiz = null;
 
         // Event Listeners
         startBtn.addEventListener('click', () => {
@@ -1215,7 +944,10 @@ Psychological disorders are characterized by clinically significant disturbances
 
         // Load sample text
         sampleTextBtn.addEventListener('click', () => {
-            textInput.value = sampleText;
+            // Cycle through sample texts
+            const texts = Object.values(sampleTexts);
+            const randomText = texts[Math.floor(Math.random() * texts.length)];
+            textInput.value = randomText;
             textInput.dispatchEvent(new Event('input'));
             textInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
@@ -1254,8 +986,174 @@ Psychological disorders are characterized by clinically significant disturbances
             calculateResults();
         });
 
-        // Functions
+        // Text Analysis Functions
+        function extractTopicsFromText(text) {
+            // Extract sentences and identify potential topics
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 10);
+            const words = text.toLowerCase().split(/\s+/);
+            
+            // Common academic words to exclude
+            const stopWords = new Set(['the', 'and', 'for', 'that', 'with', 'this', 'from', 'are', 'was', 'were', 'have', 'has', 'had', 'been', 'will', 'would', 'could', 'should', 'which', 'what', 'when', 'where', 'who', 'how', 'why', 'about', 'into', 'through', 'during', 'before', 'after', 'between', 'under', 'over', 'above', 'below', 'upon', 'within', 'without']);
+            
+            // Find important words (nouns, capitalized terms, repeated terms)
+            const wordFrequency = {};
+            words.forEach(word => {
+                const cleanWord = word.replace(/[^a-z]/g, '');
+                if (cleanWord.length > 4 && !stopWords.has(cleanWord)) {
+                    wordFrequency[cleanWord] = (wordFrequency[cleanWord] || 0) + 1;
+                }
+            });
+            
+            // Get top words
+            const topWords = Object.entries(wordFrequency)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10)
+                .map(([word]) => word);
+            
+            // Extract potential topics from sentences
+            const topics = [];
+            sentences.forEach(sentence => {
+                // Look for definition patterns
+                if (sentence.toLowerCase().includes('is the') || sentence.toLowerCase().includes('are the') || 
+                    sentence.toLowerCase().includes('refers to') || sentence.toLowerCase().includes('known as')) {
+                    const topicMatch = sentence.match(/([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/);
+                    if (topicMatch && topicMatch[1].split(' ').length <= 4) {
+                        topics.push(topicMatch[1]);
+                    }
+                }
+                
+                // Look for list indicators
+                if (sentence.includes(':') || sentence.includes('include') || sentence.includes('such as')) {
+                    const colonParts = sentence.split(':');
+                    if (colonParts[0].split(' ').length <= 5) {
+                        topics.push(colonParts[0].trim());
+                    }
+                }
+            });
+            
+            // Combine and deduplicate topics
+            const allTopics = [...new Set([...topics, ...topWords.map(w => w.charAt(0).toUpperCase() + w.slice(1))])];
+            
+            // Return top 6 topics or default if not enough found
+            if (allTopics.length >= 4) {
+                return allTopics.slice(0, 6);
+            }
+            
+            // Default topics based on text content
+            return ['Key Concepts', 'Main Processes', 'Important Terms', 'Fundamental Principles', 'Applications', 'Historical Context'];
+        }
+
+        function generateQuestionsFromText(text, topics) {
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 20);
+            const questions = [];
+            
+            // Question templates based on type
+            const questionTemplates = {
+                conceptual: [
+                    "What is the main purpose or function of {concept} as described in the text?",
+                    "How does {concept} relate to or differ from other concepts mentioned?",
+                    "What would be the most accurate description of {concept} based on the text?",
+                    "Which statement best captures the essence of {concept} according to the text?"
+                ],
+                application: [
+                    "If you were to apply the concept of {concept} to a real-world situation, what would be the most likely outcome?",
+                    "Based on the text, how would {concept} function in a different context?",
+                    "What practical example best illustrates the principle of {concept} as described?",
+                    "How might {concept} be used to solve a problem mentioned in the text?"
+                ],
+                factual: [
+                    "According to the text, what is the definition of {concept}?",
+                    "Where does the text state that {concept} occurs or takes place?",
+                    "What specific example of {concept} is provided in the text?",
+                    "Which of these facts about {concept} is explicitly stated in the text?"
+                ],
+                critical: [
+                    "Why is {concept} considered important according to the text?",
+                    "What would be the most significant consequence if {concept} did not function as described?",
+                    "How does the text suggest that {concept} influences or affects other elements?",
+                    "Based on the information provided, what can be inferred about the role of {concept}?"
+                ]
+            };
+            
+            // Generate questions
+            const questionTypes = ['conceptual', 'conceptual', 'conceptual', 'conceptual', 'application', 'application', 'application', 'factual', 'factual', 'critical'];
+            
+            for (let i = 0; i < 10; i++) {
+                const type = questionTypes[i];
+                const topic = topics[i % topics.length];
+                
+                // Find relevant sentences for this topic
+                const relevantSentences = sentences.filter(s => 
+                    s.toLowerCase().includes(topic.toLowerCase()) || 
+                    s.includes(topic.split(' ')[0])
+                );
+                
+                if (relevantSentences.length > 0) {
+                    const template = questionTemplates[type][Math.floor(Math.random() * questionTemplates[type].length)];
+                    const questionText = template.replace('{concept}', topic);
+                    
+                    // Generate plausible options
+                    const options = generateOptions(text, topic, type);
+                    
+                    questions.push({
+                        id: i + 1,
+                        topic: topic,
+                        type: type,
+                        text: questionText,
+                        options: options,
+                        correct: 0, // First option is correct
+                        explanation: `This answer is correct because it aligns with the information provided in the text about ${topic}.`
+                    });
+                }
+            }
+            
+            return questions;
+        }
+
+        function generateOptions(text, topic, type) {
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 10);
+            const correctSentence = sentences.find(s => 
+                s.toLowerCase().includes(topic.toLowerCase()) ||
+                s.includes(topic.split(' ')[0])
+            ) || `The text discusses ${topic} and its importance.`;
+            
+            // Extract key information for correct answer
+            let correctAnswer = "";
+            if (type === 'conceptual') {
+                correctAnswer = `It is the process or concept that ${topic.toLowerCase()} represents as described in the text.`;
+            } else if (type === 'application') {
+                correctAnswer = `It demonstrates how ${topic.toLowerCase()} can be applied in practical situations.`;
+            } else if (type === 'factual') {
+                correctAnswer = correctSentence.substring(0, 100) + "...";
+            } else { // critical
+                correctAnswer = `Because ${topic.toLowerCase()} plays a crucial role in the system described.`;
+            }
+            
+            // Generate plausible distractors
+            const distractors = [
+                `It refers to a completely different concept not mentioned in the text.`,
+                `This is a common misconception about ${topic.toLowerCase()}.`,
+                `While related, this option describes a different aspect than what's in the text.`,
+                `This contradicts the information provided about ${topic.toLowerCase()}.`
+            ];
+            
+            // Shuffle options
+            const options = [correctAnswer, ...distractors.slice(0, 3)];
+            return shuffleArray(options);
+        }
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
         function simulateTextAnalysis() {
+            const userText = textInput.value.trim();
+            
             // Show processing animation
             processingArea.style.display = 'block';
             aiAnalysis.style.display = 'none';
@@ -1263,19 +1161,37 @@ Psychological disorders are characterized by clinically significant disturbances
             
             // Simulate AI processing time
             setTimeout(() => {
+                // Extract topics from user text
+                const extractedTopics = extractTopicsFromText(userText);
+                
+                // Generate questions based on user text
+                const generatedQuestions = generateQuestionsFromText(userText, extractedTopics);
+                
+                // Determine document title from first sentence
+                const firstSentence = userText.split(/[.!?]+/)[0];
+                const documentTitle = firstSentence.length > 50 ? firstSentence.substring(0, 50) + "..." : firstSentence;
+                
+                // Create quiz object
+                aiGeneratedQuiz = {
+                    documentTitle: documentTitle,
+                    topics: extractedTopics.map(topic => ({ name: topic, confidence: 0 })),
+                    questions: generatedQuestions
+                };
+                
+                // Update analysis summary
+                analysisDetails.innerHTML = `
+                    <p><i class="fas fa-check-circle"></i> Content analyzed successfully</p>
+                    <p><i class="fas fa-tags"></i> ${extractedTopics.length} main topics identified</p>
+                    <p><i class="fas fa-question-circle"></i> ${generatedQuestions.length} personalized questions generated</p>
+                    <p><i class="fas fa-chart-line"></i> Difficulty: Medium (based on text complexity)</p>
+                `;
+                
                 processingArea.style.display = 'none';
                 aiAnalysis.style.display = 'block';
                 
-                // Update document title based on text content
-                const text = textInput.value.substring(0, 100);
-                const titleMatch = text.match(/[A-Z][^.!?]*?(psychology|science|theory|research|study)[^.!?]*[.!?]/i);
-                if (titleMatch) {
-                    aiGeneratedQuiz.documentTitle = titleMatch[0].substring(0, 50) + "...";
-                }
-                
-                // Update analysis summary
+                // Update analysis title
                 document.querySelector('.ai-analysis h3').innerHTML = 
-                    `<i class="fas fa-robot"></i> AI Analysis Complete: "${aiGeneratedQuiz.documentTitle}"`;
+                    `<i class="fas fa-robot"></i> AI Analysis Complete`;
                 
                 // Start quiz after short delay
                 setTimeout(startQuiz, 1500);
@@ -1283,9 +1199,11 @@ Psychological disorders are characterized by clinically significant disturbances
         }
 
         function startQuiz() {
+            if (!aiGeneratedQuiz) return;
+            
             quizSection.style.display = 'block';
             currentQuestion = 0;
-            userAnswers.fill(null);
+            userAnswers = new Array(aiGeneratedQuiz.questions.length).fill(null);
             quizStartTime = new Date();
             
             // Start timer
@@ -1302,6 +1220,8 @@ Psychological disorders are characterized by clinically significant disturbances
         }
 
         function renderQuestion() {
+            if (!aiGeneratedQuiz) return;
+            
             const question = aiGeneratedQuiz.questions[currentQuestion];
             progressText.textContent = `Question ${currentQuestion + 1} of ${aiGeneratedQuiz.questions.length}`;
             
@@ -1378,6 +1298,8 @@ Psychological disorders are characterized by clinically significant disturbances
         }
 
         function updateNavigation() {
+            if (!aiGeneratedQuiz) return;
+            
             prevQuestionBtn.disabled = currentQuestion === 0;
             nextQuestionBtn.disabled = currentQuestion === aiGeneratedQuiz.questions.length - 1;
         }
@@ -1397,6 +1319,8 @@ Psychological disorders are characterized by clinically significant disturbances
         function calculateResults() {
             clearInterval(timerInterval);
             
+            if (!aiGeneratedQuiz) return;
+            
             // Calculate scores
             let correctCount = 0;
             const topicScores = {};
@@ -1408,7 +1332,7 @@ Psychological disorders are characterized by clinically significant disturbances
             
             // Calculate correctness and topic scores
             aiGeneratedQuiz.questions.forEach((question, index) => {
-                const isCorrect = userAnswers[index] === question.correct;
+                const isCorrect = userAnswers[index] === 0; // First option is always correct in our generation
                 if (isCorrect) correctCount++;
                 
                 // Track topic performance
@@ -1420,48 +1344,11 @@ Psychological disorders are characterized by clinically significant disturbances
             
             const overallScore = Math.round((correctCount / aiGeneratedQuiz.questions.length) * 100);
             
-            // Determine learning profile based on performance patterns
+            // Determine learning profile
             let learningProfile = "Mixed Learner";
-            let profileDescription = "";
+            let profileDescription = "You have balanced abilities across different types of learning tasks.";
             
-            // Analyze question type performance
-            let conceptualScore = 0, applicationScore = 0, factualScore = 0, criticalScore = 0;
-            let conceptualTotal = 0, applicationTotal = 0, factualTotal = 0, criticalTotal = 0;
-            
-            aiGeneratedQuiz.questions.forEach((question, index) => {
-                const isCorrect = userAnswers[index] === question.correct;
-                
-                if (question.type === 'conceptual') {
-                    conceptualTotal++;
-                    if (isCorrect) conceptualScore++;
-                } else if (question.type === 'application') {
-                    applicationTotal++;
-                    if (isCorrect) applicationScore++;
-                } else if (question.type === 'factual') {
-                    factualTotal++;
-                    if (isCorrect) factualScore++;
-                } else if (question.type === 'critical') {
-                    criticalTotal++;
-                    if (isCorrect) criticalScore++;
-                }
-            });
-            
-            // Determine profile based on relative strengths
-            if (conceptualScore/conceptualTotal > 0.8 && criticalScore/criticalTotal > 0.7) {
-                learningProfile = "Conceptual Learner";
-                profileDescription = "You excel at understanding underlying concepts and thinking critically about material.";
-            } else if (applicationScore/applicationTotal > 0.8 && factualScore/factualTotal > 0.6) {
-                learningProfile = "Application-oriented Learner";
-                profileDescription = "You learn best by applying knowledge to practical situations and remembering key facts.";
-            } else if (factualScore/factualTotal > 0.8 && conceptualScore/conceptualTotal < 0.6) {
-                learningProfile = "Memorization-based Learner";
-                profileDescription = "You're strong at recalling facts but may need to work on deeper conceptual understanding.";
-            } else {
-                learningProfile = "Mixed Learner";
-                profileDescription = "You have balanced abilities across different types of learning tasks.";
-            }
-            
-            // Determine strong/weak topics
+            // Analyze topic performance patterns
             const topicPerformance = [];
             for (const [topic, scores] of Object.entries(topicScores)) {
                 if (scores.total > 0) {
@@ -1481,27 +1368,35 @@ Psychological disorders are characterized by clinically significant disturbances
             // Sort topics by accuracy
             topicPerformance.sort((a, b) => b.accuracy - a.accuracy);
             
-            // Determine study technique based on learning profile
+            // Determine study technique based on performance
             let technique = "";
             let techniqueReason = "";
             let techniqueIcon = "fa-bullseye";
             
-            if (learningProfile === "Conceptual Learner") {
-                technique = "Feynman Technique with Mind Mapping";
-                techniqueReason = "Your strength in conceptual understanding makes you ideal for teaching concepts back in simple terms and creating visual connections between ideas.";
-                techniqueIcon = "fa-project-diagram";
-            } else if (learningProfile === "Application-oriented Learner") {
+            if (overallScore >= 80) {
+                learningProfile = "Conceptual Learner";
+                profileDescription = "You excel at understanding underlying concepts and making connections between ideas.";
+                technique = "Feynman Technique";
+                techniqueReason = "Your strong conceptual understanding makes you ideal for teaching concepts back in simple terms to identify any remaining gaps.";
+                techniqueIcon = "fa-chalkboard-teacher";
+            } else if (overallScore >= 60) {
+                learningProfile = "Application-oriented Learner";
+                profileDescription = "You learn best by applying knowledge to practical situations and solving problems.";
                 technique = "Practice-based Learning with Active Recall";
                 techniqueReason = "You excel at applying knowledge, so combining practice problems with self-testing will maximize your learning efficiency.";
                 techniqueIcon = "fa-tasks";
-            } else if (learningProfile === "Memorization-based Learner") {
-                technique = "Spaced Repetition with Blurting Method";
-                techniqueReason = "Your factual recall is strong, but spaced repetition will help with long-term retention, and blurting will identify gaps in your knowledge.";
+            } else if (overallScore >= 40) {
+                learningProfile = "Mixed Learner";
+                profileDescription = "You have balanced learning abilities and benefit from varied study approaches.";
+                technique = "Active Recall with Spaced Repetition";
+                techniqueReason = "Your balanced learning style benefits from testing yourself regularly while spacing out reviews for optimal retention.";
                 techniqueIcon = "fa-brain";
             } else {
-                technique = "Active Recall with Interleaving";
-                techniqueReason = "Your balanced learning style benefits from varied approaches. Mixing topics during study sessions while actively testing yourself will optimize your learning.";
-                techniqueIcon = "fa-random";
+                learningProfile = "Memorization-based Learner";
+                profileDescription = "You're building foundational knowledge and benefit from structured memorization techniques.";
+                technique = "Spaced Repetition with Blurting Method";
+                techniqueReason = "Building strong foundational knowledge requires regular review and self-testing to identify gaps.";
+                techniqueIcon = "fa-history";
             }
             
             // Generate results HTML
@@ -1622,7 +1517,7 @@ Psychological disorders are characterized by clinically significant disturbances
                     </div>
                     
                     <h4 style="color: var(--secondary); margin: 30px 0 20px; font-size: 1.2rem;">
-                        <i class="fas fa-road"></i> Step-by-Step Study Plan for the Same Material
+                        <i class="fas fa-road"></i> Step-by-Step Study Plan
                     </h4>
                     <ol class="steps-list">
                         <li><strong>First Session (45 mins):</strong> Review weak topics using the recommended technique. Focus on understanding rather than memorization.</li>
@@ -1644,30 +1539,6 @@ Psychological disorders are characterized by clinically significant disturbances
                             <p>• Increase weak topic scores by 30%</p>
                             <p>• Strengthen conceptual connections</p>
                             <p>• Improve application skills</p>
-                        </div>
-                    </div>
-                    
-                    <div style="background: #fff5f5; padding: 25px; border-radius: 10px; border-left: 5px solid var(--danger); margin-top: 30px;">
-                        <h4 style="color: var(--danger); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-exclamation-triangle"></i> What to Avoid
-                        </h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                            <div style="padding: 10px; background: rgba(255, 255, 255, 0.7); border-radius: 6px;">
-                                <i class="fas fa-times" style="color: var(--danger); margin-right: 8px;"></i>
-                                Passive re-reading
-                            </div>
-                            <div style="padding: 10px; background: rgba(255, 255, 255, 0.7); border-radius: 6px;">
-                                <i class="fas fa-times" style="color: var(--danger); margin-right: 8px;"></i>
-                                Cramming sessions
-                            </div>
-                            <div style="padding: 10px; background: rgba(255, 255, 255, 0.7); border-radius: 6px;">
-                                <i class="fas fa-times" style="color: var(--danger); margin-right: 8px;"></i>
-                                Highlighting without processing
-                            </div>
-                            <div style="padding: 10px; background: rgba(255, 255, 255, 0.7); border-radius: 6px;">
-                                <i class="fas fa-times" style="color: var(--danger); margin-right: 8px;"></i>
-                                Studying without breaks
-                            </div>
                         </div>
                     </div>
                     
