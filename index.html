@@ -1,10 +1,10 @@
+<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyMind AI | Interface Only</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>StudyMind AI | Diagnostic Learning System</title>
     <style>
         :root {
             --primary: #4361ee;
@@ -95,71 +95,6 @@
             font-size: 1.25rem;
             color: var(--gray);
             margin-bottom: 40px;
-        }
-
-        /* Articles Section */
-        .articles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 80px;
-        }
-
-        .article-card {
-            background: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            overflow: hidden;
-            transition: var(--transition);
-            height: 100%;
-        }
-
-        .article-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .article-header {
-            padding: 25px;
-            background: linear-gradient(135deg, var(--primary-light), var(--primary));
-            color: white;
-        }
-
-        .article-header h2 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        .article-content {
-            padding: 25px;
-        }
-
-        .method-grid {
-            display: grid;
-            gap: 15px;
-        }
-
-        .method-item {
-            padding: 15px;
-            border-radius: 8px;
-            background: var(--gray-light);
-            transition: var(--transition);
-        }
-
-        .method-item:hover {
-            transform: translateX(5px);
-            background: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .strength {
-            color: var(--success);
-            font-weight: 600;
-        }
-
-        .weakness {
-            color: var(--danger);
-            font-weight: 600;
         }
 
         /* Diagnostic Section */
@@ -292,26 +227,10 @@
             100% { transform: rotate(360deg); }
         }
 
-        .ai-analysis {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 35px;
-            border-radius: var(--border-radius);
-            margin: 30px 0;
-            display: none;
-            animation: fadeIn 0.8s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         /* Quiz Section */
         .quiz-section {
             display: none;
             margin-top: 50px;
-            animation: fadeIn 0.8s ease;
         }
 
         .quiz-header {
@@ -351,12 +270,6 @@
             padding: 35px;
             margin-bottom: 30px;
             border-left: 6px solid var(--primary);
-            animation: slideIn 0.5s ease;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
         }
 
         .question-meta {
@@ -378,8 +291,7 @@
 
         .conceptual { background: #e3f2fd; color: #1565c0; }
         .application { background: #e8f5e9; color: #2e7d32; }
-        .factual { background: #fff3e0; color: #ef6c00; }
-        .critical { background: #f3e5f5; color: #7b1fa2; }
+        .definition { background: #fff3e0; color: #ef6c00; }
 
         .question-text {
             font-size: 1.25rem;
@@ -420,16 +332,6 @@
             box-shadow: 0 4px 15px rgba(67, 97, 238, 0.1);
         }
 
-        .option.correct {
-            border-color: var(--success);
-            background: #f0fff4;
-        }
-
-        .option.incorrect {
-            border-color: var(--danger);
-            background: #fff5f5;
-        }
-
         .option-letter {
             width: 40px;
             height: 40px;
@@ -449,15 +351,10 @@
             transform: scale(1.1);
         }
 
-        .option-text {
-            flex: 1;
-        }
-
         /* Results Section */
         .results-section {
             display: none;
             margin-top: 50px;
-            animation: fadeIn 0.8s ease;
         }
 
         .profile-card {
@@ -546,88 +443,6 @@
             background: linear-gradient(135deg, #fff5f5, #ffe6e6);
         }
 
-        .topic-item.medium {
-            border-left: 5px solid var(--warning);
-            background: linear-gradient(135deg, #fff9e6, #fff5cc);
-        }
-
-        .topic-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            align-items: center;
-        }
-
-        /* Study Plan */
-        .study-plan {
-            background: linear-gradient(135deg, #f8fbff, #eef2ff);
-            border-radius: var(--border-radius);
-            padding: 40px;
-            margin: 40px 0;
-            border-left: 6px solid var(--accent);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-        }
-
-        .technique-recommendation {
-            display: flex;
-            align-items: center;
-            gap: 25px;
-            margin-bottom: 35px;
-        }
-
-        .tech-icon {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, var(--accent), #ff6b9d);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            color: white;
-            flex-shrink: 0;
-            box-shadow: 0 8px 20px rgba(247, 37, 133, 0.3);
-        }
-
-        .steps-list {
-            list-style: none;
-            margin: 25px 0 35px;
-            counter-reset: step-counter;
-        }
-
-        .steps-list li {
-            padding: 20px 20px 20px 70px;
-            position: relative;
-            margin-bottom: 15px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            transition: var(--transition);
-        }
-
-        .steps-list li:hover {
-            transform: translateX(5px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .steps-list li::before {
-            counter-increment: step-counter;
-            content: counter(step-counter);
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-        }
-
         /* Buttons */
         .btn {
             padding: 16px 35px;
@@ -641,37 +456,6 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 5px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.5);
-            opacity: 0;
-            border-radius: 100%;
-            transform: scale(1, 1) translate(-50%);
-            transform-origin: 50% 50%;
-        }
-
-        .btn:focus:not(:active)::after {
-            animation: ripple 1s ease-out;
-        }
-
-        @keyframes ripple {
-            0% {
-                transform: scale(0, 0);
-                opacity: 0.5;
-            }
-            100% {
-                transform: scale(40, 40);
-                opacity: 0;
-            }
         }
 
         .btn-primary {
@@ -709,72 +493,24 @@
             box-shadow: none !important;
         }
 
-        /* Footer */
-        footer {
-            background: var(--dark);
-            color: white;
-            padding: 60px 0 30px;
-            margin-top: 80px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        /* Alert */
+        .alert {
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            margin: 20px 0;
+            display: none;
         }
 
-        .footer-content {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto;
+        .alert-error {
+            background: #fff5f5;
+            border-left: 4px solid var(--danger);
+            color: var(--danger);
         }
 
-        .ai-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px 20px;
-            border-radius: 25px;
-            margin-bottom: 25px;
-            backdrop-filter: blur(10px);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .articles-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .diagnostic-container {
-                padding: 30px 20px;
-            }
-            
-            .quiz-header {
-                flex-direction: column;
-                gap: 20px;
-                align-items: flex-start;
-            }
-            
-            .profile-header {
-                flex-direction: column;
-                text-align: center;
-                gap: 20px;
-            }
-            
-            .technique-recommendation {
-                flex-direction: column;
-                text-align: center;
-                gap: 20px;
-            }
-            
-            .btn {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-            
-            .steps-list li {
-                padding: 20px 20px 20px 60px;
-            }
+        .alert-success {
+            background: #f0fff4;
+            border-left: 4px solid var(--success);
+            color: #2e7d32;
         }
     </style>
 </head>
@@ -787,7 +523,6 @@
                 <span>StudyMind AI</span>
             </div>
             <nav>
-                <a href="#articles" style="margin-right: 25px; text-decoration: none; color: var(--dark); font-weight: 500;">Articles</a>
                 <a href="#diagnostic" style="text-decoration: none; color: var(--dark); font-weight: 500;">Diagnostic</a>
             </nav>
         </div>
@@ -796,95 +531,37 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>AI-Powered Text Analysis & Quiz Generator</h1>
-            <p>Paste your study content below. Our AI will analyze it and generate a personalized quiz to assess your understanding and create a custom study plan.</p>
+            <h1>AI-Powered Diagnostic Learning System</h1>
+            <p>Paste your study material. Get a personalized diagnostic quiz, learning profile analysis, and custom study plan designed for you.</p>
             <button class="btn btn-primary btn-large" id="startBtn">
                 <i class="fas fa-play-circle"></i> Start Diagnostic
             </button>
         </div>
     </section>
 
-    <!-- Articles Section -->
-    <section id="articles" class="container">
-        <h2 class="section-title">Study Techniques & Methods</h2>
-        <div class="articles-grid">
-            <!-- Article 1 -->
-            <article class="article-card">
-                <div class="article-header">
-                    <h2><i class="fas fa-lightbulb"></i> Effective Study Techniques</h2>
-                    <p>Evidence-based learning strategies</p>
-                </div>
-                <div class="article-content">
-                    <div class="method-grid">
-                        <div class="method-item">
-                            <strong>Active Recall</strong>
-                            Testing yourself without looking at material to strengthen memory pathways.
-                        </div>
-                        <div class="method-item">
-                            <strong>Spaced Repetition</strong>
-                            Reviewing information at scientifically optimized intervals for long-term retention.
-                        </div>
-                        <div class="method-item">
-                            <strong>Feynman Technique</strong>
-                            Teaching concepts in simple language to identify and fill knowledge gaps.
-                        </div>
-                        <div class="method-item">
-                            <strong>Interleaving</strong>
-                            Mixing different topics or types of problems during study sessions.
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Article 2 -->
-            <article class="article-card">
-                <div class="article-header">
-                    <h2><i class="fas fa-chart-bar"></i> Technique Analysis</h2>
-                    <p>Strengths and weaknesses of each approach</p>
-                </div>
-                <div class="article-content">
-                    <div class="method-item">
-                        <strong>Active Recall</strong>
-                        <span class="strength">Strengths:</span> Highly effective for long-term retention, identifies knowledge gaps<br>
-                        <span class="weakness">Weaknesses:</span> Mentally demanding, requires discipline and planning
-                    </div>
-                    <div class="method-item">
-                        <strong>Feynman Technique</strong>
-                        <span class="strength">Strengths:</span> Deepens conceptual understanding, reveals misunderstandings<br>
-                        <span class="weakness">Weaknesses:</span> Time-intensive for complex topics, requires foundational knowledge
-                    </div>
-                    <div class="method-item">
-                        <strong>Spaced Repetition</strong>
-                        <span class="strength">Strengths:</span> Optimizes memory retention, efficient over time<br>
-                        <span class="weakness">Weaknesses:</span> Requires consistent schedule, less effective for pure conceptual learning
-                    </div>
-                </div>
-            </article>
-        </div>
-    </section>
-
     <!-- Diagnostic Section -->
     <section id="diagnostic" class="container">
         <div class="diagnostic-container">
-            <h2 class="section-title">AI Text Analysis & Diagnostic</h2>
+            <h2 class="section-title">AI Text Analysis & Diagnostic Quiz</h2>
+            
+            <!-- Alert Messages -->
+            <div class="alert alert-error" id="errorAlert"></div>
+            <div class="alert alert-success" id="successAlert"></div>
             
             <!-- Text Input Area -->
             <div class="text-input-area">
                 <div class="text-input-header">
                     <h3>Paste Your Study Content</h3>
-                    <div class="word-count" id="wordCount">0 words (minimum: 100)</div>
+                    <div class="word-count" id="wordCount">0 words (minimum: 50)</div>
                 </div>
                 
                 <div class="text-input-container">
-                    <textarea class="text-input" id="textInput" 
-                        placeholder="Paste your textbook content, lecture notes, or study material here...
-
-Example: Photosynthesis is the process used by plants, algae, and some bacteria to convert light energy into chemical energy. This process occurs in chloroplasts and involves two main stages: the light-dependent reactions and the Calvin cycle. In the light-dependent reactions, chlorophyll absorbs light energy, which splits water molecules into oxygen, protons, and electrons. The energy from these reactions is stored in ATP and NADPH. In the Calvin cycle, carbon dioxide is fixed and converted into glucose using the ATP and NADPH produced in the light reactions."></textarea>
+                    <textarea class="text-input" id="textInput" placeholder="Paste your textbook content, lecture notes, or study material here..."></textarea>
                 </div>
                 
                 <div class="text-input-footer">
                     <div>
-                        <i class="fas fa-info-circle"></i> Paste at least 100 words for accurate analysis
+                        <i class="fas fa-info-circle"></i> Paste at least 50 words for accurate analysis
                     </div>
                     <button class="sample-text-btn" id="sampleTextBtn">
                         <i class="fas fa-magic"></i> Load Sample Text
@@ -904,22 +581,6 @@ Example: Photosynthesis is the process used by plants, algae, and some bacteria 
                 <div class="spinner"></div>
                 <h3>AI is Analyzing Your Content</h3>
                 <p>Extracting key concepts, identifying main topics, and generating personalized questions...</p>
-                <div style="margin-top: 25px; color: var(--gray); display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                    <div><i class="fas fa-check-circle"></i> Text processed</div>
-                    <div><i class="fas fa-cog fa-spin"></i> Identifying topics</div>
-                    <div><i class="fas fa-cog fa-spin"></i> Generating questions</div>
-                </div>
-            </div>
-
-            <!-- AI Analysis Summary -->
-            <div class="ai-analysis" id="aiAnalysis">
-                <h3><i class="fas fa-robot"></i> AI Analysis Complete</h3>
-                <div id="analysisDetails">
-                    <p><i class="fas fa-check-circle"></i> Content analyzed successfully</p>
-                    <p><i class="fas fa-tags"></i> 5 main topics identified</p>
-                    <p><i class="fas fa-question-circle"></i> 10 personalized questions generated</p>
-                    <p><i class="fas fa-chart-line"></i> Difficulty: Medium (adaptive)</p>
-                </div>
             </div>
 
             <!-- Quiz Section -->
@@ -967,71 +628,490 @@ Example: Photosynthesis is the process used by plants, algae, and some bacteria 
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container footer-content">
-            <div class="ai-badge">
-                <i class="fas fa-robot"></i>
-                <span>Powered by Advanced AI</span>
-            </div>
-            <div class="logo" style="font-size: 2.2rem; margin-bottom: 25px;">
-                <i class="fas fa-brain"></i>
-                <span>StudyMind AI</span>
-            </div>
-            <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 30px; line-height: 1.6;">
-                Personalized learning diagnostics powered by artificial intelligence. 
-                Get custom study plans based on your unique learning profile.
-            </p>
-            <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.9rem;">
-                © 2023 StudyMind AI. Interface only - No functionality included.
-            </p>
-        </div>
-    </footer>
-
     <script>
-        // Empty script - No functionality
-        console.log("This is an interface-only version with no functionality.");
-        
-        // Simple word count update
+        // DOM Elements
         const textInput = document.getElementById('textInput');
         const wordCount = document.getElementById('wordCount');
-        
+        const analyzeTextBtn = document.getElementById('analyzeTextBtn');
+        const processingArea = document.getElementById('processingArea');
+        const quizSection = document.getElementById('quizSection');
+        const quizQuestions = document.getElementById('quizQuestions');
+        const progressText = document.getElementById('progressText');
+        const quizProgress = document.getElementById('quizProgress');
+        const prevQuestionBtn = document.getElementById('prevQuestionBtn');
+        const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+        const submitQuizBtn = document.getElementById('submitQuizBtn');
+        const resultsSection = document.getElementById('resultsSection');
+        const errorAlert = document.getElementById('errorAlert');
+        const successAlert = document.getElementById('successAlert');
+
+        // State
+        let currentQuestion = 0;
+        let userAnswers = {};
+        let quizData = null;
+        let sessionId = null;
+        let quizStartTime = null;
+        let timerInterval = null;
+
+        // Word count tracking
         textInput.addEventListener('input', function() {
             const text = this.value.trim();
             const words = text === '' ? 0 : text.split(/\s+/).length;
-            wordCount.textContent = `${words} words (minimum: 100)`;
+            wordCount.textContent = `${words} words (minimum: 50)`;
             
-            // Update styling
-            if (words >= 100) {
+            if (words >= 50) {
                 wordCount.className = 'word-count';
-            } else if (words >= 50) {
+                analyzeTextBtn.disabled = false;
+            } else if (words >= 25) {
                 wordCount.className = 'word-count warning';
+                analyzeTextBtn.disabled = true;
             } else {
                 wordCount.className = 'word-count error';
+                analyzeTextBtn.disabled = true;
             }
         });
-        
-        // Sample text button
+
+        // Load sample text
         document.getElementById('sampleTextBtn').addEventListener('click', function() {
             const sampleText = `Photosynthesis is the process used by plants, algae, and some bacteria to convert light energy into chemical energy. This process occurs in chloroplasts and involves two main stages: the light-dependent reactions and the Calvin cycle.
 
-In the light-dependent reactions, chlorophyll absorbs light energy, which splits water molecules into oxygen, protons, and electrons. The energy from these reactions is stored in ATP and NADPH. This stage occurs in the thylakoid membranes of chloroplasts.
+Light-dependent Reactions:
+These reactions occur in the thylakoid membranes of chloroplasts. Chlorophyll absorbs light energy, which splits water molecules into oxygen, protons, and electrons. The energy from these reactions is stored in ATP and NADPH.
 
-The Calvin cycle, also known as the light-independent reactions, takes place in the stroma of chloroplasts. Here, carbon dioxide is fixed and converted into glucose using the ATP and NADPH produced in the light reactions. The enzyme RuBisCO catalyzes the first major step of carbon fixation.
+Calvin Cycle:
+Also known as the light-independent reactions, this cycle takes place in the stroma of chloroplasts. Here, carbon dioxide is fixed and converted into glucose using the ATP and NADPH produced in the light reactions. The enzyme RuBisCO catalyzes the first major step of carbon fixation.
 
-Photosynthesis is crucial for life on Earth as it produces oxygen and forms the base of most food chains. The overall chemical equation for photosynthesis is: 6CO₂ + 6H₂O + light energy → C₆H₁₂O₆ + 6O₂.
+Importance of Photosynthesis:
+Photosynthesis is crucial for life on Earth as it produces oxygen and forms the base of most food chains. The overall chemical equation is: 6CO₂ + 6H₂O + light energy → C₆H₁₂O₆ + 6O₂.
 
-Factors affecting photosynthesis include light intensity, carbon dioxide concentration, temperature, and water availability. Plants have adapted various mechanisms to optimize photosynthesis under different environmental conditions, such as C4 and CAM pathways in plants living in hot, dry environments.`;
+Factors Affecting Photosynthesis:
+Light intensity, carbon dioxide concentration, temperature, and water availability all affect the rate of photosynthesis. Plants have adapted various mechanisms to optimize photosynthesis, such as C4 and CAM pathways in plants living in hot, dry environments.`;
             
             textInput.value = sampleText;
             textInput.dispatchEvent(new Event('input'));
         });
-        
-        // Scroll to diagnostic button
+
+        // Start diagnostic
         document.getElementById('startBtn').addEventListener('click', function() {
             document.getElementById('diagnostic').scrollIntoView({ behavior: 'smooth' });
             textInput.focus();
         });
+
+        // Analyze text and generate quiz
+        analyzeTextBtn.addEventListener('click', async function() {
+            const text = textInput.value.trim();
+            
+            if (text.split(/\s+/).length < 50) {
+                showError('Please enter at least 50 words for accurate analysis.');
+                return;
+            }
+            
+            // Show processing
+            processingArea.style.display = 'block';
+            analyzeTextBtn.disabled = true;
+            
+            try {
+                // Send to backend
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: text })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Analysis failed');
+                }
+                
+                // Store quiz data
+                quizData = data.quiz;
+                sessionId = data.session_id;
+                
+                // Show success
+                showSuccess(`Analysis complete! Found ${data.analysis_summary.concepts_identified} concepts. Generated ${data.total_questions} questions.`);
+                
+                // Start quiz
+                startQuiz();
+                
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                processingArea.style.display = 'none';
+                analyzeTextBtn.disabled = false;
+            }
+        });
+
+        // Start quiz
+        function startQuiz() {
+            if (!quizData) return;
+            
+            quizSection.style.display = 'block';
+            currentQuestion = 0;
+            userAnswers = {};
+            quizStartTime = Date.now();
+            
+            // Start timer
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            // Initialize quiz
+            renderQuestion();
+            updateNavigation();
+            
+            // Scroll to quiz
+            quizSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Render question
+        function renderQuestion() {
+            if (!quizData || !quizData[currentQuestion]) return;
+            
+            const question = quizData[currentQuestion];
+            progressText.textContent = `Question ${currentQuestion + 1} of ${quizData.length}`;
+            
+            // Calculate progress
+            const progress = ((currentQuestion + 1) / quizData.length) * 100;
+            quizProgress.style.width = `${progress}%`;
+            
+            // Create question HTML
+            const typeClass = question.type === 'conceptual' ? 'conceptual' :
+                            question.type === 'application' ? 'application' : 'definition';
+            
+            const typeIcon = question.type === 'conceptual' ? 'fa-lightbulb' :
+                           question.type === 'application' ? 'fa-cogs' : 'fa-brain';
+            
+            let optionsHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+            
+            question.options.forEach((option, index) => {
+                let optionClass = 'option';
+                if (userAnswers[question.id] === index) {
+                    optionClass += ' selected';
+                }
+                
+                optionsHTML += `
+                    <div class="${optionClass}" data-index="${index}" data-question="${question.id}">
+                        <div class="option-letter">${letters[index]}</div>
+                        <div class="option-text">${option}</div>
+                    </div>
+                `;
+            });
+            
+            quizQuestions.innerHTML = `
+                <div class="quiz-question">
+                    <div class="question-meta">
+                        <div class="question-type ${typeClass}">
+                            <i class="fas ${typeIcon}"></i> ${question.type.charAt(0).toUpperCase() + question.type.slice(1)} Question
+                        </div>
+                        <div>
+                            <i class="fas fa-bookmark"></i> Source: ${question.source}
+                        </div>
+                    </div>
+                    <div class="question-text">
+                        ${question.question}
+                    </div>
+                    <div class="options-grid">
+                        ${optionsHTML}
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners to options
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const selectedIndex = parseInt(this.getAttribute('data-index'));
+                    const questionId = this.getAttribute('data-question');
+                    
+                    // Remove selected class from all options in this question
+                    document.querySelectorAll(`[data-question="${questionId}"]`).forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Save answer
+                    userAnswers[questionId] = selectedIndex;
+                    
+                    // Enable submit button if all questions answered
+                    const allAnswered = Object.keys(userAnswers).length === quizData.length;
+                    submitQuizBtn.style.display = allAnswered ? 'block' : 'none';
+                });
+            });
+        }
+
+        // Navigation
+        nextQuestionBtn.addEventListener('click', () => {
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+                updateNavigation();
+            }
+        });
+
+        prevQuestionBtn.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+                updateNavigation();
+            }
+        });
+
+        function updateNavigation() {
+            prevQuestionBtn.disabled = currentQuestion === 0;
+            nextQuestionBtn.disabled = currentQuestion === quizData.length - 1;
+        }
+
+        // Timer
+        function updateTimer() {
+            if (!quizStartTime) return;
+            
+            const now = Date.now();
+            const diff = Math.floor((now - quizStartTime) / 1000);
+            const minutes = Math.floor(diff / 60);
+            const seconds = diff % 60;
+            
+            document.getElementById('quizTime').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Submit quiz
+        submitQuizBtn.addEventListener('click', async function() {
+            if (!sessionId || !quizData) return;
+            
+            clearInterval(timerInterval);
+            const timeTaken = Math.floor((Date.now() - quizStartTime) / 1000);
+            
+            // Prepare answers
+            const answers = {};
+            for (const [qId, answer] of Object.entries(userAnswers)) {
+                answers[qId] = answer;
+            }
+            
+            submitQuizBtn.disabled = true;
+            submitQuizBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+            
+            try {
+                const response = await fetch('/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        answers: answers,
+                        time_taken: timeTaken
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Submission failed');
+                }
+                
+                // Show results
+                showResults(data);
+                
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                submitQuizBtn.disabled = false;
+                submitQuizBtn.innerHTML = '<i class="fas fa-chart-line"></i> Submit Quiz & Get Analysis';
+            }
+        });
+
+        // Show results
+        function showResults(data) {
+            quizSection.style.display = 'none';
+            resultsSection.style.display = 'block';
+            
+            const profileColors = {
+                'conceptual': 'var(--warning)',
+                'rote': 'var(--accent)',
+                'application': 'var(--success)',
+                'inconsistent': 'var(--primary)',
+                'balanced': 'var(--primary)'
+            };
+            
+            const profileIcons = {
+                'conceptual': 'fa-lightbulb',
+                'rote': 'fa-brain',
+                'application': 'fa-cogs',
+                'inconsistent': 'fa-chart-line',
+                'balanced': 'fa-balance-scale'
+            };
+            
+            const profileColor = profileColors[data.learner_profile.type] || 'var(--primary)';
+            const profileIcon = profileIcons[data.learner_profile.type] || 'fa-user';
+            
+            // Create topics HTML
+            let topicsHTML = '';
+            
+            if (data.concept_analysis.strong && data.concept_analysis.strong.length > 0) {
+                data.concept_analysis.strong.forEach(concept => {
+                    topicsHTML += `
+                        <div class="topic-item strong">
+                            <div class="topic-header">
+                                <strong>${concept}</strong>
+                                <span style="font-weight: 700; color: var(--success);">Strong</span>
+                            </div>
+                            <p style="color: var(--gray); margin-top: 10px;">You understand this concept well</p>
+                        </div>
+                    `;
+                });
+            }
+            
+            if (data.concept_analysis.weak && data.concept_analysis.weak.length > 0) {
+                data.concept_analysis.weak.forEach(concept => {
+                    topicsHTML += `
+                        <div class="topic-item weak">
+                            <div class="topic-header">
+                                <strong>${concept}</strong>
+                                <span style="font-weight: 700; color: var(--danger);">Needs Work</span>
+                            </div>
+                            <p style="color: var(--gray); margin-top: 10px;">Focus more on this concept</p>
+                        </div>
+                    `;
+                });
+            }
+            
+            // Create study plan HTML
+            let studyPlanHTML = '';
+            if (data.recommendations.study_plan) {
+                data.recommendations.study_plan.forEach((step, index) => {
+                    studyPlanHTML += `
+                        <div style="padding: 15px; background: white; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: start; gap: 15px;">
+                            <div style="width: 30px; height: 30px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">${index + 1}</div>
+                            <div>${step}</div>
+                        </div>
+                    `;
+                });
+            }
+            
+            resultsSection.innerHTML = `
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-icon" style="background: linear-gradient(135deg, ${profileColor}, ${profileColor}dd);">
+                            <i class="fas ${profileIcon}"></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <h2 style="color: var(--secondary); margin-bottom: 10px;">Your Learning Profile</h2>
+                            <h1 style="color: ${profileColor}; margin-bottom: 15px; font-size: 2.5rem;">${data.learner_profile.type.toUpperCase()} LEARNER</h1>
+                            <p style="color: var(--gray); line-height: 1.6;">${data.learner_profile.description}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="confidence-meter">
+                        <div class="meter-label">
+                            <span style="font-size: 1.1rem;">Diagnostic Score</span>
+                            <strong style="font-size: 1.5rem; color: ${data.quiz_results.accuracy >= 70 ? 'var(--success)' : data.quiz_results.accuracy >= 50 ? 'var(--warning)' : 'var(--danger)'};">${data.quiz_results.accuracy.toFixed(1)}%</strong>
+                        </div>
+                        <div class="meter-bar">
+                            <div class="meter-fill" style="width: ${data.quiz_results.accuracy}%;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 10px; color: var(--gray); font-size: 0.9rem;">
+                            <span>${data.quiz_results.correct} correct</span>
+                            <span>${data.quiz_results.total} total</span>
+                        </div>
+                    </div>
+                </div>
+                
+                ${topicsHTML ? `
+                <div class="profile-card">
+                    <h3 style="color: var(--secondary); margin-bottom: 25px; font-size: 1.5rem;">
+                        <i class="fas fa-layer-group"></i> Concept Analysis
+                    </h3>
+                    <div class="topics-breakdown">
+                        ${topicsHTML}
+                    </div>
+                </div>
+                ` : ''}
+                
+                <div class="profile-card">
+                    <h3 style="color: var(--secondary); margin-bottom: 30px; font-size: 1.5rem;">
+                        <i class="fas fa-graduation-cap"></i> Personalized Study Plan
+                    </h3>
+                    
+                    <div style="background: linear-gradient(135deg, #f8fbff, #eef2ff); padding: 25px; border-radius: var(--border-radius); margin-bottom: 30px;">
+                        <h4 style="color: var(--secondary); margin-bottom: 15px;">Recommended Techniques</h4>
+                        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                            ${data.recommendations.recommended_techniques.map(tech => `
+                                <div style="padding: 12px 20px; background: white; border-radius: 8px; font-weight: 600; color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                                    <i class="fas fa-check-circle"></i> ${tech}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <p style="color: var(--gray); margin-top: 15px;">${data.recommendations.why_fits}</p>
+                    </div>
+                    
+                    <h4 style="color: var(--secondary); margin: 25px 0 15px;">Step-by-Step Study Plan</h4>
+                    ${studyPlanHTML}
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 30px 0;">
+                        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+                            <h4 style="color: var(--secondary); margin-bottom: 10px;"><i class="fas fa-clock"></i> Schedule</h4>
+                            <p><strong>Daily:</strong> ${data.recommendations.daily_time}</p>
+                            <p><strong>Focus:</strong> ${data.recommendations.focus_ratio}</p>
+                        </div>
+                        <div style="background: #fff5f5; padding: 20px; border-radius: 10px; border-left: 5px solid var(--danger);">
+                            <h4 style="color: var(--danger); margin-bottom: 10px;"><i class="fas fa-exclamation-triangle"></i> Avoid These</h4>
+                            <ul style="padding-left: 20px; color: var(--gray);">
+                                ${data.recommendations.what_to_avoid.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 40px;">
+                        <button class="btn btn-primary" id="newDiagnosticBtn" style="padding: 18px 40px;">
+                            <i class="fas fa-redo"></i> Start New Diagnostic
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listener to new diagnostic button
+            document.getElementById('newDiagnosticBtn').addEventListener('click', function() {
+                location.reload();
+            });
+            
+            // Animate progress bar
+            setTimeout(() => {
+                const fill = document.querySelector('.meter-fill');
+                const width = fill.style.width;
+                fill.style.width = '0%';
+                setTimeout(() => {
+                    fill.style.width = width;
+                }, 100);
+            }, 300);
+            
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Utility functions
+        function showError(message) {
+            errorAlert.textContent = message;
+            errorAlert.style.display = 'block';
+            setTimeout(() => {
+                errorAlert.style.display = 'none';
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            successAlert.textContent = message;
+            successAlert.style.display = 'block';
+            setTimeout(() => {
+                successAlert.style.display = 'none';
+            }, 5000);
+        }
+
+        // Initialize
+        textInput.dispatchEvent(new Event('input'));
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 </body>
 </html>
