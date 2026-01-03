@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyMind AI | Intelligent Study Assistant</title>
+    <title>StudyMind AI | Text-Based Learning Diagnostic</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -18,9 +18,9 @@
             --dark: #212529;
             --gray: #6c757d;
             --gray-light: #e9ecef;
-            --border-radius: 10px;
-            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s ease;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -31,27 +31,28 @@
         }
 
         body {
-            background: linear-gradient(135deg, #f5f7ff 0%, #f0f4ff 100%);
+            background: linear-gradient(135deg, #f5f9ff 0%, #f0f5ff 100%);
             color: var(--dark);
             line-height: 1.7;
             min-height: 100vh;
+            padding-bottom: 40px;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
         /* Header */
         header {
-            background: white;
-            box-shadow: var(--box-shadow);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             position: sticky;
             top: 0;
             z-index: 1000;
             backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .nav-container {
@@ -72,12 +73,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .logo i {
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
         /* Hero */
         .hero {
             text-align: center;
@@ -93,6 +88,7 @@
             -webkit-text-fill-color: transparent;
             margin-bottom: 20px;
             line-height: 1.2;
+            font-weight: 800;
         }
 
         .hero p {
@@ -115,11 +111,12 @@
             box-shadow: var(--box-shadow);
             overflow: hidden;
             transition: var(--transition);
+            height: 100%;
         }
 
         .article-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
 
         .article-header {
@@ -139,19 +136,20 @@
 
         .method-grid {
             display: grid;
-            gap: 20px;
+            gap: 15px;
         }
 
         .method-item {
             padding: 15px;
             border-radius: 8px;
             background: var(--gray-light);
+            transition: var(--transition);
         }
 
-        .method-item strong {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--secondary);
+        .method-item:hover {
+            transform: translateX(5px);
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
         .strength {
@@ -169,7 +167,7 @@
             background: white;
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
-            padding: 40px;
+            padding: 50px;
             margin-bottom: 80px;
             position: relative;
             overflow: hidden;
@@ -181,8 +179,8 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--success));
         }
 
         .section-title {
@@ -190,106 +188,103 @@
             margin-bottom: 40px;
             color: var(--secondary);
             font-size: 2.2rem;
+            font-weight: 700;
         }
 
-        /* Upload Area */
-        .upload-area {
-            border: 3px dashed var(--gray-light);
-            border-radius: var(--border-radius);
-            padding: 60px 30px;
-            text-align: center;
+        /* Text Input Area */
+        .text-input-area {
             margin-bottom: 40px;
-            transition: var(--transition);
-            cursor: pointer;
-            background: #fafbff;
         }
 
-        .upload-area:hover {
-            border-color: var(--primary);
-            background: #f5f8ff;
-            transform: scale(1.01);
-        }
-
-        .upload-area.active {
-            border-color: var(--success);
-            background: #f0fff4;
-        }
-
-        .upload-icon {
-            font-size: 4rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .upload-area h3 {
+        .text-input-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
-            color: var(--dark);
         }
 
-        .file-input {
-            display: none;
+        .word-count {
+            color: var(--gray);
+            font-size: 0.9rem;
         }
 
-        .upload-btn {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            padding: 14px 32px;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-            font-size: 1rem;
+        .word-count.warning {
+            color: var(--warning);
         }
 
-        .upload-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
-        }
-
-        .selected-file {
-            margin-top: 25px;
-            padding: 20px;
-            background: var(--gray-light);
-            border-radius: var(--border-radius);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            justify-content: center;
-        }
-
-        .file-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 500;
-        }
-
-        .file-info i {
+        .word-count.error {
             color: var(--danger);
-            font-size: 1.2rem;
+        }
+
+        .text-input-container {
+            position: relative;
+        }
+
+        .text-input {
+            width: 100%;
+            min-height: 250px;
+            padding: 25px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            line-height: 1.6;
+            resize: vertical;
+            transition: var(--transition);
+            background: #fdfdfd;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            background: white;
+        }
+
+        .text-input::placeholder {
+            color: var(--gray);
+        }
+
+        .text-input-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .sample-text-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 0.9rem;
+        }
+
+        .sample-text-btn:hover {
+            color: var(--secondary);
         }
 
         /* Processing Animation */
         .processing-area {
             display: none;
             text-align: center;
-            padding: 40px;
-            background: #f8fbff;
+            padding: 50px 30px;
+            background: linear-gradient(135deg, #f8fbff, #f0f5ff);
             border-radius: var(--border-radius);
             margin: 30px 0;
+            border: 2px dashed var(--primary-light);
         }
 
         .spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid var(--gray-light);
+            width: 70px;
+            height: 70px;
+            border: 4px solid rgba(67, 97, 238, 0.1);
             border-top: 4px solid var(--primary);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+            margin: 0 auto 25px;
         }
 
         @keyframes spin {
@@ -300,23 +295,23 @@
         .ai-analysis {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 30px;
+            padding: 35px;
             border-radius: var(--border-radius);
             margin: 30px 0;
             display: none;
+            animation: fadeIn 0.8s ease;
         }
 
-        .ai-analysis h3 {
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Quiz Section */
         .quiz-section {
             display: none;
-            margin-top: 40px;
+            margin-top: 50px;
+            animation: fadeIn 0.8s ease;
         }
 
         .quiz-header {
@@ -328,43 +323,57 @@
             border-bottom: 2px solid var(--gray-light);
         }
 
+        .progress-container {
+            flex: 1;
+            margin-right: 30px;
+        }
+
         .progress-bar {
-            height: 8px;
+            height: 10px;
             background: var(--gray-light);
-            border-radius: 4px;
+            border-radius: 5px;
             overflow: hidden;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--primary), var(--success));
             width: 0%;
-            transition: width 0.5s ease;
+            transition: width 0.6s ease;
+            border-radius: 5px;
         }
 
         .quiz-question {
             background: white;
             border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            padding: 30px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            padding: 35px;
             margin-bottom: 30px;
-            border-left: 5px solid var(--primary);
+            border-left: 6px solid var(--primary);
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         .question-meta {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-size: 0.9rem;
-            color: var(--gray);
         }
 
         .question-type {
             background: var(--gray-light);
-            padding: 4px 12px;
+            padding: 6px 15px;
             border-radius: 20px;
             font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .conceptual { background: #e3f2fd; color: #1565c0; }
@@ -373,36 +382,42 @@
         .critical { background: #f3e5f5; color: #7b1fa2; }
 
         .question-text {
-            font-size: 1.2rem;
-            margin-bottom: 25px;
+            font-size: 1.25rem;
+            margin-bottom: 30px;
             color: var(--dark);
             font-weight: 500;
+            line-height: 1.5;
         }
 
         .options-grid {
             display: grid;
-            gap: 12px;
+            gap: 15px;
         }
 
         .option {
-            padding: 18px 20px;
+            padding: 20px 25px;
             border: 2px solid var(--gray-light);
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             transition: var(--transition);
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
+            background: white;
         }
 
         .option:hover {
             border-color: var(--primary-light);
             background: #f8fbff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
         .option.selected {
             border-color: var(--primary);
             background: #eef2ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.1);
         }
 
         .option.correct {
@@ -416,197 +431,206 @@
         }
 
         .option-letter {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             background: var(--gray-light);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
+            font-weight: 700;
             flex-shrink: 0;
+            transition: var(--transition);
         }
 
         .selected .option-letter {
             background: var(--primary);
             color: white;
+            transform: scale(1.1);
+        }
+
+        .option-text {
+            flex: 1;
         }
 
         /* Results Section */
         .results-section {
             display: none;
-            margin-top: 40px;
+            margin-top: 50px;
+            animation: fadeIn 0.8s ease;
         }
 
         .profile-card {
             background: white;
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
-            padding: 30px;
+            padding: 40px;
             margin-bottom: 30px;
         }
 
         .profile-header {
             display: flex;
             align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 25px;
+            margin-bottom: 40px;
         }
 
         .profile-icon {
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             background: linear-gradient(135deg, var(--primary), var(--accent));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: white;
+            flex-shrink: 0;
+            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.3);
         }
 
         .confidence-meter {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .meter {
-            flex: 1;
+            margin-bottom: 40px;
         }
 
         .meter-label {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            font-weight: 600;
         }
 
         .meter-bar {
-            height: 12px;
+            height: 14px;
             background: var(--gray-light);
-            border-radius: 6px;
+            border-radius: 7px;
             overflow: hidden;
+            position: relative;
         }
 
         .meter-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--danger), var(--warning), var(--success));
             width: 0%;
-            transition: width 1.5s ease;
+            transition: width 1.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 7px;
         }
 
         .topics-breakdown {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
-            margin: 30px 0;
+            margin: 40px 0;
         }
 
         .topic-item {
-            padding: 20px;
-            border-radius: 8px;
-            background: var(--gray-light);
+            padding: 25px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .topic-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
 
         .topic-item.strong {
-            background: linear-gradient(135deg, #d4edda, #c3e6cb);
-            border-left: 4px solid var(--success);
+            border-left: 5px solid var(--success);
+            background: linear-gradient(135deg, #f0fff4, #e6ffed);
         }
 
         .topic-item.weak {
-            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
-            border-left: 4px solid var(--danger);
+            border-left: 5px solid var(--danger);
+            background: linear-gradient(135deg, #fff5f5, #ffe6e6);
+        }
+
+        .topic-item.medium {
+            border-left: 5px solid var(--warning);
+            background: linear-gradient(135deg, #fff9e6, #fff5cc);
         }
 
         .topic-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            align-items: center;
         }
 
         /* Study Plan */
         .study-plan {
             background: linear-gradient(135deg, #f8fbff, #eef2ff);
             border-radius: var(--border-radius);
-            padding: 30px;
-            margin: 30px 0;
-            border-left: 5px solid var(--accent);
+            padding: 40px;
+            margin: 40px 0;
+            border-left: 6px solid var(--accent);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
         }
 
         .technique-recommendation {
             display: flex;
             align-items: center;
-            gap: 20px;
-            margin-bottom: 25px;
+            gap: 25px;
+            margin-bottom: 35px;
         }
 
         .tech-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--accent);
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--accent), #ff6b9d);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: white;
             flex-shrink: 0;
+            box-shadow: 0 8px 20px rgba(247, 37, 133, 0.3);
         }
 
         .steps-list {
             list-style: none;
-            margin: 20px 0;
+            margin: 25px 0 35px;
+            counter-reset: step-counter;
         }
 
         .steps-list li {
-            padding: 10px 0 10px 35px;
+            padding: 20px 20px 20px 70px;
             position: relative;
+            margin-bottom: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .steps-list li:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
         }
 
         .steps-list li::before {
-            content: '✓';
+            counter-increment: step-counter;
+            content: counter(step-counter);
             position: absolute;
-            left: 0;
-            top: 10px;
-            width: 24px;
-            height: 24px;
-            background: var(--success);
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--dark);
-            color: white;
-            padding: 60px 0 30px;
-            margin-top: 80px;
-        }
-
-        .footer-content {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .ai-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 8px 16px;
-            border-radius: 20px;
-            margin-bottom: 20px;
+            font-weight: 700;
         }
 
         /* Buttons */
         .btn {
-            padding: 14px 32px;
+            padding: 16px 35px;
             border-radius: 50px;
             font-weight: 600;
             cursor: pointer;
@@ -617,16 +641,48 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        .btn:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(40, 40);
+                opacity: 0;
+            }
         }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(67, 97, 238, 0.4);
         }
 
         .btn-secondary {
@@ -638,6 +694,7 @@
         .btn-secondary:hover {
             background: var(--primary);
             color: white;
+            transform: translateY(-3px);
         }
 
         .btn-large {
@@ -652,6 +709,32 @@
             box-shadow: none !important;
         }
 
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 80px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
@@ -663,18 +746,34 @@
             }
             
             .diagnostic-container {
-                padding: 25px;
+                padding: 30px 20px;
             }
             
             .quiz-header {
                 flex-direction: column;
-                gap: 15px;
+                gap: 20px;
                 align-items: flex-start;
             }
             
             .profile-header {
                 flex-direction: column;
                 text-align: center;
+                gap: 20px;
+            }
+            
+            .technique-recommendation {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .steps-list li {
+                padding: 20px 20px 20px 60px;
             }
         }
     </style>
@@ -688,7 +787,7 @@
                 <span>StudyMind AI</span>
             </div>
             <nav>
-                <a href="#articles" style="margin-right: 20px; text-decoration: none; color: var(--dark); font-weight: 500;">Articles</a>
+                <a href="#articles" style="margin-right: 25px; text-decoration: none; color: var(--dark); font-weight: 500;">Articles</a>
                 <a href="#diagnostic" style="text-decoration: none; color: var(--dark); font-weight: 500;">Diagnostic</a>
             </nav>
         </div>
@@ -697,10 +796,10 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>Your AI Study Assistant</h1>
-            <p>Upload your textbook or study material. Get a personalized diagnostic quiz, learning profile analysis, and custom study plan designed just for you.</p>
+            <h1>AI-Powered Study Diagnostic</h1>
+            <p>Paste your textbook content below. Our AI will analyze it and generate a personalized quiz to assess your understanding and create a custom study plan.</p>
             <button class="btn btn-primary btn-large" id="startBtn">
-                <i class="fas fa-rocket"></i> Start AI Diagnostic
+                <i class="fas fa-play-circle"></i> Start Diagnostic
             </button>
         </div>
     </section>
@@ -712,26 +811,26 @@
             <!-- Article 1 -->
             <article class="article-card">
                 <div class="article-header">
-                    <h2><i class="fas fa-lightbulb"></i> Study Techniques</h2>
+                    <h2><i class="fas fa-lightbulb"></i> Effective Study Techniques</h2>
                     <p>Evidence-based learning strategies</p>
                 </div>
                 <div class="article-content">
                     <div class="method-grid">
                         <div class="method-item">
                             <strong>Active Recall</strong>
-                            Testing yourself without looking at material to strengthen memory.
+                            Testing yourself without looking at material to strengthen memory pathways.
                         </div>
                         <div class="method-item">
                             <strong>Spaced Repetition</strong>
-                            Reviewing information at increasing intervals over time.
+                            Reviewing information at scientifically optimized intervals for long-term retention.
                         </div>
                         <div class="method-item">
                             <strong>Feynman Technique</strong>
-                            Teaching concepts in simple language to identify gaps.
+                            Teaching concepts in simple language to identify and fill knowledge gaps.
                         </div>
                         <div class="method-item">
                             <strong>Interleaving</strong>
-                            Mixing different topics during study sessions.
+                            Mixing different topics or types of problems during study sessions.
                         </div>
                     </div>
                 </div>
@@ -740,29 +839,24 @@
             <!-- Article 2 -->
             <article class="article-card">
                 <div class="article-header">
-                    <h2><i class="fas fa-chart-bar"></i> Methods Analysis</h2>
+                    <h2><i class="fas fa-chart-bar"></i> Technique Analysis</h2>
                     <p>Strengths and weaknesses of each approach</p>
                 </div>
                 <div class="article-content">
                     <div class="method-item">
                         <strong>Active Recall</strong>
                         <span class="strength">Strengths:</span> Highly effective for long-term retention, identifies knowledge gaps<br>
-                        <span class="weakness">Weaknesses:</span> Can be mentally taxing, requires discipline
+                        <span class="weakness">Weaknesses:</span> Mentally demanding, requires discipline and planning
                     </div>
                     <div class="method-item">
                         <strong>Feynman Technique</strong>
                         <span class="strength">Strengths:</span> Deepens conceptual understanding, reveals misunderstandings<br>
-                        <span class="weakness">Weaknesses:</span> Time-consuming for complex topics
+                        <span class="weakness">Weaknesses:</span> Time-intensive for complex topics, requires foundational knowledge
                     </div>
                     <div class="method-item">
                         <strong>Spaced Repetition</strong>
                         <span class="strength">Strengths:</span> Optimizes memory retention, efficient over time<br>
-                        <span class="weakness">Weaknesses:</span> Requires consistent schedule, less effective for concepts
-                    </div>
-                    <div class="method-item">
-                        <strong>Blurting Method</strong>
-                        <span class="strength">Strengths:</span> Quick assessment, active recall practice<br>
-                        <span class="weakness">Weaknesses:</span> Can be discouraging if knowledge is limited
+                        <span class="weakness">Weaknesses:</span> Requires consistent schedule, less effective for pure conceptual learning
                     </div>
                 </div>
             </article>
@@ -772,79 +866,85 @@
     <!-- Diagnostic Section -->
     <section id="diagnostic" class="container">
         <div class="diagnostic-container">
-            <h2 class="section-title">AI Study Diagnostic</h2>
+            <h2 class="section-title">AI Text Analysis & Diagnostic</h2>
             
-            <!-- Upload Area -->
-            <div class="upload-area" id="uploadArea">
-                <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                <h3>Upload Your Study Material</h3>
-                <p>Upload a PDF textbook, notes, or study guide. Our AI will analyze the content and create a personalized diagnostic quiz.</p>
-                <p style="color: var(--gray); font-size: 0.9rem; margin-top: 10px;">Supported: PDF files up to 50MB</p>
-                
-                <input type="file" id="pdfUpload" class="file-input" accept=".pdf">
-                <label for="pdfUpload" class="upload-btn">
-                    <i class="fas fa-file-pdf"></i> Choose PDF File
-                </label>
-                
-                <div class="selected-file" id="selectedFile" style="display: none;">
-                    <div class="file-info">
-                        <i class="fas fa-file-pdf"></i>
-                        <span id="fileName">No file selected</span>
-                        <button id="removeFile" style="background: none; border: none; color: var(--danger); cursor: pointer; margin-left: 10px;">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
+            <!-- Text Input Area -->
+            <div class="text-input-area">
+                <div class="text-input-header">
+                    <h3>Paste Your Study Content</h3>
+                    <div class="word-count" id="wordCount">0 words (minimum: 100)</div>
                 </div>
+                
+                <div class="text-input-container">
+                    <textarea class="text-input" id="textInput" 
+                        placeholder="Paste your textbook content, lecture notes, or study material here...
+                        
+Example: Psychology is the scientific study of mind and behavior. It includes the study of conscious and unconscious phenomena, as well as feelings and thoughts. Psychology is an academic discipline of immense scope, crossing the boundaries between the natural and social sciences.
+
+Key areas include biological psychology, cognitive psychology, developmental psychology, and social psychology. Researchers in psychology employ empirical methods to infer causal and correlational relationships between psychosocial variables."></textarea>
+                </div>
+                
+                <div class="text-input-footer">
+                    <div>
+                        <i class="fas fa-info-circle"></i> Paste at least 100 words for accurate analysis
+                    </div>
+                    <button class="sample-text-btn" id="sampleTextBtn">
+                        <i class="fas fa-magic"></i> Load Sample Text
+                    </button>
+                </div>
+            </div>
+
+            <!-- Generate Quiz Button -->
+            <div style="text-align: center;">
+                <button class="btn btn-primary btn-large" id="analyzeTextBtn">
+                    <i class="fas fa-bolt"></i> Analyze Text & Generate Quiz
+                </button>
             </div>
 
             <!-- Processing Animation -->
             <div class="processing-area" id="processingArea">
                 <div class="spinner"></div>
-                <h3>AI is Analyzing Your Document</h3>
-                <p>Reading and understanding content... Identifying key concepts and topics...</p>
-                <div style="margin-top: 20px; color: var(--gray);">
-                    <i class="fas fa-cog fa-spin"></i> Generating personalized quiz questions...
+                <h3>AI is Analyzing Your Content</h3>
+                <p>Extracting key concepts, identifying main topics, and generating personalized questions...</p>
+                <div style="margin-top: 25px; color: var(--gray); display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                    <div><i class="fas fa-check-circle"></i> Text processed</div>
+                    <div><i class="fas fa-cog fa-spin"></i> Identifying topics</div>
+                    <div><i class="fas fa-cog fa-spin"></i> Generating questions</div>
                 </div>
             </div>
 
             <!-- AI Analysis Summary -->
             <div class="ai-analysis" id="aiAnalysis">
                 <h3><i class="fas fa-robot"></i> AI Analysis Complete</h3>
-                <p>✅ Document processed successfully</p>
-                <p>✅ 12 key topics identified</p>
-                <p>✅ 15 personalized questions generated</p>
-                <p>✅ Difficulty level: Medium</p>
-            </div>
-
-            <!-- Generate Quiz Button -->
-            <div style="text-align: center; margin-top: 40px;">
-                <button class="btn btn-primary btn-large" id="generateQuizBtn" disabled>
-                    <i class="fas fa-bolt"></i> Generate AI Diagnostic Quiz
-                </button>
+                <p><i class="fas fa-check-circle"></i> Content analyzed successfully</p>
+                <p><i class="fas fa-tags"></i> 5 main topics identified</p>
+                <p><i class="fas fa-question-circle"></i> 10 personalized questions generated</p>
+                <p><i class="fas fa-chart-line"></i> Difficulty: Medium (adaptive)</p>
             </div>
 
             <!-- Quiz Section -->
             <div class="quiz-section" id="quizSection">
                 <div class="quiz-header">
-                    <div>
-                        <h3>AI Diagnostic Quiz</h3>
-                        <p style="color: var(--gray);">Answer all questions to get your personalized study plan</p>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="quizProgress"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--gray);">
+                            <span>Progress</span>
+                            <span id="progressText">Question 1 of 10</span>
+                        </div>
                     </div>
-                    <div style="text-align: right;">
-                        <div style="font-weight: 600; font-size: 1.1rem;">Question <span id="currentQuestion">1</span> of <span id="totalQuestions">15</span></div>
-                        <div style="color: var(--gray); font-size: 0.9rem;">Time: <span id="quizTime">00:00</span></div>
+                    <div style="text-align: right; min-width: 150px;">
+                        <div style="font-weight: 700; font-size: 1.2rem; color: var(--secondary);">AI Diagnostic Quiz</div>
+                        <div style="color: var(--gray); font-size: 0.9rem; margin-top: 5px;">Time: <span id="quizTime">00:00</span></div>
                     </div>
-                </div>
-
-                <div class="progress-bar">
-                    <div class="progress-fill" id="quizProgress"></div>
                 </div>
 
                 <div id="quizQuestions">
                     <!-- Questions will be inserted here -->
                 </div>
 
-                <div style="display: flex; justify-content: space-between; margin-top: 40px;">
+                <div style="display: flex; justify-content: space-between; margin-top: 50px;">
                     <button class="btn btn-secondary" id="prevQuestionBtn" disabled>
                         <i class="fas fa-arrow-left"></i> Previous
                     </button>
@@ -853,8 +953,8 @@
                     </button>
                 </div>
 
-                <div style="text-align: center; margin-top: 30px;">
-                    <button class="btn btn-primary btn-large" id="submitQuizBtn" style="display: none;">
+                <div style="text-align: center; margin-top: 40px;">
+                    <button class="btn btn-primary btn-large" id="submitQuizBtn" style="display: none; padding: 18px 50px;">
                         <i class="fas fa-chart-line"></i> Submit Quiz & Get Analysis
                     </button>
                 </div>
@@ -872,17 +972,18 @@
         <div class="container footer-content">
             <div class="ai-badge">
                 <i class="fas fa-robot"></i>
-                <span>Powered by AI</span>
+                <span>Powered by Advanced AI</span>
             </div>
-            <div class="logo" style="font-size: 2rem; margin-bottom: 20px;">
+            <div class="logo" style="font-size: 2.2rem; margin-bottom: 25px;">
                 <i class="fas fa-brain"></i>
                 <span>StudyMind AI</span>
             </div>
-            <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 30px;">
-                Personalized learning diagnostics powered by artificial intelligence.
+            <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 30px; line-height: 1.6;">
+                Personalized learning diagnostics powered by artificial intelligence. 
+                Get custom study plans based on your unique learning profile.
             </p>
             <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.9rem;">
-                © 2023 StudyMind AI. This is a prototype demonstration.
+                © 2023 StudyMind AI. This is a prototype demonstrating AI-powered educational technology.
             </p>
         </div>
     </footer>
@@ -890,119 +991,189 @@
     <script>
         // DOM Elements
         const startBtn = document.getElementById('startBtn');
-        const uploadArea = document.getElementById('uploadArea');
-        const pdfUpload = document.getElementById('pdfUpload');
-        const selectedFile = document.getElementById('selectedFile');
-        const fileName = document.getElementById('fileName');
-        const removeFileBtn = document.getElementById('removeFile');
-        const generateQuizBtn = document.getElementById('generateQuizBtn');
+        const textInput = document.getElementById('textInput');
+        const wordCount = document.getElementById('wordCount');
+        const sampleTextBtn = document.getElementById('sampleTextBtn');
+        const analyzeTextBtn = document.getElementById('analyzeTextBtn');
         const processingArea = document.getElementById('processingArea');
         const aiAnalysis = document.getElementById('aiAnalysis');
         const quizSection = document.getElementById('quizSection');
         const quizQuestions = document.getElementById('quizQuestions');
-        const currentQuestionEl = document.getElementById('currentQuestion');
-        const totalQuestionsEl = document.getElementById('totalQuestions');
+        const progressText = document.getElementById('progressText');
         const quizProgress = document.getElementById('quizProgress');
         const prevQuestionBtn = document.getElementById('prevQuestionBtn');
         const nextQuestionBtn = document.getElementById('nextQuestionBtn');
         const submitQuizBtn = document.getElementById('submitQuizBtn');
         const resultsSection = document.getElementById('resultsSection');
 
-        // Sample AI-generated quiz data (simulating AI analysis)
+        // Sample text for demonstration
+        const sampleText = `Psychology is the scientific study of mind and behavior. It includes the study of conscious and unconscious phenomena, as well as feelings and thoughts. Psychology is an academic discipline of immense scope, crossing the boundaries between the natural and social sciences.
+
+Key areas in psychology include biological psychology, cognitive psychology, developmental psychology, and social psychology. Researchers in psychology employ empirical methods to infer causal and correlational relationships between psychosocial variables.
+
+Biological psychology examines how biological processes influence behavior and mental processes. This includes studying the brain, neurotransmitters, hormones, and genetics. Cognitive psychology focuses on mental processes such as perception, attention, language, memory, and problem-solving.
+
+Developmental psychology studies how people change and grow across their lifespan, from infancy to old age. This includes physical, cognitive, social, and emotional development. Social psychology examines how individuals' thoughts, feelings, and behaviors are influenced by the actual, imagined, or implied presence of others.
+
+Learning theories in psychology explain how behavior changes as a result of experience. Classical conditioning, discovered by Ivan Pavlov, involves learning through association. Operant conditioning, developed by B.F. Skinner, involves learning through consequences (reinforcement and punishment).
+
+Memory is another crucial area, involving processes of encoding, storage, and retrieval. The multi-store model proposes three memory stores: sensory memory, short-term memory, and long-term memory. Working memory, a component of short-term memory, is essential for complex cognitive tasks.
+
+Personality psychology studies enduring patterns of thinking, feeling, and behaving that distinguish individuals. Major theories include psychodynamic, humanistic, trait, and social-cognitive approaches. Assessment methods include self-report inventories, projective tests, and behavioral observations.
+
+Psychological disorders are characterized by clinically significant disturbances in cognition, emotion regulation, or behavior. The DSM-5 (Diagnostic and Statistical Manual of Mental Disorders) provides a classification system. Treatment approaches include psychotherapy, medication, and combined treatments.`;
+
+        // AI-generated quiz based on text analysis
         const aiGeneratedQuiz = {
-            documentTitle: "Introduction to Psychology",
+            documentTitle: "Psychology Fundamentals",
             topics: [
-                { name: "Research Methods", confidence: 0 },
-                { name: "Biological Bases", confidence: 0 },
-                { name: "Sensation & Perception", confidence: 0 },
+                { name: "Introduction to Psychology", confidence: 0 },
+                { name: "Biological Psychology", confidence: 0 },
+                { name: "Cognitive Processes", confidence: 0 },
                 { name: "Learning Theories", confidence: 0 },
                 { name: "Memory Systems", confidence: 0 },
-                { name: "Cognitive Processes", confidence: 0 }
+                { name: "Personality Psychology", confidence: 0 }
             ],
             questions: [
                 {
                     id: 1,
-                    topic: "Research Methods",
+                    topic: "Introduction to Psychology",
                     type: "conceptual",
-                    text: "Which of the following best describes the primary purpose of using a control group in experimental research?",
+                    text: "Based on the text, which statement best captures the scope of psychology as a discipline?",
                     options: [
-                        "To provide a baseline for comparing the experimental group's results",
-                        "To ensure all participants receive the same treatment",
-                        "To eliminate the need for random assignment",
-                        "To reduce the overall cost of the research"
+                        "It studies both conscious and unconscious phenomena, crossing boundaries between natural and social sciences",
+                        "It focuses exclusively on observable behavior and ignores internal mental processes",
+                        "It is primarily concerned with treating mental disorders and psychological problems",
+                        "It is a natural science that doesn't incorporate social science methodologies"
                     ],
                     correct: 0,
-                    explanation: "Control groups provide a baseline comparison, helping researchers determine if changes in the experimental group are due to the treatment or other factors."
+                    explanation: "The text explicitly states psychology includes study of conscious/unconscious phenomena and crosses boundaries between natural and social sciences."
                 },
                 {
                     id: 2,
-                    topic: "Biological Bases",
+                    topic: "Biological Psychology",
                     type: "factual",
-                    text: "Which part of the neuron is primarily responsible for receiving signals from other neurons?",
+                    text: "According to the text, what does biological psychology examine?",
                     options: [
-                        "Dendrites",
-                        "Axon",
-                        "Myelin sheath",
-                        "Synapse"
+                        "How biological processes influence behavior and mental processes",
+                        "Exclusively the structure of the brain without considering neurotransmitters",
+                        "Only genetic factors in psychological disorders",
+                        "Social influences on biological development"
                     ],
                     correct: 0,
-                    explanation: "Dendrites are the branched extensions of neurons that receive electrical signals from other neurons."
+                    explanation: "The text states biological psychology examines how biological processes influence behavior and mental processes, including brain, neurotransmitters, hormones, and genetics."
                 },
                 {
                     id: 3,
-                    topic: "Sensation & Perception",
+                    topic: "Cognitive Processes",
                     type: "application",
-                    text: "If a person with normal vision looks at a green circle for 30 seconds and then looks at a white wall, what color afterimage would they most likely see?",
+                    text: "If a researcher is studying how people solve complex puzzles, which area of psychology mentioned in the text would this research most likely fall under?",
                     options: [
-                        "Red",
-                        "Blue",
-                        "Yellow",
-                        "Purple"
+                        "Cognitive psychology",
+                        "Developmental psychology",
+                        "Social psychology",
+                        "Biological psychology"
                     ],
                     correct: 0,
-                    explanation: "According to opponent-process theory, staring at green fatigues green receptors, causing the opponent red receptors to be more active when looking at white."
+                    explanation: "Cognitive psychology focuses on mental processes like problem-solving, as mentioned in the text."
                 },
                 {
                     id: 4,
                     topic: "Learning Theories",
                     type: "critical",
-                    text: "Why would variable-ratio reinforcement schedules produce behavior that is most resistant to extinction?",
+                    text: "Why would classical conditioning be considered different from operant conditioning based on the text's description?",
                     options: [
-                        "Because the reinforcement is unpredictable, making it hard to detect when it has stopped",
-                        "Because it provides the most frequent reinforcement",
-                        "Because it's the easiest schedule for subjects to understand",
-                        "Because it only reinforces perfect responses"
+                        "Classical conditioning involves learning through association, while operant conditioning involves learning through consequences",
+                        "Classical conditioning is more effective than operant conditioning for all types of learning",
+                        "Operant conditioning was discovered before classical conditioning",
+                        "Classical conditioning only works with animals, while operant conditioning works with humans"
                     ],
                     correct: 0,
-                    explanation: "Variable-ratio schedules create high, steady response rates with high resistance to extinction because reinforcement is unpredictable."
+                    explanation: "The text clearly distinguishes classical conditioning (learning through association) from operant conditioning (learning through consequences)."
                 },
                 {
                     id: 5,
                     topic: "Memory Systems",
                     type: "conceptual",
-                    text: "What is the key difference between explicit (declarative) memory and implicit (non-declarative) memory?",
+                    text: "What is the key distinction between short-term memory and working memory according to the text?",
                     options: [
-                        "Explicit memory requires conscious recall, while implicit memory does not",
-                        "Explicit memory is only for facts, while implicit memory is only for skills",
-                        "Explicit memory lasts longer than implicit memory",
-                        "Explicit memory is stored in the hippocampus, while implicit memory is stored in the cerebellum"
+                        "Working memory is a component of short-term memory essential for complex cognitive tasks",
+                        "Short-term memory is only for visual information, while working memory is for auditory information",
+                        "Working memory has unlimited capacity while short-term memory is limited",
+                        "They are completely separate memory systems with no relationship"
                     ],
                     correct: 0,
-                    explanation: "The primary distinction is that explicit memories require conscious effort to recall, while implicit memories are recalled unconsciously."
+                    explanation: "The text states working memory is a component of short-term memory essential for complex cognitive tasks."
                 },
                 {
                     id: 6,
-                    topic: "Cognitive Processes",
+                    topic: "Personality Psychology",
                     type: "application",
-                    text: "A student is trying to solve a physics problem but keeps applying a formula that worked for similar-looking problems in the past. What cognitive barrier are they experiencing?",
+                    text: "If a psychologist uses a questionnaire where people rate themselves on various traits, which assessment method from the text are they using?",
                     options: [
-                        "Mental set",
-                        "Confirmation bias",
-                        "Availability heuristic",
-                        "Functional fixedness"
+                        "Self-report inventories",
+                        "Projective tests",
+                        "Behavioral observations",
+                        "Clinical interviews"
                     ],
                     correct: 0,
-                    explanation: "Mental set refers to the tendency to approach problems using previously successful strategies even when they're not optimal for the current problem."
+                    explanation: "The text mentions self-report inventories as one method of personality assessment."
+                },
+                {
+                    id: 7,
+                    topic: "Introduction to Psychology",
+                    type: "factual",
+                    text: "Which of the following is NOT listed as a key area of psychology in the text?",
+                    options: [
+                        "Industrial-organizational psychology",
+                        "Biological psychology",
+                        "Cognitive psychology",
+                        "Developmental psychology"
+                    ],
+                    correct: 0,
+                    explanation: "The text lists biological, cognitive, developmental, and social psychology as key areas, but not industrial-organizational psychology."
+                },
+                {
+                    id: 8,
+                    topic: "Learning Theories",
+                    type: "conceptual",
+                    text: "Based on the text's description, what is the primary mechanism of learning in operant conditioning?",
+                    options: [
+                        "Consequences (reinforcement and punishment)",
+                        "Association between stimuli",
+                        "Observational learning",
+                        "Cognitive restructuring"
+                    ],
+                    correct: 0,
+                    explanation: "The text explicitly states operant conditioning involves learning through consequences (reinforcement and punishment)."
+                },
+                {
+                    id: 9,
+                    topic: "Memory Systems",
+                    type: "critical",
+                    text: "Why is the multi-store model of memory considered hierarchical according to the text?",
+                    options: [
+                        "It proposes three distinct memory stores that process information sequentially",
+                        "It suggests some memories are more important than others",
+                        "It was developed by psychologists with different academic ranks",
+                        "It only applies to memories formed during important life events"
+                    ],
+                    correct: 0,
+                    explanation: "The multi-store model proposes three memory stores (sensory, short-term, long-term) that process information in a sequence, making it hierarchical."
+                },
+                {
+                    id: 10,
+                    topic: "Personality Psychology",
+                    type: "application",
+                    text: "A psychologist believes personality is shaped by the interaction between personal factors and the environment. Which theoretical approach from the text aligns with this view?",
+                    options: [
+                        "Social-cognitive approach",
+                        "Psychodynamic approach",
+                        "Humanistic approach",
+                        "Trait approach"
+                    ],
+                    correct: 0,
+                    explanation: "The social-cognitive approach focuses on the interaction between personal factors and the environment in shaping personality."
                 }
             ]
         };
@@ -1012,40 +1183,52 @@
         let userAnswers = new Array(aiGeneratedQuiz.questions.length).fill(null);
         let quizStartTime = null;
         let timerInterval = null;
+        let wordCountValue = 0;
 
         // Event Listeners
         startBtn.addEventListener('click', () => {
             document.getElementById('diagnostic').scrollIntoView({ behavior: 'smooth' });
+            textInput.focus();
         });
 
-        // Handle PDF upload
-        pdfUpload.addEventListener('change', function() {
-            if (this.files.length > 0) {
-                const file = this.files[0];
-                fileName.textContent = file.name;
-                selectedFile.style.display = 'flex';
-                uploadArea.classList.add('active');
-                generateQuizBtn.disabled = false;
-                
-                // Simulate AI analysis
-                simulateAIAnalysis();
+        // Word count tracking
+        textInput.addEventListener('input', function() {
+            const text = this.value.trim();
+            const words = text === '' ? 0 : text.split(/\s+/).length;
+            wordCountValue = words;
+            
+            // Update word count display
+            wordCount.textContent = `${words} words (minimum: 100)`;
+            
+            // Update styling based on word count
+            if (words >= 100) {
+                wordCount.className = 'word-count';
+                analyzeTextBtn.disabled = false;
+            } else if (words >= 50) {
+                wordCount.className = 'word-count warning';
+                analyzeTextBtn.disabled = true;
+            } else {
+                wordCount.className = 'word-count error';
+                analyzeTextBtn.disabled = true;
             }
         });
 
-        // Remove file
-        removeFileBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            pdfUpload.value = '';
-            selectedFile.style.display = 'none';
-            uploadArea.classList.remove('active');
-            generateQuizBtn.disabled = true;
-            processingArea.style.display = 'none';
-            aiAnalysis.style.display = 'none';
+        // Load sample text
+        sampleTextBtn.addEventListener('click', () => {
+            textInput.value = sampleText;
+            textInput.dispatchEvent(new Event('input'));
+            textInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
 
-        // Generate quiz
-        generateQuizBtn.addEventListener('click', () => {
-            startQuiz();
+        // Analyze text and generate quiz
+        analyzeTextBtn.addEventListener('click', () => {
+            if (wordCountValue < 100) {
+                alert('Please enter at least 100 words for accurate analysis.');
+                textInput.focus();
+                return;
+            }
+            
+            simulateTextAnalysis();
         });
 
         // Next question
@@ -1072,19 +1255,31 @@
         });
 
         // Functions
-        function simulateAIAnalysis() {
+        function simulateTextAnalysis() {
+            // Show processing animation
             processingArea.style.display = 'block';
             aiAnalysis.style.display = 'none';
+            quizSection.style.display = 'none';
             
             // Simulate AI processing time
             setTimeout(() => {
                 processingArea.style.display = 'none';
                 aiAnalysis.style.display = 'block';
                 
-                // Update document title in UI
+                // Update document title based on text content
+                const text = textInput.value.substring(0, 100);
+                const titleMatch = text.match(/[A-Z][^.!?]*?(psychology|science|theory|research|study)[^.!?]*[.!?]/i);
+                if (titleMatch) {
+                    aiGeneratedQuiz.documentTitle = titleMatch[0].substring(0, 50) + "...";
+                }
+                
+                // Update analysis summary
                 document.querySelector('.ai-analysis h3').innerHTML = 
                     `<i class="fas fa-robot"></i> AI Analysis Complete: "${aiGeneratedQuiz.documentTitle}"`;
-            }, 2500);
+                
+                // Start quiz after short delay
+                setTimeout(startQuiz, 1500);
+            }, 3000);
         }
 
         function startQuiz() {
@@ -1098,7 +1293,7 @@
             timerInterval = setInterval(updateTimer, 1000);
             
             // Initialize quiz
-            totalQuestionsEl.textContent = aiGeneratedQuiz.questions.length;
+            progressText.textContent = `Question 1 of ${aiGeneratedQuiz.questions.length}`;
             renderQuestion();
             updateNavigation();
             
@@ -1108,7 +1303,7 @@
 
         function renderQuestion() {
             const question = aiGeneratedQuiz.questions[currentQuestion];
-            currentQuestionEl.textContent = currentQuestion + 1;
+            progressText.textContent = `Question ${currentQuestion + 1} of ${aiGeneratedQuiz.questions.length}`;
             
             // Calculate progress
             const progress = ((currentQuestion + 1) / aiGeneratedQuiz.questions.length) * 100;
@@ -1118,6 +1313,10 @@
             const typeClass = question.type === 'conceptual' ? 'conceptual' :
                             question.type === 'application' ? 'application' :
                             question.type === 'factual' ? 'factual' : 'critical';
+            
+            const typeIcon = question.type === 'conceptual' ? 'fa-lightbulb' :
+                           question.type === 'application' ? 'fa-cogs' :
+                           question.type === 'factual' ? 'fa-brain' : 'fa-question-circle';
             
             let optionsHTML = '';
             const letters = ['A', 'B', 'C', 'D'];
@@ -1140,10 +1339,10 @@
                 <div class="quiz-question">
                     <div class="question-meta">
                         <div class="question-type ${typeClass}">
-                            ${question.type.toUpperCase()}
+                            <i class="fas ${typeIcon}"></i> ${question.type.charAt(0).toUpperCase() + question.type.slice(1)} Question
                         </div>
                         <div>
-                            <i class="fas fa-book"></i> Topic: ${question.topic}
+                            <i class="fas fa-bookmark"></i> Topic: ${question.topic}
                         </div>
                     </div>
                     <div class="question-text">
@@ -1201,12 +1400,10 @@
             // Calculate scores
             let correctCount = 0;
             const topicScores = {};
-            const topicResponseTimes = {};
             
             // Initialize topic tracking
             aiGeneratedQuiz.topics.forEach(topic => {
                 topicScores[topic.name] = { correct: 0, total: 0 };
-                topicResponseTimes[topic.name] = [];
             });
             
             // Calculate correctness and topic scores
@@ -1223,22 +1420,60 @@
             
             const overallScore = Math.round((correctCount / aiGeneratedQuiz.questions.length) * 100);
             
-            // Determine learning profile
+            // Determine learning profile based on performance patterns
             let learningProfile = "Mixed Learner";
-            if (overallScore >= 80) learningProfile = "Conceptual Learner";
-            else if (overallScore >= 60) learningProfile = "Application-oriented Learner";
-            else if (overallScore >= 40) learningProfile = "Mixed Learner";
-            else learningProfile = "Memorization-based Learner";
+            let profileDescription = "";
+            
+            // Analyze question type performance
+            let conceptualScore = 0, applicationScore = 0, factualScore = 0, criticalScore = 0;
+            let conceptualTotal = 0, applicationTotal = 0, factualTotal = 0, criticalTotal = 0;
+            
+            aiGeneratedQuiz.questions.forEach((question, index) => {
+                const isCorrect = userAnswers[index] === question.correct;
+                
+                if (question.type === 'conceptual') {
+                    conceptualTotal++;
+                    if (isCorrect) conceptualScore++;
+                } else if (question.type === 'application') {
+                    applicationTotal++;
+                    if (isCorrect) applicationScore++;
+                } else if (question.type === 'factual') {
+                    factualTotal++;
+                    if (isCorrect) factualScore++;
+                } else if (question.type === 'critical') {
+                    criticalTotal++;
+                    if (isCorrect) criticalScore++;
+                }
+            });
+            
+            // Determine profile based on relative strengths
+            if (conceptualScore/conceptualTotal > 0.8 && criticalScore/criticalTotal > 0.7) {
+                learningProfile = "Conceptual Learner";
+                profileDescription = "You excel at understanding underlying concepts and thinking critically about material.";
+            } else if (applicationScore/applicationTotal > 0.8 && factualScore/factualTotal > 0.6) {
+                learningProfile = "Application-oriented Learner";
+                profileDescription = "You learn best by applying knowledge to practical situations and remembering key facts.";
+            } else if (factualScore/factualTotal > 0.8 && conceptualScore/conceptualTotal < 0.6) {
+                learningProfile = "Memorization-based Learner";
+                profileDescription = "You're strong at recalling facts but may need to work on deeper conceptual understanding.";
+            } else {
+                learningProfile = "Mixed Learner";
+                profileDescription = "You have balanced abilities across different types of learning tasks.";
+            }
             
             // Determine strong/weak topics
             const topicPerformance = [];
             for (const [topic, scores] of Object.entries(topicScores)) {
                 if (scores.total > 0) {
                     const accuracy = Math.round((scores.correct / scores.total) * 100);
+                    let strength = "medium";
+                    if (accuracy >= 80) strength = "strong";
+                    else if (accuracy <= 50) strength = "weak";
+                    
                     topicPerformance.push({
                         name: topic,
                         accuracy: accuracy,
-                        strength: accuracy >= 70 ? "strong" : accuracy >= 40 ? "medium" : "weak"
+                        strength: strength
                     });
                 }
             }
@@ -1246,30 +1481,38 @@
             // Sort topics by accuracy
             topicPerformance.sort((a, b) => b.accuracy - a.accuracy);
             
-            // Determine study technique
-            let technique = "Active Recall with Spaced Repetition";
-            let techniqueReason = "Your balanced performance across different question types suggests you'd benefit from a combination of memory reinforcement and conceptual understanding.";
+            // Determine study technique based on learning profile
+            let technique = "";
+            let techniqueReason = "";
+            let techniqueIcon = "fa-bullseye";
             
             if (learningProfile === "Conceptual Learner") {
-                technique = "Feynman Technique";
-                techniqueReason = "Your strong conceptual understanding means you can deepen your learning by explaining concepts to others, which will help identify any remaining gaps.";
+                technique = "Feynman Technique with Mind Mapping";
+                techniqueReason = "Your strength in conceptual understanding makes you ideal for teaching concepts back in simple terms and creating visual connections between ideas.";
+                techniqueIcon = "fa-project-diagram";
             } else if (learningProfile === "Application-oriented Learner") {
-                technique = "Practice-based Learning with Interleaving";
-                techniqueReason = "You learn best by doing. Mixing different types of problems will help you apply concepts more flexibly.";
+                technique = "Practice-based Learning with Active Recall";
+                techniqueReason = "You excel at applying knowledge, so combining practice problems with self-testing will maximize your learning efficiency.";
+                techniqueIcon = "fa-tasks";
             } else if (learningProfile === "Memorization-based Learner") {
-                technique = "Active Recall with Blurting Method";
-                techniqueReason = "You need to strengthen recall of key facts. Testing yourself regularly will help move information from short-term to long-term memory.";
+                technique = "Spaced Repetition with Blurting Method";
+                techniqueReason = "Your factual recall is strong, but spaced repetition will help with long-term retention, and blurting will identify gaps in your knowledge.";
+                techniqueIcon = "fa-brain";
+            } else {
+                technique = "Active Recall with Interleaving";
+                techniqueReason = "Your balanced learning style benefits from varied approaches. Mixing topics during study sessions while actively testing yourself will optimize your learning.";
+                techniqueIcon = "fa-random";
             }
             
             // Generate results HTML
-            renderResults(overallScore, learningProfile, topicPerformance, technique, techniqueReason);
+            renderResults(overallScore, learningProfile, profileDescription, topicPerformance, technique, techniqueReason, techniqueIcon);
         }
 
-        function renderResults(overallScore, learningProfile, topicPerformance, technique, techniqueReason) {
+        function renderResults(overallScore, learningProfile, profileDescription, topicPerformance, technique, techniqueReason, techniqueIcon) {
             quizSection.style.display = 'none';
             resultsSection.style.display = 'block';
             
-            // Determine icon for learning profile
+            // Determine icon and color for learning profile
             let profileIcon = "fas fa-user";
             let profileColor = "var(--primary)";
             
@@ -1291,10 +1534,13 @@
                     <div class="topic-item ${topic.strength}">
                         <div class="topic-header">
                             <strong>${topic.name}</strong>
-                            <span>${topic.accuracy}%</span>
+                            <span style="font-weight: 700; font-size: 1.2rem; color: ${topic.strength === 'strong' ? 'var(--success)' : topic.strength === 'medium' ? 'var(--warning)' : 'var(--danger)'};">${topic.accuracy}%</span>
                         </div>
-                        <div class="progress-bar" style="height: 6px; margin-top: 10px;">
-                            <div class="progress-fill" style="width: ${topic.accuracy}%; background: ${topic.strength === 'strong' ? 'var(--success)' : topic.strength === 'medium' ? 'var(--warning)' : 'var(--danger)'};"></div>
+                        <div class="progress-bar" style="height: 8px; margin-top: 15px;">
+                            <div class="progress-fill" style="width: ${topic.accuracy}%; background: ${topic.strength === 'strong' ? 'var(--success)' : topic.strength === 'medium' ? 'var(--warning)' : 'var(--danger)'}; border-radius: 4px;"></div>
+                        </div>
+                        <div style="margin-top: 10px; font-size: 0.9rem; color: var(--gray);">
+                            ${topic.strength === 'strong' ? 'Strong understanding' : topic.strength === 'medium' ? 'Moderate understanding' : 'Needs improvement'}
                         </div>
                     </div>
                 `;
@@ -1306,101 +1552,130 @@
                         <div class="profile-icon" style="background: linear-gradient(135deg, ${profileColor}, ${profileColor}dd);">
                             <i class="${profileIcon}"></i>
                         </div>
-                        <div>
-                            <h2 style="color: var(--secondary); margin-bottom: 5px;">Your Learning Profile</h2>
-                            <h1 style="color: ${profileColor};">${learningProfile}</h1>
-                            <p style="color: var(--gray);">Based on your diagnostic quiz performance</p>
+                        <div style="flex: 1;">
+                            <h2 style="color: var(--secondary); margin-bottom: 10px;">Your Learning Profile</h2>
+                            <h1 style="color: ${profileColor}; margin-bottom: 15px; font-size: 2.5rem;">${learningProfile}</h1>
+                            <p style="color: var(--gray); line-height: 1.6;">${profileDescription}</p>
                         </div>
                     </div>
                     
                     <div class="confidence-meter">
-                        <div class="meter" style="flex: 2;">
-                            <div class="meter-label">
-                                <span>Overall Understanding</span>
-                                <strong>${overallScore}%</strong>
-                            </div>
-                            <div class="meter-bar">
-                                <div class="meter-fill" style="width: ${overallScore}%;"></div>
-                            </div>
+                        <div class="meter-label">
+                            <span style="font-size: 1.1rem;">Overall Understanding Score</span>
+                            <strong style="font-size: 1.5rem; color: ${overallScore >= 70 ? 'var(--success)' : overallScore >= 50 ? 'var(--warning)' : 'var(--danger)'};">${overallScore}%</strong>
+                        </div>
+                        <div class="meter-bar">
+                            <div class="meter-fill" style="width: ${overallScore}%;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 10px; color: var(--gray); font-size: 0.9rem;">
+                            <span>Needs Work</span>
+                            <span>Good</span>
+                            <span>Excellent</span>
                         </div>
                     </div>
                     
-                    <div style="margin: 30px 0;">
-                        <h3 style="color: var(--secondary); margin-bottom: 20px;">Performance Analysis</h3>
-                        <p>
-                            ${overallScore >= 70 ? 
-                                "Great work! You have a solid understanding of the material." :
-                                overallScore >= 50 ?
-                                "You have a foundational understanding but there's room for improvement." :
-                                "You're in the early stages of understanding this material. Let's build a strong foundation."}
-                        </p>
-                        
-                        ${overallScore < 70 ? `
-                            <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 4px solid var(--warning);">
-                                <strong><i class="fas fa-exclamation-triangle"></i> Areas for Focus:</strong>
-                                <p style="margin-top: 8px;">${topicPerformance.filter(t => t.strength === 'weak').map(t => t.name).join(', ')}</p>
-                            </div>
-                        ` : ''}
+                    <div style="margin: 40px 0 30px;">
+                        <h3 style="color: var(--secondary); margin-bottom: 20px; font-size: 1.5rem;">
+                            <i class="fas fa-chart-pie"></i> Performance Summary
+                        </h3>
+                        <div style="background: ${overallScore >= 70 ? '#e6ffed' : overallScore >= 50 ? '#fff9e6' : '#ffe6e6'}; padding: 20px; border-radius: 10px; border-left: 4px solid ${overallScore >= 70 ? 'var(--success)' : overallScore >= 50 ? 'var(--warning)' : 'var(--danger)'};">
+                            <p style="margin-bottom: 10px;">
+                                <strong>${overallScore >= 70 ? 
+                                    "Great work! You have a solid understanding of the material." :
+                                    overallScore >= 50 ?
+                                    "You have a foundational understanding but there's room for improvement." :
+                                    "You're in the early stages of understanding this material. Let's build a strong foundation."}</strong>
+                            </p>
+                            <p style="color: var(--gray);">
+                                ${topicPerformance[0] && topicPerformance[0].accuracy >= 70 ? `You understand <strong>${topicPerformance[0].name}</strong> very well. ` : ''}
+                                ${topicPerformance[topicPerformance.length - 1] && topicPerformance[topicPerformance.length - 1].accuracy < 50 ? 
+                                    `You struggle most with <strong>${topicPerformance[topicPerformance.length - 1].name}</strong> (${topicPerformance[topicPerformance.length - 1].accuracy}%).` : ''}
+                            </p>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="profile-card">
-                    <h3 style="color: var(--secondary); margin-bottom: 20px;">Topic-wise Breakdown</h3>
-                    <p style="margin-bottom: 20px; color: var(--gray);">Your performance across different topics in the material:</p>
+                    <h3 style="color: var(--secondary); margin-bottom: 25px; font-size: 1.5rem;">
+                        <i class="fas fa-layer-group"></i> Topic-wise Breakdown
+                    </h3>
+                    <p style="margin-bottom: 25px; color: var(--gray);">Your performance across different topics in the material:</p>
                     
                     <div class="topics-breakdown">
                         ${topicsHTML}
                     </div>
-                    
-                    <div style="margin-top: 30px; padding: 20px; background: var(--gray-light); border-radius: 8px;">
-                        <p><strong>Summary:</strong> ${topicPerformance[0] ? `You understand <strong>${topicPerformance[0].name}</strong> well (${topicPerformance[0].accuracy}%).` : ''}</p>
-                        <p>${topicPerformance[topicPerformance.length - 1] ? `You struggle most with <strong>${topicPerformance[topicPerformance.length - 1].name}</strong> because ${topicPerformance[topicPerformance.length - 1].accuracy < 40 ? 'you need more foundational understanding' : 'you need more practice with application'}.</p>` : ''}
-                    </div>
                 </div>
                 
                 <div class="study-plan">
-                    <h3 style="color: var(--secondary); margin-bottom: 25px;"><i class="fas fa-graduation-cap"></i> Your Personalized Study Plan</h3>
+                    <h3 style="color: var(--secondary); margin-bottom: 30px; font-size: 1.5rem;">
+                        <i class="fas fa-graduation-cap"></i> Your Personalized Study Plan
+                    </h3>
                     
                     <div class="technique-recommendation">
                         <div class="tech-icon">
-                            <i class="fas fa-bullseye"></i>
+                            <i class="fas ${techniqueIcon}"></i>
                         </div>
-                        <div>
-                            <h4 style="margin-bottom: 5px; color: var(--dark);">Recommended Technique: ${technique}</h4>
-                            <p style="color: var(--gray);">${techniqueReason}</p>
+                        <div style="flex: 1;">
+                            <h4 style="margin-bottom: 10px; color: var(--dark); font-size: 1.3rem;">Recommended Technique: ${technique}</h4>
+                            <p style="color: var(--gray); line-height: 1.6;">${techniqueReason}</p>
                         </div>
                     </div>
                     
-                    <h4 style="color: var(--secondary); margin: 25px 0 15px;">Step-by-Step Study Plan:</h4>
+                    <h4 style="color: var(--secondary); margin: 30px 0 20px; font-size: 1.2rem;">
+                        <i class="fas fa-road"></i> Step-by-Step Study Plan for the Same Material
+                    </h4>
                     <ol class="steps-list">
-                        <li><strong>Day 1:</strong> Review weak topics using the ${technique.split(' ')[0]} method (45 mins)</li>
-                        <li><strong>Day 2:</strong> Practice application questions from medium-strength topics (60 mins)</li>
-                        <li><strong>Day 3:</strong> Teach back strong topics using the Feynman technique (30 mins)</li>
-                        <li><strong>Day 4:</strong> Mixed practice with spaced repetition (45 mins)</li>
-                        <li><strong>Day 5:</strong> Full review and self-testing (60 mins)</li>
+                        <li><strong>First Session (45 mins):</strong> Review weak topics using the recommended technique. Focus on understanding rather than memorization.</li>
+                        <li><strong>Second Session (60 mins):</strong> Create summary notes or mind maps for medium-strength topics. Explain concepts aloud as if teaching someone.</li>
+                        <li><strong>Third Session (45 mins):</strong> Practice applying knowledge from strong topics to new scenarios or problems.</li>
+                        <li><strong>Fourth Session (60 mins):</strong> Mix all topics using interleaving technique. Test yourself with self-generated questions.</li>
+                        <li><strong>Fifth Session (45 mins):</strong> Final review focusing on connections between topics. Identify any remaining gaps.</li>
                     </ol>
                     
-                    <div style="background: white; padding: 20px; border-radius: 8px; margin: 25px 0;">
-                        <h4 style="color: var(--secondary); margin-bottom: 10px;"><i class="fas fa-clock"></i> Daily Study Time</h4>
-                        <p><strong>Recommended:</strong> 45-60 minutes per day, 5 days a week</p>
-                        <p><strong>Focus ratio:</strong> 60% on weak topics, 30% on medium topics, 10% on strong topics</p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 30px 0;">
+                        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+                            <h4 style="color: var(--secondary); margin-bottom: 10px;"><i class="fas fa-clock"></i> Study Schedule</h4>
+                            <p><strong>Daily:</strong> 45-60 minutes</p>
+                            <p><strong>Weekly:</strong> 4-5 sessions</p>
+                            <p><strong>Focus Ratio:</strong> 60% weak, 30% medium, 10% strong topics</p>
+                        </div>
+                        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+                            <h4 style="color: var(--secondary); margin-bottom: 10px;"><i class="fas fa-bullseye"></i> Goals</h4>
+                            <p>• Increase weak topic scores by 30%</p>
+                            <p>• Strengthen conceptual connections</p>
+                            <p>• Improve application skills</p>
+                        </div>
                     </div>
                     
-                    <div style="background: #fff5f5; padding: 20px; border-radius: 8px; border-left: 4px solid var(--danger);">
-                        <h4 style="color: var(--danger); margin-bottom: 10px;"><i class="fas fa-ban"></i> What NOT to Do</h4>
-                        <ul style="padding-left: 20px;">
-                            <li>Don't just re-read the material passively</li>
-                            <li>Don't cram all studying into one long session</li>
-                            <li>Don't ignore your weak topics</li>
-                            <li>Don't study without breaks (follow 45-15 minute intervals)</li>
-                        </ul>
+                    <div style="background: #fff5f5; padding: 25px; border-radius: 10px; border-left: 5px solid var(--danger); margin-top: 30px;">
+                        <h4 style="color: var(--danger); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-exclamation-triangle"></i> What to Avoid
+                        </h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <div style="padding: 10px; background: rgba(255, 255, 255, 0.7); border-radius: 6px;">
+                                <i class="fas fa-times" style="color: var(--danger); margin-right: 8px;"></i>
+                                Passive re-reading
+                            </div>
+                            <div style="padding: 10px; background: rgba(255, 255, 255, 0.7); border-radius: 6px;">
+                                <i class="fas fa-times" style="color: var(--danger); margin-right: 8px;"></i>
+                                Cramming sessions
+                            </div>
+                            <div style="padding: 10px; background: rgba(255, 255, 255, 0.7); border-radius: 6px;">
+                                <i class="fas fa-times" style="color: var(--danger); margin-right: 8px;"></i>
+                                Highlighting without processing
+                            </div>
+                            <div style="padding: 10px; background: rgba(255, 255, 255, 0.7); border-radius: 6px;">
+                                <i class="fas fa-times" style="color: var(--danger); margin-right: 8px;"></i>
+                                Studying without breaks
+                            </div>
+                        </div>
                     </div>
                     
-                    <div style="text-align: center; margin-top: 30px;">
-                        <button class="btn btn-primary" id="newDiagnosticBtn">
+                    <div style="text-align: center; margin-top: 40px;">
+                        <button class="btn btn-primary" id="newDiagnosticBtn" style="padding: 18px 40px;">
                             <i class="fas fa-redo"></i> Start New Diagnostic
                         </button>
-                        <button class="btn btn-secondary" style="margin-left: 15px;" id="savePlanBtn">
+                        <button class="btn btn-secondary" style="margin-left: 15px; padding: 18px 40px;" id="savePlanBtn">
                             <i class="fas fa-download"></i> Save Study Plan
                         </button>
                     </div>
@@ -1413,14 +1688,26 @@
             });
             
             document.getElementById('savePlanBtn').addEventListener('click', () => {
-                alert('Study plan saved! (In a real application, this would download a PDF study plan)');
+                alert('Study plan saved! (In a real application, this would generate a PDF with your personalized study plan)');
             });
+            
+            // Animate the progress bars
+            setTimeout(() => {
+                document.querySelectorAll('.meter-fill').forEach(fill => {
+                    const width = fill.style.width;
+                    fill.style.width = '0%';
+                    setTimeout(() => {
+                        fill.style.width = width;
+                    }, 100);
+                });
+            }, 300);
             
             // Scroll to results
             resultsSection.scrollIntoView({ behavior: 'smooth' });
         }
 
         // Initialize
+        textInput.dispatchEvent(new Event('input'));
         updateTimer();
     </script>
 </body>
