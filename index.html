@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyMind AI | Real-Time Text Analysis</title>
+    <title>StudyMind AI | Interface Only</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -95,6 +95,71 @@
             font-size: 1.25rem;
             color: var(--gray);
             margin-bottom: 40px;
+        }
+
+        /* Articles Section */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            transition: var(--transition);
+            height: 100%;
+        }
+
+        .article-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .article-header {
+            padding: 25px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            color: white;
+        }
+
+        .article-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .article-content {
+            padding: 25px;
+        }
+
+        .method-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .method-item {
+            padding: 15px;
+            border-radius: 8px;
+            background: var(--gray-light);
+            transition: var(--transition);
+        }
+
+        .method-item:hover {
+            transform: translateX(5px);
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .strength {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .weakness {
+            color: var(--danger);
+            font-weight: 600;
         }
 
         /* Diagnostic Section */
@@ -676,6 +741,10 @@
                 font-size: 2.5rem;
             }
             
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+            
             .diagnostic-container {
                 padding: 30px 20px;
             }
@@ -718,6 +787,7 @@
                 <span>StudyMind AI</span>
             </div>
             <nav>
+                <a href="#articles" style="margin-right: 25px; text-decoration: none; color: var(--dark); font-weight: 500;">Articles</a>
                 <a href="#diagnostic" style="text-decoration: none; color: var(--dark); font-weight: 500;">Diagnostic</a>
             </nav>
         </div>
@@ -731,6 +801,65 @@
             <button class="btn btn-primary btn-large" id="startBtn">
                 <i class="fas fa-play-circle"></i> Start Diagnostic
             </button>
+        </div>
+    </section>
+
+    <!-- Articles Section -->
+    <section id="articles" class="container">
+        <h2 class="section-title">Study Techniques & Methods</h2>
+        <div class="articles-grid">
+            <!-- Article 1 -->
+            <article class="article-card">
+                <div class="article-header">
+                    <h2><i class="fas fa-lightbulb"></i> Effective Study Techniques</h2>
+                    <p>Evidence-based learning strategies</p>
+                </div>
+                <div class="article-content">
+                    <div class="method-grid">
+                        <div class="method-item">
+                            <strong>Active Recall</strong>
+                            Testing yourself without looking at material to strengthen memory pathways.
+                        </div>
+                        <div class="method-item">
+                            <strong>Spaced Repetition</strong>
+                            Reviewing information at scientifically optimized intervals for long-term retention.
+                        </div>
+                        <div class="method-item">
+                            <strong>Feynman Technique</strong>
+                            Teaching concepts in simple language to identify and fill knowledge gaps.
+                        </div>
+                        <div class="method-item">
+                            <strong>Interleaving</strong>
+                            Mixing different topics or types of problems during study sessions.
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Article 2 -->
+            <article class="article-card">
+                <div class="article-header">
+                    <h2><i class="fas fa-chart-bar"></i> Technique Analysis</h2>
+                    <p>Strengths and weaknesses of each approach</p>
+                </div>
+                <div class="article-content">
+                    <div class="method-item">
+                        <strong>Active Recall</strong>
+                        <span class="strength">Strengths:</span> Highly effective for long-term retention, identifies knowledge gaps<br>
+                        <span class="weakness">Weaknesses:</span> Mentally demanding, requires discipline and planning
+                    </div>
+                    <div class="method-item">
+                        <strong>Feynman Technique</strong>
+                        <span class="strength">Strengths:</span> Deepens conceptual understanding, reveals misunderstandings<br>
+                        <span class="weakness">Weaknesses:</span> Time-intensive for complex topics, requires foundational knowledge
+                    </div>
+                    <div class="method-item">
+                        <strong>Spaced Repetition</strong>
+                        <span class="strength">Strengths:</span> Optimizes memory retention, efficient over time<br>
+                        <span class="weakness">Weaknesses:</span> Requires consistent schedule, less effective for pure conceptual learning
+                    </div>
+                </div>
+            </article>
         </div>
     </section>
 
@@ -776,8 +905,8 @@ Example: Photosynthesis is the process used by plants, algae, and some bacteria 
                 <h3>AI is Analyzing Your Content</h3>
                 <p>Extracting key concepts, identifying main topics, and generating personalized questions...</p>
                 <div style="margin-top: 25px; color: var(--gray); display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                    <div><i class="fas fa-cog fa-spin"></i> Analyzing text structure</div>
-                    <div><i class="fas fa-cog fa-spin"></i> Extracting key concepts</div>
+                    <div><i class="fas fa-check-circle"></i> Text processed</div>
+                    <div><i class="fas fa-cog fa-spin"></i> Identifying topics</div>
                     <div><i class="fas fa-cog fa-spin"></i> Generating questions</div>
                 </div>
             </div>
@@ -785,7 +914,12 @@ Example: Photosynthesis is the process used by plants, algae, and some bacteria 
             <!-- AI Analysis Summary -->
             <div class="ai-analysis" id="aiAnalysis">
                 <h3><i class="fas fa-robot"></i> AI Analysis Complete</h3>
-                <p id="analysisDetails">Content analyzed successfully</p>
+                <div id="analysisDetails">
+                    <p><i class="fas fa-check-circle"></i> Content analyzed successfully</p>
+                    <p><i class="fas fa-tags"></i> 5 main topics identified</p>
+                    <p><i class="fas fa-question-circle"></i> 10 personalized questions generated</p>
+                    <p><i class="fas fa-chart-line"></i> Difficulty: Medium (adaptive)</p>
+                </div>
             </div>
 
             <!-- Quiz Section -->
@@ -849,33 +983,37 @@ Example: Photosynthesis is the process used by plants, algae, and some bacteria 
                 Get custom study plans based on your unique learning profile.
             </p>
             <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.9rem;">
-                © 2023 StudyMind AI. This is a prototype demonstrating AI-powered educational technology.
+                © 2023 StudyMind AI. Interface only - No functionality included.
             </p>
         </div>
     </footer>
 
     <script>
-        // DOM Elements
-        const startBtn = document.getElementById('startBtn');
+        // Empty script - No functionality
+        console.log("This is an interface-only version with no functionality.");
+        
+        // Simple word count update
         const textInput = document.getElementById('textInput');
         const wordCount = document.getElementById('wordCount');
-        const sampleTextBtn = document.getElementById('sampleTextBtn');
-        const analyzeTextBtn = document.getElementById('analyzeTextBtn');
-        const processingArea = document.getElementById('processingArea');
-        const aiAnalysis = document.getElementById('aiAnalysis');
-        const analysisDetails = document.getElementById('analysisDetails');
-        const quizSection = document.getElementById('quizSection');
-        const quizQuestions = document.getElementById('quizQuestions');
-        const progressText = document.getElementById('progressText');
-        const quizProgress = document.getElementById('quizProgress');
-        const prevQuestionBtn = document.getElementById('prevQuestionBtn');
-        const nextQuestionBtn = document.getElementById('nextQuestionBtn');
-        const submitQuizBtn = document.getElementById('submitQuizBtn');
-        const resultsSection = document.getElementById('resultsSection');
-
-        // Sample texts for demonstration
-        const sampleTexts = {
-            biology: `Photosynthesis is the process used by plants, algae, and some bacteria to convert light energy into chemical energy. This process occurs in chloroplasts and involves two main stages: the light-dependent reactions and the Calvin cycle.
+        
+        textInput.addEventListener('input', function() {
+            const text = this.value.trim();
+            const words = text === '' ? 0 : text.split(/\s+/).length;
+            wordCount.textContent = `${words} words (minimum: 100)`;
+            
+            // Update styling
+            if (words >= 100) {
+                wordCount.className = 'word-count';
+            } else if (words >= 50) {
+                wordCount.className = 'word-count warning';
+            } else {
+                wordCount.className = 'word-count error';
+            }
+        });
+        
+        // Sample text button
+        document.getElementById('sampleTextBtn').addEventListener('click', function() {
+            const sampleText = `Photosynthesis is the process used by plants, algae, and some bacteria to convert light energy into chemical energy. This process occurs in chloroplasts and involves two main stages: the light-dependent reactions and the Calvin cycle.
 
 In the light-dependent reactions, chlorophyll absorbs light energy, which splits water molecules into oxygen, protons, and electrons. The energy from these reactions is stored in ATP and NADPH. This stage occurs in the thylakoid membranes of chloroplasts.
 
@@ -883,703 +1021,17 @@ The Calvin cycle, also known as the light-independent reactions, takes place in 
 
 Photosynthesis is crucial for life on Earth as it produces oxygen and forms the base of most food chains. The overall chemical equation for photosynthesis is: 6CO₂ + 6H₂O + light energy → C₆H₁₂O₆ + 6O₂.
 
-Factors affecting photosynthesis include light intensity, carbon dioxide concentration, temperature, and water availability. Plants have adapted various mechanisms to optimize photosynthesis under different environmental conditions, such as C4 and CAM pathways in plants living in hot, dry environments.`,
-
-            history: `The Industrial Revolution was a period of major industrialization and innovation that began in Great Britain in the late 18th century and spread to other parts of the world. This transformative era marked a shift from agrarian, handcraft economies to machine-based manufacturing.
-
-Key inventions included the steam engine (improved by James Watt), the spinning jenny, and the power loom. These innovations revolutionized textile production and manufacturing processes. The development of railroads and steamships transformed transportation and trade.
-
-The Industrial Revolution led to significant social changes, including urbanization as people moved from rural areas to cities for factory work. Working conditions in early factories were often harsh, with long hours, low wages, and unsafe environments. This eventually led to the rise of labor movements and reforms.
-
-Economic theories such as capitalism and socialism emerged in response to industrial changes. The period also saw environmental impacts, including pollution and resource depletion. Despite challenges, the Industrial Revolution dramatically increased production efficiency and laid the foundation for modern industrial society.
-
-Major consequences included the growth of the middle class, changes in family structure, and increased global trade. The revolution spread to continental Europe, North America, and eventually to other parts of the world, fundamentally altering global economic and social structures.`,
-
-            psychology: `Classical conditioning is a learning process discovered by Ivan Pavlov, a Russian physiologist. In his famous experiment with dogs, Pavlov noticed that dogs would salivate not only when food was presented but also when they saw the lab assistant who normally fed them.
-
-Pavlov conducted systematic experiments where he paired a neutral stimulus (a bell) with an unconditioned stimulus (food). After repeated pairings, the neutral stimulus alone could elicit the salivation response. The bell became a conditioned stimulus, and salivation to the bell became a conditioned response.
-
-Key concepts in classical conditioning include: unconditioned stimulus (US) which naturally triggers a response; unconditioned response (UR) which is the natural response to the US; conditioned stimulus (CS) which is originally neutral but comes to trigger a response after association; and conditioned response (CR) which is the learned response to the CS.
-
-Other important phenomena include extinction (weakening of CR when CS is presented without US), spontaneous recovery (reappearance of extinguished CR after rest period), generalization (responding to similar stimuli), and discrimination (learning to differentiate between stimuli).
-
-Classical conditioning has practical applications in areas like phobia treatment through systematic desensitization, advertising through associative learning, and understanding emotional responses. It forms a fundamental basis for understanding how associations are formed in learning.`
-        };
-
-        // Quiz state
-        let currentQuestion = 0;
-        let userAnswers = [];
-        let quizStartTime = null;
-        let timerInterval = null;
-        let wordCountValue = 0;
-        let aiGeneratedQuiz = null;
-
-        // Event Listeners
-        startBtn.addEventListener('click', () => {
+Factors affecting photosynthesis include light intensity, carbon dioxide concentration, temperature, and water availability. Plants have adapted various mechanisms to optimize photosynthesis under different environmental conditions, such as C4 and CAM pathways in plants living in hot, dry environments.`;
+            
+            textInput.value = sampleText;
+            textInput.dispatchEvent(new Event('input'));
+        });
+        
+        // Scroll to diagnostic button
+        document.getElementById('startBtn').addEventListener('click', function() {
             document.getElementById('diagnostic').scrollIntoView({ behavior: 'smooth' });
             textInput.focus();
         });
-
-        // Word count tracking
-        textInput.addEventListener('input', function() {
-            const text = this.value.trim();
-            const words = text === '' ? 0 : text.split(/\s+/).length;
-            wordCountValue = words;
-            
-            // Update word count display
-            wordCount.textContent = `${words} words (minimum: 100)`;
-            
-            // Update styling based on word count
-            if (words >= 100) {
-                wordCount.className = 'word-count';
-                analyzeTextBtn.disabled = false;
-            } else if (words >= 50) {
-                wordCount.className = 'word-count warning';
-                analyzeTextBtn.disabled = true;
-            } else {
-                wordCount.className = 'word-count error';
-                analyzeTextBtn.disabled = true;
-            }
-        });
-
-        // Load sample text
-        sampleTextBtn.addEventListener('click', () => {
-            // Cycle through sample texts
-            const texts = Object.values(sampleTexts);
-            const randomText = texts[Math.floor(Math.random() * texts.length)];
-            textInput.value = randomText;
-            textInput.dispatchEvent(new Event('input'));
-            textInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        });
-
-        // Analyze text and generate quiz
-        analyzeTextBtn.addEventListener('click', () => {
-            if (wordCountValue < 100) {
-                alert('Please enter at least 100 words for accurate analysis.');
-                textInput.focus();
-                return;
-            }
-            
-            simulateTextAnalysis();
-        });
-
-        // Next question
-        nextQuestionBtn.addEventListener('click', () => {
-            if (currentQuestion < aiGeneratedQuiz.questions.length - 1) {
-                currentQuestion++;
-                renderQuestion();
-                updateNavigation();
-            }
-        });
-
-        // Previous question
-        prevQuestionBtn.addEventListener('click', () => {
-            if (currentQuestion > 0) {
-                currentQuestion--;
-                renderQuestion();
-                updateNavigation();
-            }
-        });
-
-        // Submit quiz
-        submitQuizBtn.addEventListener('click', () => {
-            calculateResults();
-        });
-
-        // Text Analysis Functions
-        function extractTopicsFromText(text) {
-            // Extract sentences and identify potential topics
-            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 10);
-            const words = text.toLowerCase().split(/\s+/);
-            
-            // Common academic words to exclude
-            const stopWords = new Set(['the', 'and', 'for', 'that', 'with', 'this', 'from', 'are', 'was', 'were', 'have', 'has', 'had', 'been', 'will', 'would', 'could', 'should', 'which', 'what', 'when', 'where', 'who', 'how', 'why', 'about', 'into', 'through', 'during', 'before', 'after', 'between', 'under', 'over', 'above', 'below', 'upon', 'within', 'without']);
-            
-            // Find important words (nouns, capitalized terms, repeated terms)
-            const wordFrequency = {};
-            words.forEach(word => {
-                const cleanWord = word.replace(/[^a-z]/g, '');
-                if (cleanWord.length > 4 && !stopWords.has(cleanWord)) {
-                    wordFrequency[cleanWord] = (wordFrequency[cleanWord] || 0) + 1;
-                }
-            });
-            
-            // Get top words
-            const topWords = Object.entries(wordFrequency)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 10)
-                .map(([word]) => word);
-            
-            // Extract potential topics from sentences
-            const topics = [];
-            sentences.forEach(sentence => {
-                // Look for definition patterns
-                if (sentence.toLowerCase().includes('is the') || sentence.toLowerCase().includes('are the') || 
-                    sentence.toLowerCase().includes('refers to') || sentence.toLowerCase().includes('known as')) {
-                    const topicMatch = sentence.match(/([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/);
-                    if (topicMatch && topicMatch[1].split(' ').length <= 4) {
-                        topics.push(topicMatch[1]);
-                    }
-                }
-                
-                // Look for list indicators
-                if (sentence.includes(':') || sentence.includes('include') || sentence.includes('such as')) {
-                    const colonParts = sentence.split(':');
-                    if (colonParts[0].split(' ').length <= 5) {
-                        topics.push(colonParts[0].trim());
-                    }
-                }
-            });
-            
-            // Combine and deduplicate topics
-            const allTopics = [...new Set([...topics, ...topWords.map(w => w.charAt(0).toUpperCase() + w.slice(1))])];
-            
-            // Return top 6 topics or default if not enough found
-            if (allTopics.length >= 4) {
-                return allTopics.slice(0, 6);
-            }
-            
-            // Default topics based on text content
-            return ['Key Concepts', 'Main Processes', 'Important Terms', 'Fundamental Principles', 'Applications', 'Historical Context'];
-        }
-
-        function generateQuestionsFromText(text, topics) {
-            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 20);
-            const questions = [];
-            
-            // Question templates based on type
-            const questionTemplates = {
-                conceptual: [
-                    "What is the main purpose or function of {concept} as described in the text?",
-                    "How does {concept} relate to or differ from other concepts mentioned?",
-                    "What would be the most accurate description of {concept} based on the text?",
-                    "Which statement best captures the essence of {concept} according to the text?"
-                ],
-                application: [
-                    "If you were to apply the concept of {concept} to a real-world situation, what would be the most likely outcome?",
-                    "Based on the text, how would {concept} function in a different context?",
-                    "What practical example best illustrates the principle of {concept} as described?",
-                    "How might {concept} be used to solve a problem mentioned in the text?"
-                ],
-                factual: [
-                    "According to the text, what is the definition of {concept}?",
-                    "Where does the text state that {concept} occurs or takes place?",
-                    "What specific example of {concept} is provided in the text?",
-                    "Which of these facts about {concept} is explicitly stated in the text?"
-                ],
-                critical: [
-                    "Why is {concept} considered important according to the text?",
-                    "What would be the most significant consequence if {concept} did not function as described?",
-                    "How does the text suggest that {concept} influences or affects other elements?",
-                    "Based on the information provided, what can be inferred about the role of {concept}?"
-                ]
-            };
-            
-            // Generate questions
-            const questionTypes = ['conceptual', 'conceptual', 'conceptual', 'conceptual', 'application', 'application', 'application', 'factual', 'factual', 'critical'];
-            
-            for (let i = 0; i < 10; i++) {
-                const type = questionTypes[i];
-                const topic = topics[i % topics.length];
-                
-                // Find relevant sentences for this topic
-                const relevantSentences = sentences.filter(s => 
-                    s.toLowerCase().includes(topic.toLowerCase()) || 
-                    s.includes(topic.split(' ')[0])
-                );
-                
-                if (relevantSentences.length > 0) {
-                    const template = questionTemplates[type][Math.floor(Math.random() * questionTemplates[type].length)];
-                    const questionText = template.replace('{concept}', topic);
-                    
-                    // Generate plausible options
-                    const options = generateOptions(text, topic, type);
-                    
-                    questions.push({
-                        id: i + 1,
-                        topic: topic,
-                        type: type,
-                        text: questionText,
-                        options: options,
-                        correct: 0, // First option is correct
-                        explanation: `This answer is correct because it aligns with the information provided in the text about ${topic}.`
-                    });
-                }
-            }
-            
-            return questions;
-        }
-
-        function generateOptions(text, topic, type) {
-            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 10);
-            const correctSentence = sentences.find(s => 
-                s.toLowerCase().includes(topic.toLowerCase()) ||
-                s.includes(topic.split(' ')[0])
-            ) || `The text discusses ${topic} and its importance.`;
-            
-            // Extract key information for correct answer
-            let correctAnswer = "";
-            if (type === 'conceptual') {
-                correctAnswer = `It is the process or concept that ${topic.toLowerCase()} represents as described in the text.`;
-            } else if (type === 'application') {
-                correctAnswer = `It demonstrates how ${topic.toLowerCase()} can be applied in practical situations.`;
-            } else if (type === 'factual') {
-                correctAnswer = correctSentence.substring(0, 100) + "...";
-            } else { // critical
-                correctAnswer = `Because ${topic.toLowerCase()} plays a crucial role in the system described.`;
-            }
-            
-            // Generate plausible distractors
-            const distractors = [
-                `It refers to a completely different concept not mentioned in the text.`,
-                `This is a common misconception about ${topic.toLowerCase()}.`,
-                `While related, this option describes a different aspect than what's in the text.`,
-                `This contradicts the information provided about ${topic.toLowerCase()}.`
-            ];
-            
-            // Shuffle options
-            const options = [correctAnswer, ...distractors.slice(0, 3)];
-            return shuffleArray(options);
-        }
-
-        function shuffleArray(array) {
-            const shuffled = [...array];
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
-            return shuffled;
-        }
-
-        function simulateTextAnalysis() {
-            const userText = textInput.value.trim();
-            
-            // Show processing animation
-            processingArea.style.display = 'block';
-            aiAnalysis.style.display = 'none';
-            quizSection.style.display = 'none';
-            
-            // Simulate AI processing time
-            setTimeout(() => {
-                // Extract topics from user text
-                const extractedTopics = extractTopicsFromText(userText);
-                
-                // Generate questions based on user text
-                const generatedQuestions = generateQuestionsFromText(userText, extractedTopics);
-                
-                // Determine document title from first sentence
-                const firstSentence = userText.split(/[.!?]+/)[0];
-                const documentTitle = firstSentence.length > 50 ? firstSentence.substring(0, 50) + "..." : firstSentence;
-                
-                // Create quiz object
-                aiGeneratedQuiz = {
-                    documentTitle: documentTitle,
-                    topics: extractedTopics.map(topic => ({ name: topic, confidence: 0 })),
-                    questions: generatedQuestions
-                };
-                
-                // Update analysis summary
-                analysisDetails.innerHTML = `
-                    <p><i class="fas fa-check-circle"></i> Content analyzed successfully</p>
-                    <p><i class="fas fa-tags"></i> ${extractedTopics.length} main topics identified</p>
-                    <p><i class="fas fa-question-circle"></i> ${generatedQuestions.length} personalized questions generated</p>
-                    <p><i class="fas fa-chart-line"></i> Difficulty: Medium (based on text complexity)</p>
-                `;
-                
-                processingArea.style.display = 'none';
-                aiAnalysis.style.display = 'block';
-                
-                // Update analysis title
-                document.querySelector('.ai-analysis h3').innerHTML = 
-                    `<i class="fas fa-robot"></i> AI Analysis Complete`;
-                
-                // Start quiz after short delay
-                setTimeout(startQuiz, 1500);
-            }, 3000);
-        }
-
-        function startQuiz() {
-            if (!aiGeneratedQuiz) return;
-            
-            quizSection.style.display = 'block';
-            currentQuestion = 0;
-            userAnswers = new Array(aiGeneratedQuiz.questions.length).fill(null);
-            quizStartTime = new Date();
-            
-            // Start timer
-            clearInterval(timerInterval);
-            timerInterval = setInterval(updateTimer, 1000);
-            
-            // Initialize quiz
-            progressText.textContent = `Question 1 of ${aiGeneratedQuiz.questions.length}`;
-            renderQuestion();
-            updateNavigation();
-            
-            // Scroll to quiz
-            quizSection.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function renderQuestion() {
-            if (!aiGeneratedQuiz) return;
-            
-            const question = aiGeneratedQuiz.questions[currentQuestion];
-            progressText.textContent = `Question ${currentQuestion + 1} of ${aiGeneratedQuiz.questions.length}`;
-            
-            // Calculate progress
-            const progress = ((currentQuestion + 1) / aiGeneratedQuiz.questions.length) * 100;
-            quizProgress.style.width = `${progress}%`;
-            
-            // Create question HTML
-            const typeClass = question.type === 'conceptual' ? 'conceptual' :
-                            question.type === 'application' ? 'application' :
-                            question.type === 'factual' ? 'factual' : 'critical';
-            
-            const typeIcon = question.type === 'conceptual' ? 'fa-lightbulb' :
-                           question.type === 'application' ? 'fa-cogs' :
-                           question.type === 'factual' ? 'fa-brain' : 'fa-question-circle';
-            
-            let optionsHTML = '';
-            const letters = ['A', 'B', 'C', 'D'];
-            
-            question.options.forEach((option, index) => {
-                let optionClass = 'option';
-                if (userAnswers[currentQuestion] === index) {
-                    optionClass += ' selected';
-                }
-                
-                optionsHTML += `
-                    <div class="${optionClass}" data-index="${index}">
-                        <div class="option-letter">${letters[index]}</div>
-                        <div class="option-text">${option}</div>
-                    </div>
-                `;
-            });
-            
-            quizQuestions.innerHTML = `
-                <div class="quiz-question">
-                    <div class="question-meta">
-                        <div class="question-type ${typeClass}">
-                            <i class="fas ${typeIcon}"></i> ${question.type.charAt(0).toUpperCase() + question.type.slice(1)} Question
-                        </div>
-                        <div>
-                            <i class="fas fa-bookmark"></i> Topic: ${question.topic}
-                        </div>
-                    </div>
-                    <div class="question-text">
-                        ${question.text}
-                    </div>
-                    <div class="options-grid">
-                        ${optionsHTML}
-                    </div>
-                </div>
-            `;
-            
-            // Add event listeners to options
-            document.querySelectorAll('.option').forEach(option => {
-                option.addEventListener('click', function() {
-                    const selectedIndex = parseInt(this.getAttribute('data-index'));
-                    
-                    // Remove selected class from all options in this question
-                    document.querySelectorAll('.option').forEach(opt => {
-                        opt.classList.remove('selected');
-                    });
-                    
-                    // Add selected class to clicked option
-                    this.classList.add('selected');
-                    
-                    // Save answer
-                    userAnswers[currentQuestion] = selectedIndex;
-                    
-                    // Enable submit button if all questions answered
-                    const allAnswered = userAnswers.every(answer => answer !== null);
-                    submitQuizBtn.style.display = allAnswered ? 'block' : 'none';
-                });
-            });
-        }
-
-        function updateNavigation() {
-            if (!aiGeneratedQuiz) return;
-            
-            prevQuestionBtn.disabled = currentQuestion === 0;
-            nextQuestionBtn.disabled = currentQuestion === aiGeneratedQuiz.questions.length - 1;
-        }
-
-        function updateTimer() {
-            if (!quizStartTime) return;
-            
-            const now = new Date();
-            const diff = Math.floor((now - quizStartTime) / 1000);
-            const minutes = Math.floor(diff / 60);
-            const seconds = diff % 60;
-            
-            document.getElementById('quizTime').textContent = 
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-
-        function calculateResults() {
-            clearInterval(timerInterval);
-            
-            if (!aiGeneratedQuiz) return;
-            
-            // Calculate scores
-            let correctCount = 0;
-            const topicScores = {};
-            
-            // Initialize topic tracking
-            aiGeneratedQuiz.topics.forEach(topic => {
-                topicScores[topic.name] = { correct: 0, total: 0 };
-            });
-            
-            // Calculate correctness and topic scores
-            aiGeneratedQuiz.questions.forEach((question, index) => {
-                const isCorrect = userAnswers[index] === 0; // First option is always correct in our generation
-                if (isCorrect) correctCount++;
-                
-                // Track topic performance
-                if (topicScores[question.topic]) {
-                    topicScores[question.topic].total++;
-                    if (isCorrect) topicScores[question.topic].correct++;
-                }
-            });
-            
-            const overallScore = Math.round((correctCount / aiGeneratedQuiz.questions.length) * 100);
-            
-            // Determine learning profile
-            let learningProfile = "Mixed Learner";
-            let profileDescription = "You have balanced abilities across different types of learning tasks.";
-            
-            // Analyze topic performance patterns
-            const topicPerformance = [];
-            for (const [topic, scores] of Object.entries(topicScores)) {
-                if (scores.total > 0) {
-                    const accuracy = Math.round((scores.correct / scores.total) * 100);
-                    let strength = "medium";
-                    if (accuracy >= 80) strength = "strong";
-                    else if (accuracy <= 50) strength = "weak";
-                    
-                    topicPerformance.push({
-                        name: topic,
-                        accuracy: accuracy,
-                        strength: strength
-                    });
-                }
-            }
-            
-            // Sort topics by accuracy
-            topicPerformance.sort((a, b) => b.accuracy - a.accuracy);
-            
-            // Determine study technique based on performance
-            let technique = "";
-            let techniqueReason = "";
-            let techniqueIcon = "fa-bullseye";
-            
-            if (overallScore >= 80) {
-                learningProfile = "Conceptual Learner";
-                profileDescription = "You excel at understanding underlying concepts and making connections between ideas.";
-                technique = "Feynman Technique";
-                techniqueReason = "Your strong conceptual understanding makes you ideal for teaching concepts back in simple terms to identify any remaining gaps.";
-                techniqueIcon = "fa-chalkboard-teacher";
-            } else if (overallScore >= 60) {
-                learningProfile = "Application-oriented Learner";
-                profileDescription = "You learn best by applying knowledge to practical situations and solving problems.";
-                technique = "Practice-based Learning with Active Recall";
-                techniqueReason = "You excel at applying knowledge, so combining practice problems with self-testing will maximize your learning efficiency.";
-                techniqueIcon = "fa-tasks";
-            } else if (overallScore >= 40) {
-                learningProfile = "Mixed Learner";
-                profileDescription = "You have balanced learning abilities and benefit from varied study approaches.";
-                technique = "Active Recall with Spaced Repetition";
-                techniqueReason = "Your balanced learning style benefits from testing yourself regularly while spacing out reviews for optimal retention.";
-                techniqueIcon = "fa-brain";
-            } else {
-                learningProfile = "Memorization-based Learner";
-                profileDescription = "You're building foundational knowledge and benefit from structured memorization techniques.";
-                technique = "Spaced Repetition with Blurting Method";
-                techniqueReason = "Building strong foundational knowledge requires regular review and self-testing to identify gaps.";
-                techniqueIcon = "fa-history";
-            }
-            
-            // Generate results HTML
-            renderResults(overallScore, learningProfile, profileDescription, topicPerformance, technique, techniqueReason, techniqueIcon);
-        }
-
-        function renderResults(overallScore, learningProfile, profileDescription, topicPerformance, technique, techniqueReason, techniqueIcon) {
-            quizSection.style.display = 'none';
-            resultsSection.style.display = 'block';
-            
-            // Determine icon and color for learning profile
-            let profileIcon = "fas fa-user";
-            let profileColor = "var(--primary)";
-            
-            if (learningProfile === "Conceptual Learner") {
-                profileIcon = "fas fa-lightbulb";
-                profileColor = "var(--warning)";
-            } else if (learningProfile === "Application-oriented Learner") {
-                profileIcon = "fas fa-cogs";
-                profileColor = "var(--success)";
-            } else if (learningProfile === "Memorization-based Learner") {
-                profileIcon = "fas fa-brain";
-                profileColor = "var(--accent)";
-            }
-            
-            // Create topics HTML
-            let topicsHTML = '';
-            topicPerformance.forEach(topic => {
-                topicsHTML += `
-                    <div class="topic-item ${topic.strength}">
-                        <div class="topic-header">
-                            <strong>${topic.name}</strong>
-                            <span style="font-weight: 700; font-size: 1.2rem; color: ${topic.strength === 'strong' ? 'var(--success)' : topic.strength === 'medium' ? 'var(--warning)' : 'var(--danger)'};">${topic.accuracy}%</span>
-                        </div>
-                        <div class="progress-bar" style="height: 8px; margin-top: 15px;">
-                            <div class="progress-fill" style="width: ${topic.accuracy}%; background: ${topic.strength === 'strong' ? 'var(--success)' : topic.strength === 'medium' ? 'var(--warning)' : 'var(--danger)'}; border-radius: 4px;"></div>
-                        </div>
-                        <div style="margin-top: 10px; font-size: 0.9rem; color: var(--gray);">
-                            ${topic.strength === 'strong' ? 'Strong understanding' : topic.strength === 'medium' ? 'Moderate understanding' : 'Needs improvement'}
-                        </div>
-                    </div>
-                `;
-            });
-            
-            resultsSection.innerHTML = `
-                <div class="profile-card">
-                    <div class="profile-header">
-                        <div class="profile-icon" style="background: linear-gradient(135deg, ${profileColor}, ${profileColor}dd);">
-                            <i class="${profileIcon}"></i>
-                        </div>
-                        <div style="flex: 1;">
-                            <h2 style="color: var(--secondary); margin-bottom: 10px;">Your Learning Profile</h2>
-                            <h1 style="color: ${profileColor}; margin-bottom: 15px; font-size: 2.5rem;">${learningProfile}</h1>
-                            <p style="color: var(--gray); line-height: 1.6;">${profileDescription}</p>
-                        </div>
-                    </div>
-                    
-                    <div class="confidence-meter">
-                        <div class="meter-label">
-                            <span style="font-size: 1.1rem;">Overall Understanding Score</span>
-                            <strong style="font-size: 1.5rem; color: ${overallScore >= 70 ? 'var(--success)' : overallScore >= 50 ? 'var(--warning)' : 'var(--danger)'};">${overallScore}%</strong>
-                        </div>
-                        <div class="meter-bar">
-                            <div class="meter-fill" style="width: ${overallScore}%;"></div>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; margin-top: 10px; color: var(--gray); font-size: 0.9rem;">
-                            <span>Needs Work</span>
-                            <span>Good</span>
-                            <span>Excellent</span>
-                        </div>
-                    </div>
-                    
-                    <div style="margin: 40px 0 30px;">
-                        <h3 style="color: var(--secondary); margin-bottom: 20px; font-size: 1.5rem;">
-                            <i class="fas fa-chart-pie"></i> Performance Summary
-                        </h3>
-                        <div style="background: ${overallScore >= 70 ? '#e6ffed' : overallScore >= 50 ? '#fff9e6' : '#ffe6e6'}; padding: 20px; border-radius: 10px; border-left: 4px solid ${overallScore >= 70 ? 'var(--success)' : overallScore >= 50 ? 'var(--warning)' : 'var(--danger)'};">
-                            <p style="margin-bottom: 10px;">
-                                <strong>${overallScore >= 70 ? 
-                                    "Great work! You have a solid understanding of the material." :
-                                    overallScore >= 50 ?
-                                    "You have a foundational understanding but there's room for improvement." :
-                                    "You're in the early stages of understanding this material. Let's build a strong foundation."}</strong>
-                            </p>
-                            <p style="color: var(--gray);">
-                                ${topicPerformance[0] && topicPerformance[0].accuracy >= 70 ? `You understand <strong>${topicPerformance[0].name}</strong> very well. ` : ''}
-                                ${topicPerformance[topicPerformance.length - 1] && topicPerformance[topicPerformance.length - 1].accuracy < 50 ? 
-                                    `You struggle most with <strong>${topicPerformance[topicPerformance.length - 1].name}</strong> (${topicPerformance[topicPerformance.length - 1].accuracy}%).` : ''}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="profile-card">
-                    <h3 style="color: var(--secondary); margin-bottom: 25px; font-size: 1.5rem;">
-                        <i class="fas fa-layer-group"></i> Topic-wise Breakdown
-                    </h3>
-                    <p style="margin-bottom: 25px; color: var(--gray);">Your performance across different topics in the material:</p>
-                    
-                    <div class="topics-breakdown">
-                        ${topicsHTML}
-                    </div>
-                </div>
-                
-                <div class="study-plan">
-                    <h3 style="color: var(--secondary); margin-bottom: 30px; font-size: 1.5rem;">
-                        <i class="fas fa-graduation-cap"></i> Your Personalized Study Plan
-                    </h3>
-                    
-                    <div class="technique-recommendation">
-                        <div class="tech-icon">
-                            <i class="fas ${techniqueIcon}"></i>
-                        </div>
-                        <div style="flex: 1;">
-                            <h4 style="margin-bottom: 10px; color: var(--dark); font-size: 1.3rem;">Recommended Technique: ${technique}</h4>
-                            <p style="color: var(--gray); line-height: 1.6;">${techniqueReason}</p>
-                        </div>
-                    </div>
-                    
-                    <h4 style="color: var(--secondary); margin: 30px 0 20px; font-size: 1.2rem;">
-                        <i class="fas fa-road"></i> Step-by-Step Study Plan
-                    </h4>
-                    <ol class="steps-list">
-                        <li><strong>First Session (45 mins):</strong> Review weak topics using the recommended technique. Focus on understanding rather than memorization.</li>
-                        <li><strong>Second Session (60 mins):</strong> Create summary notes or mind maps for medium-strength topics. Explain concepts aloud as if teaching someone.</li>
-                        <li><strong>Third Session (45 mins):</strong> Practice applying knowledge from strong topics to new scenarios or problems.</li>
-                        <li><strong>Fourth Session (60 mins):</strong> Mix all topics using interleaving technique. Test yourself with self-generated questions.</li>
-                        <li><strong>Fifth Session (45 mins):</strong> Final review focusing on connections between topics. Identify any remaining gaps.</li>
-                    </ol>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 30px 0;">
-                        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
-                            <h4 style="color: var(--secondary); margin-bottom: 10px;"><i class="fas fa-clock"></i> Study Schedule</h4>
-                            <p><strong>Daily:</strong> 45-60 minutes</p>
-                            <p><strong>Weekly:</strong> 4-5 sessions</p>
-                            <p><strong>Focus Ratio:</strong> 60% weak, 30% medium, 10% strong topics</p>
-                        </div>
-                        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
-                            <h4 style="color: var(--secondary); margin-bottom: 10px;"><i class="fas fa-bullseye"></i> Goals</h4>
-                            <p>• Increase weak topic scores by 30%</p>
-                            <p>• Strengthen conceptual connections</p>
-                            <p>• Improve application skills</p>
-                        </div>
-                    </div>
-                    
-                    <div style="text-align: center; margin-top: 40px;">
-                        <button class="btn btn-primary" id="newDiagnosticBtn" style="padding: 18px 40px;">
-                            <i class="fas fa-redo"></i> Start New Diagnostic
-                        </button>
-                        <button class="btn btn-secondary" style="margin-left: 15px; padding: 18px 40px;" id="savePlanBtn">
-                            <i class="fas fa-download"></i> Save Study Plan
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            // Add event listeners to new buttons
-            document.getElementById('newDiagnosticBtn').addEventListener('click', () => {
-                location.reload();
-            });
-            
-            document.getElementById('savePlanBtn').addEventListener('click', () => {
-                alert('Study plan saved! (In a real application, this would generate a PDF with your personalized study plan)');
-            });
-            
-            // Animate the progress bars
-            setTimeout(() => {
-                document.querySelectorAll('.meter-fill').forEach(fill => {
-                    const width = fill.style.width;
-                    fill.style.width = '0%';
-                    setTimeout(() => {
-                        fill.style.width = width;
-                    }, 100);
-                });
-            }, 300);
-            
-            // Scroll to results
-            resultsSection.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Initialize
-        textInput.dispatchEvent(new Event('input'));
-        updateTimer();
     </script>
 </body>
 </html>
