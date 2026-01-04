@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyMind AI | Advanced Learning Diagnostic</title>
+    <title>StudyMind AI | NotebookLM-Style Quiz Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -153,7 +153,7 @@
 
         .text-input {
             width: 100%;
-            min-height: 300px;
+            min-height: 350px;
             padding: 25px;
             border: 2px solid var(--gray-light);
             border-radius: var(--border-radius);
@@ -195,6 +195,24 @@
 
         .sample-text-btn:hover {
             color: var(--secondary);
+        }
+
+        .quality-indicator {
+            margin: 15px 0;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+        }
+
+        .quality-good {
+            color: var(--success);
+            background: #e8f5e9;
+        }
+
+        .quality-poor {
+            color: var(--warning);
+            background: #fff3e0;
         }
 
         .processing-area {
@@ -294,8 +312,8 @@
 
         .conceptual { background: #e3f2fd; color: #1565c0; }
         .application { background: #e8f5e9; color: #2e7d32; }
-        .factual { background: #fff3e0; color: #ef6c00; }
-        .critical { background: #f3e5f5; color: #7b1fa2; }
+        .analytical { background: #fff3e0; color: #ef6c00; }
+        .synthesis { background: #f3e5f5; color: #7b1fa2; }
 
         .question-text {
             font-size: 1.25rem;
@@ -603,6 +621,19 @@
             margin: 20px 0;
         }
 
+        .learning-level {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .level-beginner { background: #e3f2fd; color: #1565c0; }
+        .level-intermediate { background: #e8f5e9; color: #2e7d32; }
+        .level-advanced { background: #fff3e0; color: #ef6c00; }
+        .level-expert { background: #f3e5f5; color: #7b1fa2; }
+
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.3rem; }
             .diagnostic-container { padding: 25px 20px; }
@@ -628,8 +659,8 @@
 
     <section class="hero">
         <div class="container">
-            <h1>Advanced Learning Diagnostic System</h1>
-            <p>Paste your study material. Our AI understands the content and creates intelligent quizzes with conceptual questions and detailed analysis.</p>
+            <h1>Intelligent Learning Diagnostic</h1>
+            <p>Paste your study material. Get NotebookLM-style quizzes with deep learning analytics and personalized study plans.</p>
             <button class="btn btn-primary btn-large" id="startBtn">
                 <i class="fas fa-play-circle"></i> Start Diagnostic
             </button>
@@ -638,7 +669,7 @@
 
     <section id="diagnostic" class="container">
         <div class="diagnostic-container">
-            <h2 class="section-title">Intelligent Text Analysis & Quiz</h2>
+            <h2 class="section-title">Advanced Text Analysis & Quiz Generation</h2>
             
             <div class="alert alert-error" id="errorAlert"></div>
             <div class="alert alert-success" id="successAlert"></div>
@@ -646,16 +677,20 @@
             <div class="text-input-area">
                 <div class="text-input-header">
                     <h3>Paste Your Study Content</h3>
-                    <div class="word-count" id="wordCount">0 words (minimum: 150)</div>
+                    <div class="word-count" id="wordCount">0 words (minimum: 200)</div>
                 </div>
                 
                 <div class="text-input-container">
                     <textarea class="text-input" id="textInput" placeholder="Paste your textbook content, lecture notes, or study material here..."></textarea>
                 </div>
                 
+                <div class="quality-indicator" id="qualityIndicator">
+                    <i class="fas fa-info-circle"></i> Tip: Include definitions, examples, and explanations for better analysis
+                </div>
+                
                 <div class="text-input-footer">
                     <div>
-                        <i class="fas fa-info-circle"></i> Paste at least 150 words for deep analysis
+                        <i class="fas fa-lightbulb"></i> More detailed content = Better analysis
                     </div>
                     <button class="sample-text-btn" id="sampleTextBtn">
                         <i class="fas fa-magic"></i> Load Sample Text
@@ -672,7 +707,7 @@
             <div class="processing-area" id="processingArea">
                 <div class="spinner"></div>
                 <h3>AI is Analyzing Your Content</h3>
-                <p>Understanding concepts, extracting relationships, and creating diagnostic questions...</p>
+                <p>Extracting concepts, understanding relationships, and creating insightful questions...</p>
             </div>
 
             <div class="analysis-preview" id="analysisPreview">
@@ -692,7 +727,7 @@
                         </div>
                     </div>
                     <div style="text-align: right;">
-                        <div style="font-weight: 700; color: var(--secondary);">Conceptual Quiz</div>
+                        <div style="font-weight: 700; color: var(--secondary);">Insightful Quiz</div>
                         <div style="color: var(--gray); font-size: 0.9rem; margin-top: 5px;">Time: <span id="quizTime">00:00</span></div>
                     </div>
                 </div>
@@ -710,7 +745,7 @@
 
                 <div style="text-align: center; margin-top: 30px;">
                     <button class="btn btn-primary btn-large" id="submitQuizBtn" style="display: none;">
-                        <i class="fas fa-chart-line"></i> Submit & Get Analysis
+                        <i class="fas fa-chart-line"></i> Submit & Get Deep Analysis
                     </button>
                 </div>
             </div>
@@ -720,195 +755,228 @@
     </section>
 
     <script>
-        class AdvancedTextUnderstandingEngine {
+        // Advanced Quiz Generation Engine - NotebookLM Style
+        class NotebookLMStyleEngine {
             constructor() {
-                this.concepts = new Map();
-                this.relationships = [];
-                this.keySentences = [];
-                this.structure = {};
+                this.analysisCache = {};
+                this.learningPatterns = new Map();
             }
 
-            deepUnderstand(text) {
-                if (!text || text.trim().split(/\s+/).length < 100) {
-                    throw new Error('Please provide at least 150 words for deep understanding.');
+            analyzeContentQuality(text) {
+                const words = text.split(/\s+/).length;
+                const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 10).length;
+                const paragraphs = text.split(/\n\n+/).filter(p => p.trim().length > 0).length;
+                
+                let score = 0;
+                let feedback = [];
+                
+                // Quality metrics
+                if (words >= 300) score += 30;
+                else if (words >= 150) score += 20;
+                else if (words >= 100) score += 10;
+                
+                if (sentences >= 15) score += 20;
+                else if (sentences >= 10) score += 15;
+                else if (sentences >= 5) score += 10;
+                
+                // Check for definitions
+                const definitionPatterns = [
+                    /is defined as/i,
+                    /refers to/i,
+                    /means that/i,
+                    /known as/i,
+                    /called/i
+                ];
+                
+                let definitionCount = 0;
+                definitionPatterns.forEach(pattern => {
+                    const matches = text.match(pattern);
+                    if (matches) definitionCount += matches.length;
+                });
+                
+                if (definitionCount >= 3) {
+                    score += 20;
+                    feedback.push('Good: Contains clear definitions');
+                } else if (definitionCount >= 1) {
+                    score += 10;
+                    feedback.push('Okay: Some definitions present');
                 }
+                
+                // Check for examples
+                const examplePatterns = [
+                    /for example/i,
+                    /such as/i,
+                    /e\.g\./i,
+                    /including/i,
+                    /like/i
+                ];
+                
+                let exampleCount = 0;
+                examplePatterns.forEach(pattern => {
+                    const matches = text.match(pattern);
+                    if (matches) exampleCount += matches.length;
+                });
+                
+                if (exampleCount >= 2) {
+                    score += 15;
+                    feedback.push('Good: Includes examples');
+                }
+                
+                // Check for explanations
+                const explanationPatterns = [
+                    /because/i,
+                    /therefore/i,
+                    /thus/i,
+                    /so/i,
+                    /which means/i
+                ];
+                
+                let explanationCount = 0;
+                explanationPatterns.forEach(pattern => {
+                    const matches = text.match(pattern);
+                    if (matches) explanationCount += matches.length;
+                });
+                
+                if (explanationCount >= 2) {
+                    score += 15;
+                    feedback.push('Good: Contains explanations');
+                }
+                
+                // Overall quality assessment
+                let quality;
+                if (score >= 70) {
+                    quality = 'Excellent - Will generate insightful questions';
+                } else if (score >= 50) {
+                    quality = 'Good - Should generate meaningful questions';
+                } else if (score >= 30) {
+                    quality = 'Fair - Questions may be basic';
+                } else {
+                    quality = 'Poor - Add more details for better analysis';
+                }
+                
+                return {
+                    score,
+                    quality,
+                    feedback,
+                    metrics: { words, sentences, paragraphs, definitionCount, exampleCount, explanationCount }
+                };
+            }
 
-                const analysis = {
-                    coreConcepts: [],
-                    definitions: [],
+            extractCoreInsights(text) {
+                // Advanced text processing for NotebookLM-style understanding
+                const insights = {
+                    keyConcepts: [],
+                    relationships: [],
+                    hierarchies: [],
                     processes: [],
-                    comparisons: [],
                     examples: [],
-                    principles: [],
                     implications: [],
-                    hierarchy: {},
-                    difficulty: 'medium'
+                    knowledgeLevel: 'intermediate'
                 };
 
-                // Split into paragraphs and sentences
+                // Extract sentences and clean text
+                const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 10);
                 const paragraphs = text.split(/\n\n+/).filter(p => p.trim().length > 0);
-                const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 15);
                 
-                // Extract core concepts based on frequency and importance
-                const words = text.toLowerCase().match(/\b[a-z]{4,}\b/g) || [];
-                const wordFreq = {};
-                words.forEach(word => {
-                    if (!this.isCommonWord(word)) {
-                        wordFreq[word] = (wordFreq[word] || 0) + 1;
-                    }
-                });
-
-                // Find important concepts (appear multiple times)
-                const importantWords = Object.entries(wordFreq)
-                    .filter(([word, freq]) => freq >= 2)
-                    .sort((a, b) => b[1] - a[1])
-                    .slice(0, 15)
-                    .map(([word]) => this.capitalizeFirst(word));
-
-                analysis.coreConcepts = importantWords;
-
-                // Analyze each sentence for meaning
+                // Extract key concepts using multiple methods
+                const concepts = new Set();
+                
+                // Method 1: Look for definitions
                 sentences.forEach(sentence => {
                     const lower = sentence.toLowerCase();
-                    
-                    // Extract definitions
-                    if (this.isDefinition(sentence)) {
-                        const definition = this.extractDefinition(sentence);
-                        if (definition) {
-                            analysis.definitions.push(definition);
+                    if (lower.includes(' is ') || lower.includes(' defined as ') || lower.includes(' refers to ')) {
+                        const words = sentence.split(' ');
+                        const isIndex = words.findIndex(w => w.toLowerCase() === 'is');
+                        if (isIndex > 0 && isIndex < words.length - 2) {
+                            const concept = words.slice(0, isIndex).join(' ');
+                            if (concept.split(' ').length <= 4) {
+                                concepts.add(concept);
+                                insights.keyConcepts.push({
+                                    concept,
+                                    type: 'definition',
+                                    sentence: sentence.trim()
+                                });
+                            }
                         }
-                    }
-                    
-                    // Extract processes (steps, stages, phases)
-                    if (this.isProcess(sentence)) {
-                        const process = this.extractProcess(sentence);
-                        if (process) {
-                            analysis.processes.push(process);
-                        }
-                    }
-                    
-                    // Extract comparisons
-                    if (this.isComparison(sentence)) {
-                        analysis.comparisons.push(sentence);
-                    }
-                    
-                    // Extract examples
-                    if (this.isExample(sentence)) {
-                        analysis.examples.push(sentence);
-                    }
-                    
-                    // Extract principles (laws, theories, rules)
-                    if (this.isPrinciple(sentence)) {
-                        analysis.principles.push(sentence);
-                    }
-                    
-                    // Extract implications (therefore, thus, hence, so)
-                    if (this.isImplication(sentence)) {
-                        analysis.implications.push(sentence);
                     }
                 });
 
-                // Build concept hierarchy
-                analysis.hierarchy = this.buildHierarchy(analysis.coreConcepts, sentences);
-                
-                // Determine difficulty based on content complexity
-                const complexTerms = this.countComplexTerms(text);
-                analysis.difficulty = complexTerms > 10 ? 'advanced' : complexTerms > 5 ? 'intermediate' : 'beginner';
+                // Method 2: Look for important terms (capitalized, repeated)
+                const words = text.split(/\s+/);
+                const wordFrequency = {};
+                words.forEach(word => {
+                    const cleanWord = word.replace(/[^a-zA-Z]/g, '').toLowerCase();
+                    if (cleanWord.length > 4 && !this.isCommonWord(cleanWord)) {
+                        wordFrequency[cleanWord] = (wordFrequency[cleanWord] || 0) + 1;
+                    }
+                });
 
-                this.analysis = analysis;
-                return analysis;
+                // Add frequently mentioned words as concepts
+                Object.entries(wordFrequency)
+                    .filter(([_, count]) => count >= 2)
+                    .slice(0, 10)
+                    .forEach(([word]) => {
+                        const capitalized = word.charAt(0).toUpperCase() + word.slice(1);
+                        if (!concepts.has(capitalized)) {
+                            concepts.add(capitalized);
+                            insights.keyConcepts.push({
+                                concept: capitalized,
+                                type: 'key_term',
+                                frequency: wordFrequency[word]
+                            });
+                        }
+                    });
+
+                // Extract relationships
+                sentences.forEach(sentence => {
+                    const lower = sentence.toLowerCase();
+                    if (lower.includes(' and ') || lower.includes(' or ') || lower.includes(' but ') || 
+                        lower.includes(' versus ') || lower.includes(' vs ') || lower.includes(' compared to ')) {
+                        insights.relationships.push(sentence.trim());
+                    }
+                });
+
+                // Extract processes (steps, stages)
+                sentences.forEach(sentence => {
+                    if (sentence.toLowerCase().includes('step') || sentence.toLowerCase().includes('stage') || 
+                        sentence.toLowerCase().includes('phase') || sentence.toLowerCase().includes('process')) {
+                        insights.processes.push(sentence.trim());
+                    }
+                });
+
+                // Extract examples
+                sentences.forEach(sentence => {
+                    if (sentence.toLowerCase().includes('for example') || sentence.toLowerCase().includes('e.g.') || 
+                        sentence.toLowerCase().includes('such as') || sentence.toLowerCase().includes('including')) {
+                        insights.examples.push(sentence.trim());
+                    }
+                });
+
+                // Extract implications
+                sentences.forEach(sentence => {
+                    if (sentence.toLowerCase().includes('therefore') || sentence.toLowerCase().includes('thus') || 
+                        sentence.toLowerCase().includes('hence') || sentence.toLowerCase().includes('so ') || 
+                        sentence.toLowerCase().includes('as a result')) {
+                        insights.implications.push(sentence.trim());
+                    }
+                });
+
+                // Determine knowledge level based on content complexity
+                const complexTerms = this.countComplexTerms(text);
+                if (complexTerms > 15) insights.knowledgeLevel = 'advanced';
+                else if (complexTerms > 8) insights.knowledgeLevel = 'intermediate';
+                else insights.knowledgeLevel = 'beginner';
+
+                return insights;
             }
 
             isCommonWord(word) {
                 const commonWords = new Set([
-                    'that', 'with', 'this', 'from', 'have', 'what', 'when', 'where',
-                    'which', 'there', 'their', 'about', 'would', 'could', 'should'
+                    'about', 'above', 'across', 'after', 'again', 'against', 'along', 'among',
+                    'around', 'because', 'before', 'below', 'between', 'during', 'except',
+                    'inside', 'outside', 'through', 'under', 'until', 'without'
                 ]);
                 return commonWords.has(word);
-            }
-
-            isDefinition(sentence) {
-                const lower = sentence.toLowerCase();
-                return lower.includes(' is ') || 
-                       lower.includes('defined as') || 
-                       lower.includes('refers to') || 
-                       lower.includes('means that') ||
-                       lower.includes('known as');
-            }
-
-            extractDefinition(sentence) {
-                // Find the concept being defined
-                const words = sentence.split(' ');
-                for (let i = 0; i < words.length; i++) {
-                    if (words[i].toLowerCase() === 'is' || 
-                        words[i].toLowerCase() === 'are' ||
-                        words[i].toLowerCase() === 'refers' ||
-                        words[i].toLowerCase() === 'means') {
-                        const concept = words.slice(0, i).join(' ');
-                        const definition = words.slice(i + 1).join(' ');
-                        return { concept: concept.trim(), definition: definition.trim() };
-                    }
-                }
-                return null;
-            }
-
-            isProcess(sentence) {
-                const lower = sentence.toLowerCase();
-                return lower.includes('step') || 
-                       lower.includes('stage') || 
-                       lower.includes('phase') ||
-                       lower.includes('process') ||
-                       lower.includes('method') ||
-                       lower.includes('procedure');
-            }
-
-            extractProcess(sentence) {
-                return { description: sentence, steps: this.extractSteps(sentence) };
-            }
-
-            extractSteps(sentence) {
-                // Look for numbered or bulleted steps
-                const stepPattern = /(\d+\.\s+|[•\-]\s+)([^.•\n]+)/g;
-                const matches = [...sentence.matchAll(stepPattern)];
-                return matches.map(match => match[2].trim());
-            }
-
-            isComparison(sentence) {
-                const lower = sentence.toLowerCase();
-                return lower.includes(' compared to ') || 
-                       lower.includes(' versus ') || 
-                       lower.includes(' vs ') ||
-                       lower.includes(' different from ') ||
-                       lower.includes(' similar to ') ||
-                       lower.includes(' unlike ');
-            }
-
-            isExample(sentence) {
-                const lower = sentence.toLowerCase();
-                return lower.includes(' for example') || 
-                       lower.includes(' e.g.') || 
-                       lower.includes(' such as') ||
-                       lower.includes(' including') ||
-                       lower.includes(' like ');
-            }
-
-            isPrinciple(sentence) {
-                const lower = sentence.toLowerCase();
-                return lower.includes(' principle') || 
-                       lower.includes(' law ') || 
-                       lower.includes(' theory ') ||
-                       lower.includes(' rule ') ||
-                       lower.includes(' concept ');
-            }
-
-            isImplication(sentence) {
-                const lower = sentence.toLowerCase();
-                return lower.includes(' therefore') || 
-                       lower.includes(' thus ') || 
-                       lower.includes(' hence ') ||
-                       lower.includes(' consequently') ||
-                       lower.includes(' so ') ||
-                       lower.includes(' as a result');
             }
 
             countComplexTerms(text) {
@@ -917,7 +985,8 @@
                     /[A-Z][A-Z]+/g,               // Acronyms
                     /\b\w+ity\b/g,                // Words ending in -ity
                     /\b\w+tion\b/g,               // Words ending in -tion
-                    /\b\w+ism\b/g                 // Words ending in -ism
+                    /\b\w+ism\b/g,                // Words ending in -ism
+                    /\b\w+logy\b/g                // Words ending in -logy
                 ];
                 
                 let count = 0;
@@ -929,158 +998,157 @@
                 return count;
             }
 
-            buildHierarchy(concepts, sentences) {
-                const hierarchy = {};
-                
-                concepts.forEach(concept => {
-                    hierarchy[concept] = {
-                        parents: [],
-                        children: [],
-                        related: [],
-                        level: 1
-                    };
-                });
-
-                // Find relationships between concepts
-                sentences.forEach(sentence => {
-                    concepts.forEach(concept => {
-                        if (sentence.includes(concept)) {
-                            // Find other concepts in the same sentence
-                            concepts.forEach(otherConcept => {
-                                if (otherConcept !== concept && sentence.includes(otherConcept)) {
-                                    if (!hierarchy[concept].related.includes(otherConcept)) {
-                                        hierarchy[concept].related.push(otherConcept);
-                                    }
-                                }
-                            });
-                        }
-                    });
-                });
-
-                return hierarchy;
-            }
-
-            capitalizeFirst(word) {
-                return word.charAt(0).toUpperCase() + word.slice(1);
-            }
-
-            generateIntelligentQuestions(analysis, count = 10) {
+            generateInsightfulQuestions(insights, count = 10) {
                 const questions = [];
                 
-                if (analysis.coreConcepts.length < 3) {
-                    throw new Error('Need more content to generate meaningful questions.');
+                if (insights.keyConcepts.length < 2) {
+                    throw new Error('Need more detailed content with clear concepts to generate insightful questions.');
                 }
 
-                // Question templates with specific contexts
-                const templates = {
+                // NotebookLM-style question templates
+                const questionTemplates = {
                     conceptual: [
-                        "Based on the explanation provided, what is the fundamental purpose of {concept}?",
-                        "How would you describe the core function of {concept} according to the text?",
-                        "What key insight about {concept} is emphasized in the material?",
-                        "According to the text, what makes {concept} significant or unique?"
+                        {
+                            template: "What is the fundamental purpose or main function of {concept} as described in the text?",
+                            explanation: "This tests your understanding of the core purpose of {concept}.",
+                            level: "Understanding"
+                        },
+                        {
+                            template: "Based on the explanation, what makes {concept} unique or different from similar ideas?",
+                            explanation: "This assesses your ability to differentiate {concept} from related concepts.",
+                            level: "Analysis"
+                        },
+                        {
+                            template: "According to the text, why is {concept} important or significant?",
+                            explanation: "This evaluates your grasp of the significance of {concept}.",
+                            level: "Evaluation"
+                        }
                     ],
                     application: [
-                        "Given the information about {concept}, how would you apply it in a practical scenario?",
-                        "If you encountered a situation involving {concept}, what approach would be most appropriate based on the text?",
-                        "What real-world problem could be solved using the principles of {concept} as described?",
-                        "Based on the examples provided, where would {concept} be most effectively utilized?"
-                    ],
-                    relational: [
-                        "How does {concept} relate to {relatedConcept} according to the text?",
-                        "What is the key difference between {concept} and {relatedConcept} as described?",
-                        "Based on the comparison made, what distinguishes {concept} from similar ideas?",
-                        "How are {concept} and {relatedConcept} connected in the system described?"
+                        {
+                            template: "If you encountered a real-world situation involving {concept}, how would you apply the principles described?",
+                            explanation: "This tests your ability to apply {concept} in practical scenarios.",
+                            level: "Application"
+                        },
+                        {
+                            template: "What would be a concrete example of {concept} based on the information provided?",
+                            explanation: "This assesses your ability to generate examples for {concept}.",
+                            level: "Application"
+                        },
+                        {
+                            template: "How could you use your understanding of {concept} to solve a problem mentioned in the text?",
+                            explanation: "This evaluates problem-solving using {concept}.",
+                            level: "Synthesis"
+                        }
                     ],
                     analytical: [
-                        "What would be the most likely consequence if {concept} was absent or malfunctioning?",
-                        "Based on the implications discussed, what can be inferred about the importance of {concept}?",
-                        "What assumption underlies the functioning of {concept} as described?",
-                        "How does understanding {concept} contribute to the broader picture presented?"
+                        {
+                            template: "What are the key relationships between {concept} and other ideas mentioned in the text?",
+                            explanation: "This tests your understanding of how {concept} connects to other concepts.",
+                            level: "Analysis"
+                        },
+                        {
+                            template: "Based on the implications discussed, what can be inferred about the role of {concept}?",
+                            explanation: "This assesses your ability to draw inferences about {concept}.",
+                            level: "Inference"
+                        },
+                        {
+                            template: "What would happen if {concept} was missing or not functioning as described?",
+                            explanation: "This evaluates your understanding of the importance of {concept}.",
+                            level: "Prediction"
+                        }
+                    ],
+                    synthesis: [
+                        {
+                            template: "How does understanding {concept} help you better grasp the overall topic discussed?",
+                            explanation: "This tests how well you integrate {concept} into the bigger picture.",
+                            level: "Synthesis"
+                        },
+                        {
+                            template: "Based on what you've learned, how would you explain {concept} to someone unfamiliar with the topic?",
+                            explanation: "This assesses your ability to synthesize and communicate {concept}.",
+                            level: "Communication"
+                        }
                     ]
                 };
 
-                // Generate questions based on analysis
+                // Select concepts for questions
+                const concepts = insights.keyConcepts.map(c => c.concept);
+                const usedConcepts = new Set();
+                
+                // Generate questions with variety
                 for (let i = 0; i < count; i++) {
-                    const concept = analysis.coreConcepts[i % analysis.coreConcepts.length];
-                    let questionType, questionText;
+                    const concept = concepts[i % concepts.length];
+                    usedConcepts.add(concept);
                     
                     // Distribute question types
+                    let category, templateObj;
                     if (i < 4) {
-                        questionType = 'conceptual';
-                        questionText = templates.conceptual[i % templates.conceptual.length].replace('{concept}', concept);
+                        category = 'conceptual';
+                        templateObj = questionTemplates.conceptual[i % questionTemplates.conceptual.length];
                     } else if (i < 7) {
-                        questionType = 'application';
-                        questionText = templates.application[(i-4) % templates.application.length].replace('{concept}', concept);
+                        category = 'application';
+                        templateObj = questionTemplates.application[(i-4) % questionTemplates.application.length];
                     } else if (i < 9) {
-                        questionType = 'relational';
-                        const related = analysis.coreConcepts[(i+1) % analysis.coreConcepts.length];
-                        questionText = templates.relational[(i-7) % templates.relational.length]
-                            .replace('{concept}', concept)
-                            .replace('{relatedConcept}', related);
+                        category = 'analytical';
+                        templateObj = questionTemplates.analytical[(i-7) % questionTemplates.analytical.length];
                     } else {
-                        questionType = 'analytical';
-                        questionText = templates.analytical[(i-9) % templates.analytical.length].replace('{concept}', concept);
+                        category = 'synthesis';
+                        templateObj = questionTemplates.synthesis[(i-9) % questionTemplates.synthesis.length];
                     }
-
-                    const { options, correctIndex, explanation } = this.generateContextualOptions(concept, questionType, analysis);
+                    
+                    const questionText = templateObj.template.replace('{concept}', concept);
+                    
+                    // Generate intelligent options
+                    const { options, correctIndex, explanation } = this.generateInsightfulOptions(
+                        concept, 
+                        category, 
+                        insights,
+                        templateObj.level
+                    );
                     
                     questions.push({
                         id: i + 1,
-                        type: questionType,
+                        type: category,
                         concept: concept,
                         text: questionText,
                         options: options,
                         correctAnswer: correctIndex,
                         explanation: explanation,
-                        difficulty: analysis.difficulty
+                        cognitiveLevel: templateObj.level,
+                        source: this.findRelevantSource(concept, insights),
+                        difficulty: this.calculateQuestionDifficulty(category, templateObj.level)
                     });
                 }
 
                 return questions;
             }
 
-            generateContextualOptions(concept, type, analysis) {
+            generateInsightfulOptions(concept, category, insights, cognitiveLevel) {
+                // Find correct answer based on insights
                 let correctAnswer = '';
                 let explanation = '';
                 
-                // Find relevant information for correct answer
-                if (analysis.definitions.length > 0) {
-                    const relevantDef = analysis.definitions.find(d => 
-                        d.concept.toLowerCase().includes(concept.toLowerCase()) ||
-                        concept.toLowerCase().includes(d.concept.toLowerCase())
-                    );
-                    if (relevantDef) {
-                        correctAnswer = relevantDef.definition;
-                        explanation = `This directly matches the definition provided in the text: "${relevantDef.definition}"`;
-                    }
+                // Look for concept in insights
+                const conceptInfo = insights.keyConcepts.find(c => c.concept === concept);
+                if (conceptInfo && conceptInfo.sentence) {
+                    // Extract key information from the sentence
+                    correctAnswer = this.extractCoreMeaning(conceptInfo.sentence, concept);
+                    explanation = `Based on: "${conceptInfo.sentence.substring(0, 120)}..."`;
+                } else {
+                    // Generate logical answer based on category and cognitive level
+                    correctAnswer = this.generateLogicalAnswer(concept, category, cognitiveLevel);
+                    explanation = `This represents the most accurate understanding of ${concept} based on the text.`;
                 }
-
-                // If no definition found, use other analysis
-                if (!correctAnswer) {
-                    // Look for sentences mentioning the concept
-                    const relevantSentences = analysis.sentences?.filter(s => 
-                        s.toLowerCase().includes(concept.toLowerCase())
-                    ) || [];
-                    
-                    if (relevantSentences.length > 0) {
-                        const sentence = relevantSentences[0];
-                        correctAnswer = this.extractKeyInformation(sentence, concept);
-                        explanation = `This answer is derived from: "${sentence.substring(0, 100)}..."`;
-                    } else {
-                        // Generate logical answer based on concept type
-                        correctAnswer = this.generateLogicalAnswer(concept, type);
-                        explanation = `This represents the most accurate understanding of ${concept} based on the text's context.`;
-                    }
-                }
-
+                
                 // Generate intelligent distractors
-                const distractors = this.generateIntelligentDistractors(concept, type, analysis, correctAnswer);
+                const distractors = this.generateInsightfulDistractors(concept, category, cognitiveLevel, correctAnswer, insights);
                 
                 // Combine and shuffle
                 const allOptions = [correctAnswer, ...distractors];
                 const shuffled = this.shuffleArray([...allOptions]);
                 const correctIndex = shuffled.indexOf(correctAnswer);
-
+                
                 return {
                     options: shuffled,
                     correctIndex: correctIndex,
@@ -1088,58 +1156,104 @@
                 };
             }
 
-            extractKeyInformation(sentence, concept) {
-                // Extract the most informative part of the sentence
+            extractCoreMeaning(sentence, concept) {
+                // Extract the most meaningful part of the sentence
                 const words = sentence.split(' ');
-                const conceptIndex = words.findIndex(w => 
-                    w.toLowerCase().includes(concept.toLowerCase())
-                );
+                const conceptIndex = words.findIndex(w => w.includes(concept.split(' ')[0]));
                 
                 if (conceptIndex !== -1) {
-                    const start = Math.max(0, conceptIndex - 3);
-                    const end = Math.min(words.length, conceptIndex + 7);
+                    // Take context around the concept
+                    const start = Math.max(0, conceptIndex - 2);
+                    const end = Math.min(words.length, conceptIndex + 6);
                     return words.slice(start, end).join(' ');
                 }
                 
-                return sentence.substring(0, 80) + '...';
+                // Fallback: take first meaningful part
+                return sentence.split(/[,;]/)[0] + '.';
             }
 
-            generateLogicalAnswer(concept, type) {
-                const answers = {
-                    conceptual: `It serves a fundamental role as described, forming the basis for understanding related concepts.`,
-                    application: `It can be practically applied in situations where its specific characteristics are needed.`,
-                    relational: `It interacts with other elements in the system as described in the text.`,
-                    analytical: `Its importance lies in how it contributes to the overall functioning described.`
+            generateLogicalAnswer(concept, category, level) {
+                const answerTemplates = {
+                    conceptual: {
+                        Understanding: `It serves as ${concept.toLowerCase()} in the system described.`,
+                        Analysis: `It differs from similar concepts by ${concept.toLowerCase()} in specific ways mentioned.`,
+                        Evaluation: `Its importance lies in how it contributes to ${concept.toLowerCase()} as explained.`
+                    },
+                    application: {
+                        Application: `It can be applied by ${concept.toLowerCase()} in practical situations described.`,
+                        Synthesis: `Understanding it helps solve problems through ${concept.toLowerCase()} approaches.`
+                    },
+                    analytical: {
+                        Analysis: `It relates to other concepts through ${concept.toLowerCase()} connections described.`,
+                        Inference: `Based on the text, it plays a key role in ${concept.toLowerCase()} processes.`,
+                        Prediction: `Without it, the system would lack ${concept.toLowerCase()} capabilities described.`
+                    },
+                    synthesis: {
+                        Synthesis: `It integrates into the overall topic by ${concept.toLowerCase()} relationships.`,
+                        Communication: `It can be explained as ${concept.toLowerCase()} based on the provided information.`
+                    }
                 };
-                return answers[type] || `This represents the key understanding of ${concept} from the material.`;
+                
+                return answerTemplates[category]?.[level] || 
+                       `This represents accurate understanding of ${concept} based on the material.`;
             }
 
-            generateIntelligentDistractors(concept, type, analysis, correctAnswer) {
+            generateInsightfulDistractors(concept, category, level, correctAnswer, insights) {
                 const distractors = [];
                 
-                // Distractor 1: Opposite of correct
-                if (correctAnswer.includes(' not ') || correctAnswer.includes('never ') || correctAnswer.includes('no ')) {
-                    distractors.push(correctAnswer.replace('not ', '').replace('never ', 'always ').replace('no ', 'yes '));
-                } else {
-                    distractors.push(`This represents the opposite of what the text states about ${concept}.`);
-                }
+                // Distractor 1: Common misconception
+                distractors.push(`This is a common misunderstanding about ${concept} that contradicts the text.`);
                 
                 // Distractor 2: Overgeneralization
-                distractors.push(`This is too broad and doesn't capture the specific nature of ${concept} as described.`);
+                distractors.push(`This is too broad and doesn't capture the specific nature of ${concept} described.`);
                 
                 // Distractor 3: Misattribution (confuse with related concept)
-                if (analysis.coreConcepts.length > 1) {
-                    const otherConcepts = analysis.coreConcepts.filter(c => c !== concept);
+                if (insights.keyConcepts.length > 1) {
+                    const otherConcepts = insights.keyConcepts
+                        .filter(c => c.concept !== concept)
+                        .map(c => c.concept);
                     if (otherConcepts.length > 0) {
                         const randomConcept = otherConcepts[Math.floor(Math.random() * otherConcepts.length)];
                         distractors.push(`This actually describes ${randomConcept}, not ${concept}.`);
                     }
                 }
                 
-                // Distractor 4: Common misconception
-                distractors.push(`This is a common misunderstanding that contradicts the text's explanation.`);
+                // Distractor 4: Opposite or contradictory
+                if (correctAnswer.includes(' not ') || correctAnswer.includes('never ') || correctAnswer.includes('no ')) {
+                    distractors.push(correctAnswer.replace('not ', '').replace('never ', 'always ').replace('no ', 'yes '));
+                } else {
+                    distractors.push(`This contradicts what the text states about ${concept}.`);
+                }
                 
-                return distractors.slice(0, 3); // Return only 3 distractors
+                return distractors.slice(0, 3);
+            }
+
+            findRelevantSource(concept, insights) {
+                // Find the most relevant sentence for this concept
+                const relevant = insights.keyConcepts.find(c => c.concept === concept);
+                if (relevant && relevant.sentence) {
+                    return relevant.sentence.substring(0, 80) + '...';
+                }
+                
+                // Look in relationships
+                for (const relationship of insights.relationships) {
+                    if (relationship.includes(concept)) {
+                        return relationship.substring(0, 80) + '...';
+                    }
+                }
+                
+                return 'Based on overall content';
+            }
+
+            calculateQuestionDifficulty(category, level) {
+                const difficultyScores = {
+                    conceptual: { Understanding: 1, Analysis: 2, Evaluation: 3 },
+                    application: { Application: 2, Synthesis: 3 },
+                    analytical: { Analysis: 2, Inference: 3, Prediction: 3 },
+                    synthesis: { Synthesis: 3, Communication: 2 }
+                };
+                
+                return difficultyScores[category]?.[level] || 2;
             }
 
             shuffleArray(array) {
@@ -1151,203 +1265,222 @@
                 return shuffled;
             }
 
-            analyzePerformance(questions, answers) {
+            analyzeLearningPerformance(questions, answers, timeTaken) {
                 const analysis = {
-                    total: questions.length,
-                    correct: 0,
+                    totalQuestions: questions.length,
+                    correctAnswers: 0,
                     accuracy: 0,
-                    conceptScores: {},
-                    typeScores: {
-                        conceptual: { correct: 0, total: 0 },
-                        application: { correct: 0, total: 0 },
-                        relational: { correct: 0, total: 0 },
-                        analytical: { correct: 0, total: 0 }
-                    },
+                    timePerQuestion: timeTaken / questions.length,
+                    
+                    // Detailed analysis
+                    conceptMastery: {},
+                    cognitiveLevelPerformance: {},
+                    questionTypePerformance: {},
+                    difficultyPerformance: {},
+                    
+                    // Learning patterns
                     responsePatterns: {
-                        consistent: true,
+                        consistency: 0,
                         strengths: [],
-                        weaknesses: []
+                        weaknesses: [],
+                        learningStyle: '',
+                        confidenceLevel: ''
                     }
                 };
 
+                // Initialize tracking objects
+                questions.forEach(q => {
+                    if (!analysis.conceptMastery[q.concept]) {
+                        analysis.conceptMastery[q.concept] = { correct: 0, total: 0 };
+                    }
+                    
+                    if (!analysis.cognitiveLevelPerformance[q.cognitiveLevel]) {
+                        analysis.cognitiveLevelPerformance[q.cognitiveLevel] = { correct: 0, total: 0 };
+                    }
+                    
+                    if (!analysis.questionTypePerformance[q.type]) {
+                        analysis.questionTypePerformance[q.type] = { correct: 0, total: 0 };
+                    }
+                    
+                    if (!analysis.difficultyPerformance[q.difficulty]) {
+                        analysis.difficultyPerformance[q.difficulty] = { correct: 0, total: 0 };
+                    }
+                });
+
+                // Calculate performance
                 questions.forEach((question, index) => {
                     const qid = question.id.toString();
                     const isCorrect = answers[qid] === question.correctAnswer;
                     
-                    if (isCorrect) analysis.correct++;
+                    if (isCorrect) analysis.correctAnswers++;
                     
-                    // Track concept performance
-                    if (!analysis.conceptScores[question.concept]) {
-                        analysis.conceptScores[question.concept] = { correct: 0, total: 0 };
-                    }
-                    analysis.conceptScores[question.concept].total++;
-                    if (isCorrect) analysis.conceptScores[question.concept].correct++;
+                    // Track concept mastery
+                    analysis.conceptMastery[question.concept].total++;
+                    if (isCorrect) analysis.conceptMastery[question.concept].correct++;
                     
-                    // Track type performance
-                    analysis.typeScores[question.type].total++;
-                    if (isCorrect) analysis.typeScores[question.type].correct++;
+                    // Track cognitive levels
+                    analysis.cognitiveLevelPerformance[question.cognitiveLevel].total++;
+                    if (isCorrect) analysis.cognitiveLevelPerformance[question.cognitiveLevel].correct++;
+                    
+                    // Track question types
+                    analysis.questionTypePerformance[question.type].total++;
+                    if (isCorrect) analysis.questionTypePerformance[question.type].correct++;
+                    
+                    // Track difficulty
+                    analysis.difficultyPerformance[question.difficulty].total++;
+                    if (isCorrect) analysis.difficultyPerformance[question.difficulty].correct++;
                 });
 
-                analysis.accuracy = (analysis.correct / analysis.total) * 100;
+                analysis.accuracy = (analysis.correctAnswers / analysis.totalQuestions) * 100;
                 
-                // Calculate consistency
-                const typeAccuracies = [];
-                for (const [type, data] of Object.entries(analysis.typeScores)) {
-                    if (data.total > 0) {
-                        typeAccuracies.push((data.correct / data.total) * 100);
-                    }
-                }
-                
-                const maxDiff = Math.max(...typeAccuracies) - Math.min(...typeAccuracies);
-                analysis.responsePatterns.consistent = maxDiff < 30;
+                // Analyze learning patterns
+                this.analyzeLearningPatterns(analysis);
                 
                 return analysis;
             }
 
-            determineLearningProfile(analysis) {
-                const typeScores = {};
-                for (const [type, data] of Object.entries(analysis.typeScores)) {
-                    if (data.total > 0) {
-                        typeScores[type] = (data.correct / data.total) * 100;
+            analyzeLearningPatterns(analysis) {
+                // Calculate concept mastery levels
+                const conceptAccuracies = [];
+                for (const [concept, data] of Object.entries(analysis.conceptMastery)) {
+                    const accuracy = (data.correct / data.total) * 100;
+                    conceptAccuracies.push(accuracy);
+                    
+                    if (accuracy >= 80) {
+                        analysis.responsePatterns.strengths.push(concept);
+                    } else if (accuracy <= 50) {
+                        analysis.responsePatterns.weaknesses.push(concept);
                     }
                 }
-
-                const conceptualScore = typeScores.conceptual || 0;
-                const applicationScore = typeScores.application || 0;
-                const relationalScore = typeScores.relational || 0;
-                const analyticalScore = typeScores.analytical || 0;
-
-                let profile = {
-                    type: 'Comprehensive Learner',
-                    description: 'You show balanced understanding across different types of reasoning.',
-                    icon: 'fa-balance-scale',
-                    color: '#4361ee',
-                    strengths: ['Balanced skills', 'Adaptive thinking'],
-                    weaknesses: []
-                };
-
-                // Determine specialized profile
-                if (conceptualScore >= 80 && relationalScore >= 70) {
-                    profile.type = 'Conceptual Master';
-                    profile.description = 'You excel at understanding fundamental principles and their relationships.';
-                    profile.icon = 'fa-lightbulb';
-                    profile.color = '#f8961e';
-                    profile.strengths = ['Conceptual understanding', 'Making connections'];
-                    profile.weaknesses = ['Practical application', 'Detailed execution'];
-                } else if (applicationScore >= 80 && analyticalScore >= 70) {
-                    profile.type = 'Practical Problem Solver';
-                    profile.description = 'You are excellent at applying concepts to real situations and analyzing outcomes.';
-                    profile.icon = 'fa-cogs';
-                    profile.color = '#4cc9f0';
-                    profile.strengths = ['Practical application', 'Analytical thinking'];
-                    profile.weaknesses = ['Theoretical depth', 'Abstract concepts'];
-                } else if (relationalScore >= 80 && analyticalScore >= 70) {
-                    profile.type = 'Analytical Thinker';
-                    profile.description = 'You excel at making connections between ideas and drawing insightful conclusions.';
-                    profile.icon = 'fa-search';
-                    profile.color = '#9d4edd';
-                    profile.strengths = ['Relational thinking', 'Critical analysis'];
-                    profile.weaknesses = ['Basic concepts', 'Simple applications'];
-                } else if (conceptualScore >= 70 && applicationScore < 50) {
-                    profile.type = 'Theoretical Learner';
-                    profile.description = 'You understand concepts well but need more practice with applications.';
-                    profile.icon = 'fa-book';
-                    profile.color = '#f72585';
-                    profile.strengths = ['Theoretical understanding', 'Conceptual clarity'];
-                    profile.weaknesses = ['Practical application', 'Real-world connections'];
+                
+                // Calculate consistency
+                const accuracies = [...conceptAccuracies];
+                const maxDiff = Math.max(...accuracies) - Math.min(...accuracies);
+                analysis.responsePatterns.consistency = 100 - Math.min(maxDiff, 100);
+                
+                // Determine learning style based on performance patterns
+                const typePerformance = analysis.questionTypePerformance;
+                const conceptualScore = typePerformance.conceptual ? 
+                    (typePerformance.conceptual.correct / typePerformance.conceptual.total) * 100 : 0;
+                const applicationScore = typePerformance.application ? 
+                    (typePerformance.application.correct / typePerformance.application.total) * 100 : 0;
+                const analyticalScore = typePerformance.analytical ? 
+                    (typePerformance.analytical.correct / typePerformance.analytical.total) * 100 : 0;
+                const synthesisScore = typePerformance.synthesis ? 
+                    (typePerformance.synthesis.correct / typePerformance.synthesis.total) * 100 : 0;
+                
+                // Determine primary learning style
+                const scores = [
+                    { type: 'conceptual', score: conceptualScore },
+                    { type: 'application', score: applicationScore },
+                    { type: 'analytical', score: analyticalScore },
+                    { type: 'synthesis', score: synthesisScore }
+                ].sort((a, b) => b.score - a.score);
+                
+                if (scores[0].score >= 70 && scores[0].score - scores[1].score > 15) {
+                    analysis.responsePatterns.learningStyle = scores[0].type.charAt(0).toUpperCase() + scores[0].type.slice(1) + ' Learner';
+                } else if (analysis.responsePatterns.consistency >= 70) {
+                    analysis.responsePatterns.learningStyle = 'Balanced Learner';
+                } else {
+                    analysis.responsePatterns.learningStyle = 'Developing Learner';
                 }
+                
+                // Determine confidence level
+                if (analysis.accuracy >= 80) {
+                    analysis.responsePatterns.confidenceLevel = 'High Confidence';
+                } else if (analysis.accuracy >= 60) {
+                    analysis.responsePatterns.confidenceLevel = 'Moderate Confidence';
+                } else if (analysis.accuracy >= 40) {
+                    analysis.responsePatterns.confidenceLevel = 'Developing Confidence';
+                } else {
+                    analysis.responsePatterns.confidenceLevel = 'Needs Foundation';
+                }
+            }
 
+            generateLearningProfile(analysis) {
+                const profile = {
+                    level: this.determineLearningLevel(analysis.accuracy, analysis.responsePatterns.consistency),
+                    style: analysis.responsePatterns.learningStyle,
+                    confidence: analysis.responsePatterns.confidenceLevel,
+                    strengths: analysis.responsePatterns.strengths.slice(0, 3),
+                    weaknesses: analysis.responsePatterns.weaknesses.slice(0, 3),
+                    recommendations: this.generateRecommendations(analysis)
+                };
+                
                 return profile;
             }
 
-            generateStudyPlan(profile, analysis, questions) {
-                // Identify strong and weak concepts
-                const strongConcepts = [];
-                const weakConcepts = [];
-                
-                for (const [concept, data] of Object.entries(analysis.conceptScores)) {
-                    const accuracy = (data.correct / data.total) * 100;
-                    if (accuracy >= 80) {
-                        strongConcepts.push(concept);
-                    } else if (accuracy <= 50) {
-                        weakConcepts.push(concept);
-                    }
+            determineLearningLevel(accuracy, consistency) {
+                if (accuracy >= 85 && consistency >= 80) {
+                    return { name: 'Advanced', description: 'Strong conceptual grasp with consistent performance' };
+                } else if (accuracy >= 70 && consistency >= 70) {
+                    return { name: 'Intermediate', description: 'Good understanding with room for refinement' };
+                } else if (accuracy >= 50) {
+                    return { name: 'Developing', description: 'Basic understanding, needs more practice' };
+                } else {
+                    return { name: 'Beginner', description: 'Foundation building phase' };
                 }
-
-                // Techniques based on profile
-                const techniqueMap = {
-                    'Conceptual Master': ['Feynman Technique', 'Concept Mapping', 'Teaching Others'],
-                    'Practical Problem Solver': ['Case Studies', 'Real-world Projects', 'Problem-based Learning'],
-                    'Analytical Thinker': ['Socratic Questioning', 'Critical Analysis Exercises', 'Debate Practice'],
-                    'Theoretical Learner': ['Applied Practice', 'Scenario-based Learning', 'Practical Examples'],
-                    'Comprehensive Learner': ['Interleaving', 'Mixed Practice', 'Holistic Review']
-                };
-
-                const techniques = techniqueMap[profile.type] || ['Active Recall', 'Spaced Repetition', 'Practice Testing'];
-
-                // Generate personalized study plan
-                const studyPlan = [];
-                
-                if (weakConcepts.length > 0) {
-                    studyPlan.push(`Focus intensive study on: ${weakConcepts.slice(0, 3).join(', ')}`);
-                }
-                
-                studyPlan.push(`Use ${techniques[0]} to strengthen ${profile.weaknesses.length > 0 ? profile.weaknesses[0] : 'understanding'}`);
-                studyPlan.push('Create concept maps linking key ideas together');
-                studyPlan.push('Practice explaining each concept in your own words');
-                
-                if (strongConcepts.length > 0) {
-                    studyPlan.push(`Use strong concepts (${strongConcepts.slice(0, 2).join(', ')}) as anchors for new learning`);
-                }
-                
-                studyPlan.push('Regularly test yourself with varied question types');
-                studyPlan.push('Connect concepts to real-world applications');
-
-                return {
-                    techniques: techniques,
-                    studyPlan: studyPlan,
-                    strongConcepts: strongConcepts.slice(0, 5),
-                    weakConcepts: weakConcepts.slice(0, 5),
-                    dailyTime: '60 minutes (20 min review, 20 min practice, 20 min application)',
-                    focusRatio: '50% weak areas, 30% new connections, 20% review',
-                    avoid: [
-                        'Passive reading without active engagement',
-                        'Focusing only on comfortable topics',
-                        'Cramming without understanding',
-                        'Ignoring practical applications'
-                    ],
-                    insights: this.generateInsights(profile, analysis)
-                };
             }
 
-            generateInsights(profile, analysis) {
-                const insights = [];
+            generateRecommendations(analysis) {
+                const recommendations = {
+                    studyTechniques: [],
+                    focusAreas: [],
+                    timeAllocation: '',
+                    practiceStrategies: [],
+                    commonPitfalls: []
+                };
                 
+                // Study techniques based on learning style
+                const techniqueMap = {
+                    'Conceptual Learner': ['Feynman Technique', 'Concept Mapping', 'Teaching Others'],
+                    'Application Learner': ['Case Studies', 'Problem-based Learning', 'Real-world Projects'],
+                    'Analytical Learner': ['Socratic Questioning', 'Critical Analysis', 'Debate Practice'],
+                    'Synthesis Learner': ['Integration Exercises', 'Big Picture Mapping', 'Connection Building'],
+                    'Balanced Learner': ['Interleaving', 'Mixed Practice', 'Holistic Review'],
+                    'Developing Learner': ['Foundational Review', 'Step-by-step Practice', 'Guided Learning']
+                };
+                
+                recommendations.studyTechniques = techniqueMap[analysis.responsePatterns.learningStyle] || 
+                    ['Active Recall', 'Spaced Repetition', 'Practice Testing'];
+                
+                // Focus areas based on weaknesses
+                if (analysis.responsePatterns.weaknesses.length > 0) {
+                    recommendations.focusAreas = analysis.responsePatterns.weaknesses.slice(0, 3);
+                }
+                
+                // Time allocation based on accuracy
                 if (analysis.accuracy >= 80) {
-                    insights.push('You have a strong foundational understanding of the material.');
+                    recommendations.timeAllocation = '30% review, 40% advanced applications, 30% new topics';
                 } else if (analysis.accuracy >= 60) {
-                    insights.push('You have a good foundation but need to strengthen some areas.');
+                    recommendations.timeAllocation = '40% weak areas, 40% moderate areas, 20% review strong areas';
                 } else {
-                    insights.push('Focus on building a solid understanding of core concepts first.');
+                    recommendations.timeAllocation = '60% foundational concepts, 30% practice, 10% review';
                 }
-
-                if (analysis.responsePatterns.consistent) {
-                    insights.push('Your performance is consistent across different question types.');
-                } else {
-                    insights.push('Your performance varies significantly between different types of questions.');
-                }
-
-                if (profile.weaknesses.length > 0) {
-                    insights.push(`Pay special attention to: ${profile.weaknesses.join(', ')}`);
-                }
-
-                return insights;
+                
+                // Practice strategies
+                recommendations.practiceStrategies = [
+                    'Regular self-testing with varied question types',
+                    'Explain concepts in your own words',
+                    'Connect new information to existing knowledge',
+                    'Create summary notes after each study session'
+                ];
+                
+                // Common pitfalls to avoid
+                recommendations.commonPitfalls = [
+                    'Passive reading without active engagement',
+                    'Only practicing comfortable topics',
+                    'Cramming without understanding',
+                    'Ignoring feedback from incorrect answers'
+                ];
+                
+                return recommendations;
             }
         }
 
         // Main Application
         document.addEventListener('DOMContentLoaded', function() {
-            const aiEngine = new AdvancedTextUnderstandingEngine();
+            const aiEngine = new NotebookLMStyleEngine();
             let currentQuestions = [];
             let userAnswers = {};
             let quizStartTime = null;
@@ -1358,6 +1491,7 @@
             const elements = {
                 textInput: document.getElementById('textInput'),
                 wordCount: document.getElementById('wordCount'),
+                qualityIndicator: document.getElementById('qualityIndicator'),
                 analyzeBtn: document.getElementById('analyzeTextBtn'),
                 processing: document.getElementById('processingArea'),
                 analysisPreview: document.getElementById('analysisPreview'),
@@ -1374,44 +1508,60 @@
                 successAlert: document.getElementById('successAlert')
             };
 
-            // Word count tracking
+            // Word count and quality tracking
             elements.textInput.addEventListener('input', function() {
                 const text = this.value.trim();
                 const words = text === '' ? 0 : text.split(/\s+/).length;
-                elements.wordCount.textContent = `${words} words (minimum: 150)`;
+                elements.wordCount.textContent = `${words} words (minimum: 200)`;
                 
-                if (words >= 150) {
+                if (words >= 200) {
                     elements.wordCount.className = 'word-count';
                     elements.analyzeBtn.disabled = false;
+                    
+                    // Analyze quality
+                    const quality = aiEngine.analyzeContentQuality(text);
+                    elements.qualityIndicator.textContent = `Quality: ${quality.quality}`;
+                    elements.qualityIndicator.className = `quality-indicator ${
+                        quality.score >= 50 ? 'quality-good' : 'quality-poor'
+                    }`;
                 } else if (words >= 100) {
                     elements.wordCount.className = 'word-count warning';
                     elements.analyzeBtn.disabled = true;
+                    elements.qualityIndicator.textContent = 'Add more content for better analysis';
+                    elements.qualityIndicator.className = 'quality-indicator quality-poor';
                 } else {
                     elements.wordCount.className = 'word-count error';
                     elements.analyzeBtn.disabled = true;
+                    elements.qualityIndicator.textContent = 'Tip: Include definitions, examples, and explanations';
+                    elements.qualityIndicator.className = 'quality-indicator';
                 }
             });
 
             // Load sample text
             document.getElementById('sampleTextBtn').addEventListener('click', function() {
-                const sampleText = `Photosynthesis: The Fundamental Energy Conversion Process
+                const sampleText = `Photosynthesis: The Biochemical Process of Energy Conversion
 
-Photosynthesis is the biochemical process by which plants, algae, and some bacteria convert light energy into chemical energy stored in organic compounds like glucose. This process is fundamental to life on Earth because it produces oxygen and forms the base of most food chains.
+Definition: Photosynthesis is the process by which plants, algae, and some bacteria convert light energy into chemical energy stored in glucose and other organic compounds. This process is fundamental to life on Earth because it produces oxygen and forms the base of most food chains.
 
-The process occurs in two main stages:
-1. Light-dependent reactions take place in the thylakoid membranes of chloroplasts. Chlorophyll molecules absorb light energy, which excites electrons and splits water molecules into oxygen, protons, and electrons. This stage generates ATP and NADPH as energy carriers.
+The Two Main Stages:
+1. Light-dependent reactions occur in the thylakoid membranes of chloroplasts. Chlorophyll molecules absorb light energy, which excites electrons and splits water molecules into oxygen, protons, and electrons. This stage produces ATP and NADPH as energy carriers through electron transport chains.
 
-2. Calvin cycle (light-independent reactions) occurs in the stroma of chloroplasts. Here, carbon dioxide is fixed and converted into glucose using the ATP and NADPH produced in the light reactions. The enzyme RuBisCO catalyzes the first step of carbon fixation.
+2. Calvin cycle (light-independent reactions) takes place in the stroma of chloroplasts. Here, carbon dioxide is fixed and converted into glucose using the ATP and NADPH produced in the light reactions. The enzyme RuBisCO catalyzes the first step of carbon fixation, combining CO2 with a five-carbon compound.
 
-Key factors affecting photosynthesis rate:
-- Light intensity: Increases rate until saturation point
-- Carbon dioxide concentration: Limited by atmospheric levels
+Key Factors Affecting Rate:
+- Light intensity: Increases rate until saturation point is reached
+- Carbon dioxide concentration: Limited by atmospheric levels (0.04%)
 - Temperature: Optimal around 25-30°C for most plants
-- Water availability: Essential for electron transport
+- Water availability: Essential for electron transport and maintaining turgor pressure
 
-Plants have evolved adaptations to optimize photosynthesis. C4 plants like corn use a specialized pathway to concentrate CO2, while CAM plants like cacti open stomata at night to minimize water loss.
+Adaptations for Efficiency:
+C4 plants like corn use a specialized pathway to concentrate CO2 around RuBisCO, increasing efficiency in hot conditions. CAM plants like cacti open stomata at night to take in CO2, storing it as malic acid for daytime use, minimizing water loss.
 
-The importance of photosynthesis extends beyond energy production. It regulates atmospheric gases, supports ecosystems, and provides the foundation for virtually all life through food chains. Understanding photosynthesis is crucial for addressing climate change and improving agricultural productivity.`;
+Importance and Applications:
+Understanding photosynthesis is crucial for addressing climate change (carbon sequestration), improving agricultural productivity, and developing sustainable energy solutions through artificial photosynthesis research.
+
+Comparison with Cellular Respiration:
+While photosynthesis stores energy by building glucose from CO2 and water, cellular respiration releases energy by breaking down glucose. These complementary processes form a continuous cycle of energy transformation in ecosystems.`;
                 
                 elements.textInput.value = sampleText;
                 elements.textInput.dispatchEvent(new Event('input'));
@@ -1427,33 +1577,41 @@ The importance of photosynthesis extends beyond energy production. It regulates 
             elements.analyzeBtn.addEventListener('click', function() {
                 const text = elements.textInput.value.trim();
                 
-                if (text.split(/\s+/).length < 100) {
-                    showError('Please enter at least 100 words for proper analysis.');
+                if (text.split(/\s+/).length < 150) {
+                    showError('Please enter at least 150 words for insightful analysis.');
                     return;
                 }
                 
                 elements.processing.style.display = 'block';
                 elements.analyzeBtn.disabled = true;
                 
-                // Process with delay to simulate AI thinking
+                // Simulate AI processing
                 setTimeout(() => {
                     try {
-                        // Deep analysis
-                        const analysis = aiEngine.deepUnderstand(text);
+                        // Analyze content quality
+                        const quality = aiEngine.analyzeContentQuality(text);
                         
-                        // Generate intelligent questions
-                        currentQuestions = aiEngine.generateIntelligentQuestions(analysis, 10);
+                        if (quality.score < 30) {
+                            showError('Content needs more definitions and explanations for good questions. Add more detail.');
+                            return;
+                        }
+                        
+                        // Extract insights
+                        const insights = aiEngine.extractCoreInsights(text);
+                        
+                        // Generate questions
+                        currentQuestions = aiEngine.generateInsightfulQuestions(insights, 10);
                         
                         // Show analysis preview
                         elements.analysisDetails.innerHTML = `
-                            <p><i class="fas fa-check-circle"></i> Understood ${analysis.coreConcepts.length} core concepts</p>
-                            <p><i class="fas fa-tags"></i> Identified ${analysis.definitions.length} key definitions</p>
-                            <p><i class="fas fa-sitemap"></i> Mapped ${Object.keys(analysis.hierarchy).length} relationships</p>
-                            <p><i class="fas fa-brain"></i> Generated conceptual questions at ${analysis.difficulty} level</p>
+                            <p><i class="fas fa-check-circle"></i> Found ${insights.keyConcepts.length} key concepts</p>
+                            <p><i class="fas fa-project-diagram"></i> Identified ${insights.relationships.length} relationships</p>
+                            <p><i class="fas fa-question-circle"></i> Generated ${currentQuestions.length} insightful questions</p>
+                            <p><i class="fas fa-brain"></i> Cognitive levels: Understanding → Analysis → Synthesis</p>
                         `;
                         elements.analysisPreview.style.display = 'block';
                         
-                        showSuccess('Deep analysis complete! Ready to generate intelligent quiz.');
+                        showSuccess('Analysis complete! Ready to generate NotebookLM-style quiz.');
                         
                         // Start quiz
                         setTimeout(() => startQuiz(), 1000);
@@ -1500,8 +1658,8 @@ The importance of photosynthesis extends beyond energy production. It regulates 
                 const typeIcon = {
                     conceptual: 'fa-lightbulb',
                     application: 'fa-cogs',
-                    relational: 'fa-sitemap',
-                    analytical: 'fa-search'
+                    analytical: 'fa-search',
+                    synthesis: 'fa-project-diagram'
                 }[question.type] || 'fa-question';
                 
                 // Generate options HTML
@@ -1530,7 +1688,7 @@ The importance of photosynthesis extends beyond energy production. It regulates 
                     <div class="quiz-question">
                         <div class="question-meta">
                             <div class="question-type ${typeClass}">
-                                <i class="fas ${typeIcon}"></i> ${question.type.charAt(0).toUpperCase() + question.type.slice(1)}
+                                <i class="fas ${typeIcon}"></i> ${question.cognitiveLevel}
                             </div>
                             <div>
                                 <i class="fas fa-tag"></i> ${question.concept}
@@ -1541,6 +1699,9 @@ The importance of photosynthesis extends beyond energy production. It regulates 
                         </div>
                         <div class="options-grid">
                             ${optionsHTML}
+                        </div>
+                        <div style="margin-top: 15px; font-size: 0.9rem; color: var(--gray);">
+                            <i class="fas fa-info-circle"></i> Source: ${question.source}
                         </div>
                     </div>
                 `;
@@ -1609,102 +1770,92 @@ The importance of photosynthesis extends beyond energy production. It regulates 
                 
                 setTimeout(() => {
                     try {
-                        const performance = aiEngine.analyzePerformance(currentQuestions, userAnswers);
-                        const profile = aiEngine.determineLearningProfile(performance);
-                        const studyPlan = aiEngine.generateStudyPlan(profile, performance, currentQuestions);
+                        const performance = aiEngine.analyzeLearningPerformance(currentQuestions, userAnswers, timeTaken);
+                        const profile = aiEngine.generateLearningProfile(performance);
                         
-                        showResults(performance, profile, studyPlan, timeTaken);
+                        showResults(performance, profile, timeTaken);
                         
                     } catch (error) {
                         showError('Error analyzing results: ' + error.message);
                     } finally {
                         elements.submitBtn.disabled = false;
-                        elements.submitBtn.innerHTML = '<i class="fas fa-chart-line"></i> Submit & Get Analysis';
+                        elements.submitBtn.innerHTML = '<i class="fas fa-chart-line"></i> Submit & Get Deep Analysis';
                     }
                 }, 1500);
             });
 
             // Show results
-            function showResults(performance, profile, studyPlan, timeTaken) {
+            function showResults(performance, profile, timeTaken) {
                 elements.quizSection.style.display = 'none';
                 elements.resultsSection.style.display = 'block';
                 
                 // Create topics breakdown
                 let topicsHTML = '';
                 
-                if (studyPlan.strongConcepts.length > 0) {
-                    studyPlan.strongConcepts.forEach(concept => {
+                if (profile.strengths.length > 0) {
+                    profile.strengths.forEach(concept => {
                         topicsHTML += `
                             <div class="topic-item strong">
                                 <div class="topic-header">
                                     <strong>${concept}</strong>
-                                    <span style="font-weight: 700; color: var(--success);">Strong</span>
+                                    <span style="font-weight: 700; color: var(--success);">Strength</span>
                                 </div>
-                                <p style="color: var(--gray); margin-top: 8px; font-size: 0.9rem;">Excellent understanding demonstrated</p>
+                                <p style="color: var(--gray); margin-top: 8px; font-size: 0.9rem;">You show strong understanding</p>
                             </div>
                         `;
                     });
                 }
                 
-                if (studyPlan.weakConcepts.length > 0) {
-                    studyPlan.weakConcepts.forEach(concept => {
+                if (profile.weaknesses.length > 0) {
+                    profile.weaknesses.forEach(concept => {
                         topicsHTML += `
                             <div class="topic-item weak">
                                 <div class="topic-header">
                                     <strong>${concept}</strong>
-                                    <span style="font-weight: 700; color: var(--danger);">Needs Focus</span>
+                                    <span style="font-weight: 700; color: var(--danger);">Focus Area</span>
                                 </div>
-                                <p style="color: var(--gray); margin-top: 8px; font-size: 0.9rem;">Priority area for improvement</p>
+                                <p style="color: var(--gray); margin-top: 8px; font-size: 0.9rem;">Priority for improvement</p>
                             </div>
                         `;
                     });
                 }
                 
-                // Create study plan steps
+                // Create study plan
                 let studyPlanHTML = '';
-                studyPlan.studyPlan.forEach((step, index) => {
-                    studyPlanHTML += `<li>${step}</li>`;
-                });
-                
-                // Create insights
-                let insightsHTML = '';
-                if (studyPlan.insights && studyPlan.insights.length > 0) {
-                    insightsHTML = `
-                        <div class="insight-box">
-                            <h4 style="color: var(--secondary); margin-bottom: 10px;"><i class="fas fa-eye"></i> Key Insights</h4>
-                            <ul style="padding-left: 20px; color: var(--gray);">
-                                ${studyPlan.insights.map(insight => `<li>${insight}</li>`).join('')}
-                            </ul>
-                        </div>
-                    `;
+                if (profile.recommendations.studyTechniques.length > 0) {
+                    profile.recommendations.studyTechniques.forEach((tech, index) => {
+                        studyPlanHTML += `<li><strong>${index === 0 ? 'Primary: ' : ''}</strong>${tech}</li>`;
+                    });
                 }
                 
                 // Build results HTML
                 elements.resultsSection.innerHTML = `
                     <div class="profile-card">
                         <div class="profile-header">
-                            <div class="profile-icon" style="background: linear-gradient(135deg, ${profile.color}, ${profile.color}dd);">
-                                <i class="fas ${profile.icon}"></i>
+                            <div class="profile-icon" style="background: linear-gradient(135deg, ${profile.level.name === 'Advanced' ? '#4cc9f0' : profile.level.name === 'Intermediate' ? '#f8961e' : '#f72585'}, #4361ee);">
+                                <i class="fas fa-user-graduate"></i>
                             </div>
                             <div style="flex: 1;">
-                                <h2 style="color: var(--secondary); margin-bottom: 10px;">Learning Profile Analysis</h2>
-                                <h3 style="color: ${profile.color}; margin-bottom: 10px;">${profile.type}</h3>
-                                <p style="color: var(--gray); line-height: 1.6;">${profile.description}</p>
-                                ${profile.strengths.length > 0 ? `<p style="margin-top: 10px;"><strong>Your Strengths:</strong> ${profile.strengths.join(', ')}</p>` : ''}
-                                ${profile.weaknesses.length > 0 ? `<p><strong>Areas for Growth:</strong> ${profile.weaknesses.join(', ')}</p>` : ''}
+                                <h2 style="color: var(--secondary); margin-bottom: 10px;">Learning Profile</h2>
+                                <h3 style="color: ${profile.level.name === 'Advanced' ? '#4cc9f0' : profile.level.name === 'Intermediate' ? '#f8961e' : '#f72585'}; margin-bottom: 10px;">
+                                    <span class="learning-level level-${profile.level.name.toLowerCase()}">${profile.level.name}</span> • ${profile.style}
+                                </h3>
+                                <p style="color: var(--gray); line-height: 1.6;">${profile.level.description}</p>
+                                <p style="margin-top: 10px;"><strong>Confidence Level:</strong> ${profile.confidence}</p>
                             </div>
                         </div>
                         
                         <div class="confidence-meter">
                             <div class="meter-label">
-                                <span style="font-size: 1.1rem;">Diagnostic Score</span>
+                                <span style="font-size: 1.1rem;">Performance Score</span>
                                 <strong style="font-size: 1.5rem; color: ${performance.accuracy >= 70 ? 'var(--success)' : performance.accuracy >= 50 ? 'var(--warning)' : 'var(--danger)'};">${performance.accuracy.toFixed(1)}%</strong>
                             </div>
                             <div class="meter-bar">
                                 <div class="meter-fill" style="width: ${performance.accuracy}%;"></div>
                             </div>
                             <div style="display: flex; justify-content: space-between; margin-top: 10px; color: var(--gray); font-size: 0.9rem;">
-                                <span>${performance.correct} / ${performance.total} correct</span>
+                                <span>${performance.correctAnswers} / ${performance.totalQuestions} correct</span>
+                                <span>Consistency: ${performance.responsePatterns.consistency.toFixed(0)}%</span>
                                 <span>Time: ${Math.floor(timeTaken/60)}:${(timeTaken%60).toString().padStart(2, '0')}</span>
                             </div>
                         </div>
@@ -1713,7 +1864,7 @@ The importance of photosynthesis extends beyond energy production. It regulates 
                     ${topicsHTML ? `
                     <div class="profile-card">
                         <h3 style="color: var(--secondary); margin-bottom: 20px;">
-                            <i class="fas fa-chart-bar"></i> Concept Mastery Analysis
+                            <i class="fas fa-chart-bar"></i> Concept Analysis
                         </h3>
                         <div class="topics-breakdown">
                             ${topicsHTML}
@@ -1721,34 +1872,43 @@ The importance of photosynthesis extends beyond energy production. It regulates 
                     </div>
                     ` : ''}
                     
-                    ${insightsHTML}
-                    
                     <div class="study-plan">
                         <div class="technique-recommendation">
                             <div class="tech-icon">
                                 <i class="fas fa-graduation-cap"></i>
                             </div>
                             <div style="flex: 1;">
-                                <h3 style="color: var(--secondary); margin-bottom: 10px;">Personalized Learning Strategy</h3>
-                                <p style="color: var(--gray);"><strong>Recommended Techniques:</strong> ${studyPlan.techniques.join(', ')}</p>
+                                <h3 style="color: var(--secondary); margin-bottom: 10px;">Personalized Study Strategy</h3>
+                                <p style="color: var(--gray);">Optimized for your ${profile.style.toLowerCase()} profile</p>
                             </div>
                         </div>
                         
-                        <h4 style="color: var(--secondary); margin: 20px 0 15px;">Action Plan:</h4>
+                        <h4 style="color: var(--secondary); margin: 20px 0 15px;">Recommended Techniques:</h4>
                         <ol class="steps-list">
                             ${studyPlanHTML}
                         </ol>
                         
+                        <div class="insight-box">
+                            <h4 style="color: var(--secondary); margin-bottom: 10px;"><i class="fas fa-lightbulb"></i> Key Insights</h4>
+                            <ul style="padding-left: 20px; color: var(--gray);">
+                                <li>${profile.recommendations.focusAreas.length > 0 ? `Focus on: ${profile.recommendations.focusAreas.join(', ')}` : 'Your understanding is well-balanced'}</li>
+                                <li>Time allocation: ${profile.recommendations.timeAllocation}</li>
+                                <li>Practice explaining concepts in your own words</li>
+                                <li>Connect new information to what you already know</li>
+                            </ul>
+                        </div>
+                        
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 25px 0;">
                             <div style="background: white; padding: 15px; border-radius: 8px;">
-                                <h4 style="color: var(--secondary); margin-bottom: 8px; font-size: 0.9rem;"><i class="fas fa-clock"></i> Recommended Schedule</h4>
-                                <p style="font-size: 0.9rem; color: var(--gray);">${studyPlan.dailyTime}</p>
-                                <p style="font-size: 0.9rem; color: var(--gray);">Focus Ratio: ${studyPlan.focusRatio}</p>
+                                <h4 style="color: var(--secondary); margin-bottom: 8px; font-size: 0.9rem;"><i class="fas fa-clock"></i> Study Schedule</h4>
+                                <p style="font-size: 0.9rem; color: var(--gray);">Daily: 45-60 minutes</p>
+                                <p style="font-size: 0.9rem; color: var(--gray);">Weekly: 5-6 sessions</p>
+                                <p style="font-size: 0.9rem; color: var(--gray);">Focus: ${profile.recommendations.timeAllocation}</p>
                             </div>
                             <div style="background: #fff5f5; padding: 15px; border-radius: 8px;">
-                                <h4 style="color: var(--danger); margin-bottom: 8px; font-size: 0.9rem;"><i class="fas fa-exclamation-triangle"></i> Common Pitfalls</h4>
+                                <h4 style="color: var(--danger); margin-bottom: 8px; font-size: 0.9rem;"><i class="fas fa-exclamation-triangle"></i> Avoid These Pitfalls</h4>
                                 <ul style="padding-left: 20px; font-size: 0.9rem; color: var(--gray);">
-                                    ${studyPlan.avoid.map(item => `<li>${item}</li>`).join('')}
+                                    ${profile.recommendations.commonPitfalls.map(item => `<li>${item}</li>`).join('')}
                                 </ul>
                             </div>
                         </div>
